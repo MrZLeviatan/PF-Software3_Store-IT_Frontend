@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "clean": "rmdir /s /q .angular\\cache || rm -rf .angular/cache"
   },
   "prettier": {
     "printWidth": 100,
@@ -28,6 +29,8 @@
     "@angular/forms": "^20.2.0",
     "@angular/platform-browser": "^20.2.0",
     "@angular/router": "^20.2.0",
+    "google-libphonenumber": "^3.2.42",
+    "intl-tel-input": "^25.10.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"

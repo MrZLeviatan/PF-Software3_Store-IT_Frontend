@@ -1,0 +1,80 @@
+<div class="registro-container">
+  <!-- Selector tipo de cliente -->
+  <div class="selector">
+    <button [class.active]="esClienteNatural" (click)="cambiarTipo('NATURAL')">
+      Cliente Natural
+    </button>
+    <button [class.active]="!esClienteNatural" (click)="cambiarTipo('JURIDICO')">
+      Cliente Jurídico
+    </button>
+  </div>
+
+  <!-- Cliente Natural -->
+  @if (esClienteNatural) {
+  <form [formGroup]="formNatural" (ngSubmit)="onSubmit()">
+    <h2>Registro Cliente Natural</h2>
+    <input type="text" placeholder="Nombre" formControlName="nombre" />
+
+    <!-- Teléfono principal -->
+    <label for="telNatural">Teléfono Principal</label>
+    <input id="telNatural" type="tel" formControlName="telefono" class="form-control" />
+
+    <!-- Teléfono secundario -->
+    <label for="telNaturalSec">Teléfono Secundario</label>
+    <input
+      id="telNaturalSec"
+      type="tel"
+      formControlName="telefonoSecundario"
+      class="form-control"
+    />
+
+    <input type="email" placeholder="Correo" formControlName="email" />
+    <input type="password" placeholder="Contraseña" formControlName="password" />
+
+    <!-- Botón para obtener ubicación -->
+    <button type="button" (click)="obtenerUbicacion()">Obtener ubicación actual</button>
+    <div *ngIf="ubicacionActual">
+      <small
+        >Ubicación detectada: {{ ubicacionActual.latitud }}, {{ ubicacionActual.longitud }}</small
+      >
+    </div>
+
+    <button type="submit">Registrar</button>
+  </form>
+  }
+
+  <!-- Cliente Jurídico -->
+  @else {
+  <form [formGroup]="formJuridico" (ngSubmit)="onSubmit()">
+    <h2>Registro Cliente Jurídico</h2>
+    <input type="text" placeholder="Representante Legal" formControlName="nombre" />
+
+    <!-- Teléfono principal -->
+    <label for="telJuridico">Teléfono Principal</label>
+    <input id="telJuridico" type="tel" formControlName="telefono" class="form-control" />
+
+    <!-- Teléfono secundario -->
+    <label for="telJuridicoSec">Teléfono Secundario</label>
+    <input
+      id="telJuridicoSec"
+      type="tel"
+      formControlName="telefonoSecundario"
+      class="form-control"
+    />
+
+    <input type="email" placeholder="Correo" formControlName="email" />
+    <input type="password" placeholder="Contraseña" formControlName="password" />
+    <input type="text" placeholder="NIT" formControlName="nit" />
+
+    <!-- Botón para obtener ubicación -->
+    <button type="button" (click)="obtenerUbicacion()">Obtener ubicación actual</button>
+    <div *ngIf="ubicacionActual">
+      <small
+        >Ubicación detectada: {{ ubicacionActual.latitud }}, {{ ubicacionActual.longitud }}</small
+      >
+    </div>
+
+    <button type="submit">Registrar</button>
+  </form>
+  }
+</div>

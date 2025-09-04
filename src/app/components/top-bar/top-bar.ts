@@ -56,7 +56,7 @@ export class TopBar {
 
   irRegistro() {
     this.menuOpen = false;
-    this.router.navigate(['/register']);
+    this.router.navigate(['/registroClientes']);
   }
 
   irAbout() {
