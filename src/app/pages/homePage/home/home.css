@@ -1,0 +1,135 @@
+/* Previene el scroll horizontal y oculta cualquier desbordamiento lateral */
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* ==================== DISEÑO BANNER PRINCIPAL ==================== */
+
+/* Banner principal*/
+.main-container {
+  color: white;
+  text-align: center;
+  margin-top: 120px; /* Añadimos un margen para que el contenido no quede cubierto */
+  font-family: Verdana, Geneva, sans-serif;
+}
+
+.fade-title {
+  font-size: 4.5rem;
+  animation: fadeIn 3s forwards;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.fade-subdescription {
+  font-size: 1.5rem;
+  text-align: center;
+  opacity: 0;
+  animation: fadeIn 3s forwards;
+  max-width: 650px;
+  margin: 10px auto 0;
+}
+
+/* Duración de la animación */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.main-container,
+.sub-container {
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Dev del botón del banner  */
+.main-button-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Botón del banner  */
+.main-action-button {
+  padding: 15px 24px;
+  font-size: 1rem;
+  color: white;
+  background-color: #f27f0c;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  animation: fadeIn 3s forwards;
+}
+
+.main-action-button i {
+  margin-left: 8px; /* Espacio entre el texto y el ícono */
+}
+
+.main-action-button:hover {
+  background-color: #f7ad19;
+}
+
+.main-button-container {
+  margin-top: 1.5rem;
+}
+
+/* ==================== DISEÑO SUB BANNER PRINCIPAL ==================== */
+
+.sub-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 60px;
+  padding: 20px;
+  color: white;
+  flex-wrap: wrap;
+  font-family: Verdana, Geneva, sans-serif;
+}
+
+.features {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 1200px;
+}
+
+.feature {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 25px 20px;
+  width: 300px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+.feature:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 20px rgba(44, 107, 193, 0.3);
+}
+
+.feature i {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.feature h3 {
+  font-family: 'Poppins SemiBold', Verdana, sans-serif;
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+}
+
+.feature p {
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
