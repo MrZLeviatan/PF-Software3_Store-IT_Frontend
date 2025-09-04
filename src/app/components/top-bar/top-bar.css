@@ -1,0 +1,193 @@
+/* ==================== TOP-BAR ==================== */
+
+/* Diseño del top-bar*/
+.top-bar {
+  position: fixed; /* Fijar en la parte superior */
+  right: 0; /* Alinea al borde derecho */
+  left: 0; /* Alinea al borde izquierdo */
+  top: 0; /* Desde el borde superior */
+  width: 100vw; /* Ocupa todo el ancho de la ventana */
+  height: 7rem;
+  display: flex;
+  justify-content: space-evenly; /* Separa logo y botones */
+  align-items: center;
+  background-color: transparent;
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+  transition: transform 0.3s ease;
+}
+
+/* Efecto al hacer scroll */
+.top-bar.scrolling {
+  background-color: rgb(0, 0, 0); /* Fondo opaco al hacer scroll */
+  transform: translateY(0); /* Se mantiene en su lugar mientras se hace scroll */
+}
+
+/* Ajuste de la imagen */
+.logo-img {
+  height: 90%;
+  transition: all 0.3s ease; /* Animación suave al cambiar tamaño */
+  cursor: pointer;
+  vertical-align: top;
+}
+
+.button-group {
+  display: flex;
+  gap: 2rem; /* Espacio entre botones */
+}
+
+/* Botones conectados con transparencia */
+.nav-button {
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 15px;
+  background-color: rgba(255, 255, 255, 0.3); /* Transparente */
+  border: none;
+  color: white;
+  font-size: 0.95rem;
+  cursor: pointer;
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  font-family: Verdana, Geneva, sans-serif;
+}
+
+/* Boton de registro */
+.nav-button-registro {
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 15px;
+  background-color: #f28b0b;
+  border: none;
+  color: white;
+  font-size: 0.95rem;
+  cursor: pointer;
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  font-family: Verdana, Geneva, sans-serif;
+}
+
+/* Boton de login */
+.nav-button-login {
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 15px;
+  background-color: #5c30ff;
+  border: none;
+  color: white;
+  font-size: 0.95rem;
+  cursor: pointer;
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  font-family: Verdana, Geneva, sans-serif;
+}
+
+.nav-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.nav-button-registro:hover {
+  background-color: #f7ad19;
+  transform: scale(1.05);
+}
+
+.nav-button-login:hover {
+  background-color: #4512ff;
+  transform: scale(1.05);
+}
+
+.nav-button i,
+.nav-button-registro i,
+.nav-button-login i {
+  margin-left: 5px; /* Espacio entre el texto y el ícono */
+}
+
+/* Bordes redondeados solo en extremos para que parezcan unidos */
+.nav-button.first {
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+
+.nav-button.middle {
+  border-radius: 0;
+}
+
+.nav-button.last {
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+/* El menú estará oculto en pantallas pequeñas */
+.button-group {
+  display: flex;
+  gap: 5px;
+}
+
+/* Estilos para el botón de menú (hamburger) */
+/* --- Ajustes responsive de la barra superior (top-bar) --- */
+.menu-toggle {
+  display: none; /* Oculto en pantallas grandes */
+  font-size: 2rem;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  margin-left: 10rem;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Estilo para el menú cuando está activo */
+.button-group.active {
+  display: flex;
+  flex-direction: column;
+  width: 91%;
+  position: fixed;
+  top: 100px; /* Ajusta según el tamaño de la barra */
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.771);
+  padding: 20px;
+  z-index: 999;
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+    justify-content: space-evenly; /* Separa logo y botones */
+  }
+
+  .button-group {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.067);
+    padding: 1rem 0;
+  }
+
+  .button-group.active {
+    display: flex;
+  }
+
+  .nav-button {
+    width: 100%;
+    text-align: center;
+    padding: 0;
+  }
+
+  .logo-img {
+    height: 60%;
+  }
+}

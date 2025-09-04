@@ -1,0 +1,35 @@
+<!-- top-bar.component.html -->
+<div
+  class="top-bar"
+  [ngStyle]="{
+    'background-color': 'rgba(0, 0, 0, ' + scrollOpacity + ')',
+    'backdrop-filter': 'blur(5px)'
+  }"
+>
+  <!-- Click en el logo para ir al inicio -->
+  <img
+    src="https://res.cloudinary.com/dehltwwbu/image/upload/v1756972307/StoreIt-logo-blanco_eqxgza.png"
+    alt="Inicio"
+    class="logo-img"
+    (click)="irAlInicio()"
+    style="cursor: pointer"
+  />
+
+  <button class="menu-toggle" (click)="toggleMenu()">&#9776;</button>
+
+  <div class="button-group" [ngClass]="{ active: menuOpen }">
+    <a class="nav-button" (click)="irAbout()"
+      >Acerca de nosotros<i class="fa-solid fa-users"></i
+    ></a>
+
+    <a class="nav-button">Desarrolladores</a>
+
+    <a class="nav-button-registro" (click)="irRegistro()"
+      >Registrarse<i class="fa-solid fa-user-plus"></i
+    ></a>
+
+    <a class="nav-button-login" (click)="irLogin()"
+      >Iniciar sesión<i class="fa-solid fa-user"></i
+    ></a>
+  </div>
+</div>
