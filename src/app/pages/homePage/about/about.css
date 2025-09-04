@@ -1,0 +1,261 @@
+/* Contenedor principal */
+.about-container {
+  padding: 50px 20px;
+  font-family: Verdana, Geneva, sans-serif;
+  color: #333;
+  margin-top: 8rem;
+}
+
+/* Sección introductoria */
+.intro-section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 60px;
+  color: white;
+}
+
+.intro-image {
+  width: 350px;
+  max-width: 100%;
+  margin-right: 40px;
+  margin-left: 40px;
+  border-radius: 12px;
+}
+
+.intro-text {
+  max-width: 600px;
+}
+
+.intro-text h1 {
+  font-size: 2.8rem;
+  margin-bottom: 20px;
+  color: white;
+}
+
+.intro-text p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 16px;
+  text-align: justify;
+}
+
+.intro-text ul {
+  padding-left: 20px;
+  list-style-type: disc;
+  margin-top: -8px;
+  margin-bottom: 16px;
+}
+
+.mission-section {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centra los elementos horizontalmente */
+  flex-wrap: wrap;
+  gap: 40px;
+  margin: 20px auto 60px auto; /* Centrado horizontal + separación abajo */
+  max-width: 1200px; /* Limita el ancho total */
+  padding: 30px 10px; /* Espaciado lateral responsivo */
+}
+
+.mission-image,
+.vision-image {
+  width: 350px;
+  max-width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0);
+  flex-shrink: 0;
+}
+
+.vision-image {
+  width: 400px;
+}
+
+.mission-text-container,
+.vision-text-container {
+  flex: 1;
+  background-color: rgba(255, 255, 255, 0.5); /* Fondo semitransparente */
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  max-width: 650px;
+}
+
+.mission-text-container h2,
+.vision-text-container h2 {
+  font-size: 2.4rem;
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.mission-text-container p,
+.vision-text-container p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 16px;
+  text-align: justify;
+}
+
+.vision-section {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centra los elementos horizontalmente */
+  flex-wrap: wrap;
+  gap: 40px;
+  margin: 20px auto 60px auto; /* Centrado horizontal + separación abajo */
+  max-width: 1200px; /* Limita el ancho total */
+  padding: 30px 10px; /* Espaciado lateral responsivo */
+}
+
+/* --- Estilos generales --- */
+.objectives-section {
+  padding: 20px 20px;
+  margin-top: 2rem;
+  box-shadow: 0 8px 20px rgba(44, 107, 193, 0.3);
+  text-align: center;
+}
+
+.objectives-title {
+  font-size: 2.6rem;
+  color: white;
+  margin-top: 0;
+}
+
+.objectives-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+.objective-card {
+  background-color: white;
+  border-radius: 16px;
+  padding: 30px 20px;
+  width: 260px;
+  min-width: 260px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.objective-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+.objective-card .icon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 15px;
+}
+
+.objective-card h3 {
+  color: #34495e;
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+}
+
+.objective-card p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #555;
+}
+
+.objectives-scroll-container,
+.objectives-indicators {
+  display: none; /* Oculta carrusel e indicadores en pantallas grandes */
+}
+
+/* Estilos responsivos para móviles */
+@media (max-width: 768px) {
+  .about-container {
+    padding: 30px 10px;
+    margin-top: 4rem;
+  }
+
+  .intro-section,
+  .mission-section,
+  .vision-section {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .intro-section {
+    margin-top: 4rem;
+    flex-direction: column-reverse; /*  Hace que la imagen se muestre debajo del texto */
+  }
+
+  .mission-image,
+  .vision-image {
+    display: none;
+  }
+
+  .intro-image,
+  .mission-image,
+  .vision-image {
+    margin: 0 0 20px 0;
+    width: 70%;
+    height: auto;
+  }
+
+  .intro-text,
+  .mission-text-container,
+  .vision-text-container {
+    max-width: 100%;
+    padding: 20px;
+  }
+
+  .intro-text h1,
+  .mission-text-container h2,
+  .vision-text-container h2,
+  .objectives-title {
+    font-size: 2rem;
+  }
+
+  .intro-text p,
+  .mission-text-container p,
+  .vision-text-container p,
+  .objective-card p {
+    font-size: 1rem;
+    text-align: justify;
+  }
+
+  .objectives-cards {
+    display: none; /* Se oculta el grid normal */
+  }
+
+  .objectives-scroll-container {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 1rem 0;
+  }
+
+  .objective-card {
+    flex: 0 0 80%; /* cada tarjeta ocupa 80% del ancho */
+    scroll-snap-align: center;
+  }
+
+  /* Indicadores */
+  .objectives-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .objectives-indicators span {
+    width: 10px;
+    height: 10px;
+    background: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background 0.3s;
+  }
+
+  .objectives-indicators .active {
+    background: #2c6bc1; /* azul activo */
+  }
+}

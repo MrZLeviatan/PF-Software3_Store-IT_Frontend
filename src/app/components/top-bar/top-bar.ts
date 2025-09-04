@@ -39,7 +39,7 @@ export class TopBar {
 
   // Función que se activa al hacer clic en el logo
   irAlInicio() {
-    // 🔒 Cierra el menú si está abierto (útil en móvil)
+    // Cierra el menú si está abierto (útil en móvil)
     this.menuOpen = false;
 
     const currentUrl = this.router.url;
@@ -50,6 +50,7 @@ export class TopBar {
     } else {
       // 🚀 Si estás en otra ruta, navega hacia la raíz
       this.router.navigate(['/']);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 
@@ -61,6 +62,7 @@ export class TopBar {
   irAbout() {
     this.menuOpen = false;
     this.router.navigate(['/about']);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   irLogin() {
