@@ -18,11 +18,10 @@ import intlTelInput from 'intl-tel-input';
 })
 export class RegistroClientes implements AfterViewInit {
   esClienteNatural: boolean = true;
-
   formNatural: FormGroup;
   formJuridico: FormGroup;
-
   ubicacionActual: UbicacionDto | null = null;
+  mostrarPassword: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -32,6 +31,7 @@ export class RegistroClientes implements AfterViewInit {
     // Cliente Natural
     this.formNatural = this.fb.group({
       nombre: ['', Validators.required],
+      apellido: ['', Validators.required], // se acopla al nombre completo en el DTO
       telefono: [undefined, Validators.required],
       telefonoSecundario: [undefined],
       email: ['', [Validators.required, Validators.email]],
@@ -51,15 +51,49 @@ export class RegistroClientes implements AfterViewInit {
 
   cambiarTipo(tipo: 'NATURAL' | 'JURIDICO') {
     this.esClienteNatural = tipo === 'NATURAL';
+
+    // Espera a que Angular pinte el nuevo formulario y aplica intl-tel-input
+    setTimeout(() => {
+      this.inicializarTelefonos();
+    });
+  }
+
+  private inicializarTelefonos() {
+    const ids = ['telNatural', 'telNaturalSec', 'telJuridico', 'telJuridicoSec'];
+    for (const id of ids) {
+      const input = document.querySelector<HTMLInputElement>(`#${id}`);
+      if (input) {
+        intlTelInput(input, {
+          initialCountry: 'co',
+          preferredCountries: ['co', 'us', 'gb', 'ca', 'mx', 'fr'],
+          separateDialCode: true,
+        } as any);
+      }
+    }
   }
 
   async obtenerUbicacion() {
     try {
       this.ubicacionActual = await this.ubicacionService.obtenerUbicacionActual();
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          console.log('Posición obtenida:', position);
+        },
+        (error) => {
+          console.error('Error al obtener la posición:', error);
+          alert('Error al obtener la posición. Asegúrate de haber dado permiso.');
+        }
+      );
       console.log('Ubicación obtenida:', this.ubicacionActual);
     } catch (error) {
       alert(error);
     }
+  }
+
+  // Alterna visibilidad de la contraseña
+  togglePassword() {
+    this.mostrarPassword = !this.mostrarPassword;
   }
 
   ngAfterViewInit() {
@@ -112,7 +146,7 @@ export class RegistroClientes implements AfterViewInit {
 
     if (this.esClienteNatural && this.formNatural.valid) {
       dto = {
-        nombre: this.formNatural.value.nombre,
+        nombre: this.formNatural.value.nombre + ' ' + this.formNatural.value.apellido,
         telefono: this.telefonoService.obtenerNumero('telNatural') ?? '',
         codigoPais: this.telefonoService.obtenerCodigoPais('telNatural') ?? '',
         telefonoSecundario: this.telefonoService.obtenerNumero('telNaturalSec') ?? '',

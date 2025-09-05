@@ -1,48 +1,350 @@
-.registro-container {
-  max-width: 400px;
-  margin: auto;
+/* ============================= */
+/* 1. Layout general             */
+/* ============================= */
+.registro-layout {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  gap: 40px;
   padding: 20px;
+  background: #f9f9f9;
+  position: relative;
+}
+
+.registro-layout h2 {
+  font-size: 25px;
+  text-align: center;
+  margin-bottom: 20px;
+  margin-left: 15px;
+  color: #333;
+  font-family: Verdana, Geneva, sans-serif;
+}
+
+/* ============================= */
+/* 2. Logo arriba izquierda      */
+/* ============================= */
+.logo-container {
+  position: absolute;
+  top: 20px;
+  left: 50px;
+}
+
+.logo-container img {
+  width: 200px;
+  height: auto;
+}
+
+/* ============================= */
+/* 3. Columna izquierda (imagen) */
+/* ============================= */
+.imagen-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 140px;
+}
+
+.imagen-container img {
+  width: 150%;
+  max-width: 700px;
+  border-radius: 16px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  object-fit: cover;
+}
+
+/* ============================= */
+/* 4. Columna derecha (formulario) */
+/* ============================= */
+.registro-container {
+  max-width: 300px;
+  width: 200%;
+  margin: 140px;
+  padding: 130px;
   border-radius: 12px;
+  background: white;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.selector {
+/* ============================= */
+/* 5. Selector tipo cliente      */
+/* ============================= */
+
+/* Contenedor estilo toggle */
+.selector-toggle {
   display: flex;
-  justify-content: space-between;
+  position: relative;
+  border: 1px solid #ccc;
+  border-radius: 999px; /* pill shape */
+  overflow: hidden;
+  width: 109%;
+  max-width: 400px;
+  margin: 0 auto 20px auto;
+  background: #fff;
+}
+
+/* Fondo animado (slider) */
+.selector-toggle::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: #007bff;
+  border-radius: 999px;
+  transition: transform 0.3s ease;
+  z-index: 0;
+}
+
+/* Si está seleccionado Cliente Jurídico, se mueve */
+.selector-toggle.juridico::before {
+  transform: translateX(100%);
+}
+
+/* Botones internos */
+.selector-toggle button {
+  flex: 1;
+  padding: 10px 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 500;
+  color: #333;
+  position: relative;
+  z-index: 1; /* por encima del slider */
+  transition: color 0.3s ease;
+}
+
+/* Botón activo (color blanco sobre el fondo oscuro) */
+.selector-toggle button.active {
+  color: #fff;
+}
+
+/* ============================= */
+/* 6. Campos con label flotante  */
+/* ============================= */
+
+.form-row {
+  display: flex;
+  gap: 35px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-group {
+  position: relative;
   margin-bottom: 20px;
 }
 
-.selector button {
-  flex: 1;
-  padding: 10px;
-  border: none;
-  cursor: pointer;
-  background: #eee;
-  transition: 0.3s;
-}
-
-.selector button.active {
-  background: #007bff;
-  color: white;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-input {
-  padding: 8px;
+.form-group input {
+  width: 100%;
+  padding: 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
+  outline: none;
+  background: none;
+  font-size: 14px;
 }
 
-button[type='submit'] {
+.form-group label {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: white;
+  padding: 0 5px;
+  color: #aaa;
+  font-size: 14px;
+  pointer-events: none;
+  transition: 0.2s ease all;
+}
+
+.form-group input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 1px rgba(0, 123, 255, 0.25);
+}
+
+.form-group input:focus + label,
+.form-group input:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 10px;
+  font-size: 12px;
+  color: #007bff;
+}
+
+/* ============================= */
+/* 7. Contraseña con toggle      */
+/* ============================= */
+.password-group {
+  position: relative;
+}
+
+.toggle-btn {
+  position: absolute;
+  right: 1px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  font-size: 16px;
+}
+
+/* ============================= */
+/* 10. Teléfonos (intl-tel-input)*/
+/* ============================= */
+
+/* Contenedor relativo para floating label */
+:host ::ng-deep .floating-input {
+  position: relative;
+  margin: 20px 0; /* espacio superior e inferior entre teléfonos */
+}
+
+/* Input base */
+:host ::ng-deep .floating-input .iti input {
+  width: 124%;
+  padding: 13px 12px 12px 80px; /* espacio para la bandera y label */
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  font-size: 14px;
+  background: none;
+  transition: border-color 0.3s ease;
+}
+
+/* Hover / focus en el input */
+:host ::ng-deep .floating-input .iti input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 1px rgba(0, 123, 255, 0.25);
+}
+
+/* Label flotante */
+:host ::ng-deep .floating-input label {
+  position: absolute;
+  left: 89px; /* mismo que padding-left del input */
+  top: 50%;
+  color: #aaa;
+  font-size: 14px;
+  pointer-events: none;
+  transition: all 0.2s ease-out;
+  padding: 0 4px;
+  transform: translateY(-50%);
+  white-space: nowrap;
+}
+
+/* Cuando el input tiene foco o valor */
+:host ::ng-deep .floating-input:focus-within label,
+:host ::ng-deep .floating-input.filled label {
+  top: -8px;
+  left: 12px;
+  font-size: 12px;
+  color: #007bff;
+}
+
+/* Label flotante cuando hay foco o texto */
+.floating-input.filled label,
+.floating-input input:focus + label {
+  top: -14px;
+  left: 12px;
+  font-size: 12px;
+  color: #007bff;
+}
+
+/* Contenedor de la bandera */
+:host ::ng-deep .iti .iti__flag-container {
+  left: 5px; /* ajustado para que no tape el label */
+}
+
+/* Dropdown del país */
+:host ::ng-deep .iti__country-list {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  font-size: 14px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* Estilo cuando seleccionas un país */
+:host ::ng-deep .iti__country.iti__highlight {
+  background-color: #b3d3f9;
+}
+
+/* Wrapper de intl-tel-input para separación entre inputs */
+:host ::ng-deep .iti {
+  margin: 0; /* ya el contenedor .floating-input maneja el espacio */
+}
+
+/* ============================= */
+/* 8. Botones                    */
+/* ============================= */
+
+.ubicacion-container {
+  display: flex;
+  align-items: center;
+  margin: 15px 0;
+  width: 108%;
+  max-width: 600px;
+}
+
+/* Botón de ubicación */
+.ubicacion-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   background: #007bff;
   color: white;
   border: none;
-  padding: 12px;
+  padding: 13px 16px;
   border-radius: 8px;
   cursor: pointer;
+  transition: 0.3s;
+  font-size: 14px;
+  width: 100%;
+}
+
+.ubicacion-btn i {
+  font-size: 16px;
+}
+
+.ubicacion-btn:hover {
+  background: #0056b3;
+}
+
+/* Info que reemplaza el botón */
+.ubicacion-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #007bff;
+  background: #e6f0ff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid #b3d3f9;
+  width: 100%;
+}
+
+/* ============================= */
+/* 9. Responsividad              */
+/* ============================= */
+@media (max-width: 768px) {
+  .registro-layout {
+    flex-direction: column;
+    padding-top: 80px; /* para que no tape el logo */
+  }
+
+  .imagen-container img {
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .logo-container img {
+    width: 90px;
+  }
 }
