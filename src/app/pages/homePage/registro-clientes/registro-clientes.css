@@ -13,12 +13,16 @@
 }
 
 .registro-layout h2 {
-  font-size: 25px;
-  text-align: center;
-  margin-bottom: 20px;
-  margin-left: 15px;
+  position: absolute;
+  font-size: 32px; /* más grande */
+  font-weight: 700;
   color: #333;
-  font-family: Verdana, Geneva, sans-serif;
+  text-align: center;
+  margin-bottom: 25px;
+  font-family: 'Verdana', Geneva, sans-serif;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* efecto sutil */
+  top: 130px;
+  right: 230px;
 }
 
 /* ============================= */
@@ -42,8 +46,9 @@
   flex: 1;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex;
   margin-left: 140px;
+  margin-top: 10px;
 }
 
 .imagen-container img {
@@ -58,13 +63,16 @@
 /* 4. Columna derecha (formulario) */
 /* ============================= */
 .registro-container {
-  max-width: 300px;
-  width: 200%;
-  margin: 140px;
-  padding: 130px;
+  max-width: 350px;
+  width: 100%;
+  margin: 120px;
+  padding: 80px 80px;
   border-radius: 12px;
   background: white;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 /* ============================= */
@@ -126,6 +134,19 @@
 /* 6. Campos con label flotante  */
 /* ============================= */
 
+.form-row,
+.form-group,
+.selector-toggle {
+  right: 13px;
+}
+
+.form-row,
+.form-group,
+.selector-toggle,
+.ubicacion-container {
+  right: 13px;
+}
+
 .form-row {
   display: flex;
   gap: 35px;
@@ -185,8 +206,8 @@
 
 .toggle-btn {
   position: absolute;
-  right: 1px;
-  top: 50%;
+  right: 20px;
+  top: 55%;
   transform: translateY(-50%);
   background: none;
   border: none;
@@ -203,11 +224,12 @@
 :host ::ng-deep .floating-input {
   position: relative;
   margin: 20px 0; /* espacio superior e inferior entre teléfonos */
+  right: 13px;
 }
 
 /* Input base */
 :host ::ng-deep .floating-input .iti input {
-  width: 124%;
+  width: 144%;
   padding: 13px 12px 12px 80px; /* espacio para la bandera y label */
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -249,7 +271,7 @@
 /* Label flotante cuando hay foco o texto */
 .floating-input.filled label,
 .floating-input input:focus + label {
-  top: -14px;
+  top: -8px;
   left: 12px;
   font-size: 12px;
   color: #007bff;
@@ -283,17 +305,16 @@
 /* 8. Botones                    */
 /* ============================= */
 
+,
 .ubicacion-container {
-  display: flex;
-  align-items: center;
-  margin: 15px 0;
-  width: 108%;
-  max-width: 600px;
+  width: 120%;
+  margin-right: 15px;
 }
 
 /* Botón de ubicación */
 .ubicacion-btn {
   display: flex;
+  position: relative;
   align-items: center;
   gap: 8px;
   background: #007bff;
@@ -304,7 +325,8 @@
   cursor: pointer;
   transition: 0.3s;
   font-size: 14px;
-  width: 100%;
+  width: 108%;
+  right: 13px;
 }
 
 .ubicacion-btn i {
@@ -318,6 +340,7 @@
 /* Info que reemplaza el botón */
 .ubicacion-info {
   display: flex;
+  position: relative;
   align-items: center;
   gap: 8px;
   font-size: 14px;
@@ -327,7 +350,245 @@
   padding: 10px 16px;
   border-radius: 8px;
   border: 1px solid #b3d3f9;
+  width: 98%;
+  right: 13px;
+}
+
+/* ============================= */
+/* Botón de Registro             */
+/* ============================= */
+
+/* Botón deshabilitado */
+.submit-btn:disabled {
+  background-color: #ccc; /* gris neutro */
+  color: #666;
+  cursor: not-allowed;
+  opacity: 0.7;
+  border-radius: 12px; /* más redondeado */
+  padding: 14px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.3s ease;
   width: 100%;
+  text-align: center;
+  border: none;
+  box-shadow: none;
+}
+
+/* Botón habilitado */
+.submit-btn:not(:disabled) {
+  background-color: #ff6600; /* naranja */
+  color: #fff;
+  cursor: pointer;
+  border-radius: 12px; /* más redondeado */
+  padding: 14px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  width: 100%;
+  text-align: center;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover cuando está habilitado */
+.submit-btn:not(:disabled):hover {
+  background-color: #ff8533; /* naranja más claro */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+/* ============================= */
+/* 9. Aviso Legal              */
+/* ============================= */
+
+.aviso-legal {
+  font-size: 12px;
+  color: #555;
+  text-align: center;
+  margin-bottom: 15px;
+  line-height: 1.4;
+  right: 13px;
+}
+
+.aviso-legal a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.aviso-legal a:hover {
+  text-decoration: underline;
+}
+
+/* ============================= */
+/* 9. Alertas (errores)         */
+/* ============================= */
+
+/* Recuadro rojo en inputs con error */
+.form-group.error input,
+.floating-input.error input {
+  border-color: #ff4d4f; /* borde rojo */
+  box-shadow: 0 0 0 1px rgba(255, 77, 79, 0.5);
+}
+
+.form-group {
+  position: relative; /* necesario para que tooltip se posicione respecto al grupo */
+}
+
+.error-icon {
+  color: #ff4d4f;
+  cursor: pointer;
+  font-size: 14px;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.tooltip {
+  visibility: hidden;
+  opacity: 0;
+  width: max-content;
+  max-width: 180px;
+  background-color: #ff4d4f;
+  color: #fff;
+  text-align: center;
+  border-radius: 4px;
+  padding: 5px 8px;
+  position: absolute;
+  z-index: 10;
+  bottom: 125%; /* Aparece arriba del icono */
+  left: 100%; /* al lado derecho del icono */
+  transform: translateX(-50%);
+  transition: opacity 0.3s;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: #ff4d4f transparent transparent transparent;
+}
+
+/* Mostrar tooltip al pasar el mouse sobre el icono */
+.error-icon:hover + .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* ============================= */
+/* 12. Google         */
+/* ============================= */
+
+/* Separador "o continúa con" */
+.social-separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+  color: #666;
+  font-size: 14px;
+  font-weight: 400;
+}
+.social-separator::before,
+.social-separator::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #ddd;
+  margin: 0 10px;
+}
+
+/* Contenedor de botones sociales */
+.social-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+/* Estilo general para botones sociales */
+.social-buttons button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Icono dentro del botón */
+.social-buttons button i {
+  font-size: 20px;
+  color: #db4437; /* Color característico de Google */
+}
+
+/* Hover efecto */
+.social-buttons button:hover {
+  background-color: #f8f8f8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Botón específico de Google */
+.google-btn {
+  border-color: #db4437;
+  color: #db4437;
+  font-weight: 600;
+}
+.google-btn:hover {
+  background-color: #db4437;
+  color: #c43434;
+  border-color: #db4437;
+}
+
+/* ============================= */
+/* Login y Footer              */
+/* ============================= */
+
+/* Parte superior derecha: login */
+.top-right-login {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 14px;
+  color: #666;
+  z-index: 10;
+  font-family: 'Verdana', Geneva, sans-serif;
+}
+.top-right-login a {
+  color: #007bff; /* Color resaltado para el enlace */
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+.top-right-login a:hover {
+  text-decoration: underline;
+  color: #007bff; /* Color hover más oscuro */
+}
+
+/* Footer con derechos reservados */
+.footer {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+  z-index: 5;
 }
 
 /* ============================= */

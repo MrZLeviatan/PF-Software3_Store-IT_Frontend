@@ -1,27 +1,33 @@
 import { Injectable } from '@angular/core';
+import intlTelInput from 'intl-tel-input';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class TelefonoService {
-  constructor() {}
+  private itiInstances: Map<string, any> = new Map(); // <-- usamos 'any'
 
-  // Obtener número completo con código de país
-  obtenerNumero(inputId: string): string | null {
-    const input = document.querySelector<HTMLInputElement>(`#${inputId}`);
-    if (!input) return null;
+  inicializar(inputId: string) {
+    const input = document.getElementById(inputId) as HTMLInputElement;
+    if (!input) return;
 
-    // @ts-ignore -> porque intlTelInput agrega la función al input
-    return input?.intlTelInput('getNumber') || null;
+    const iti = intlTelInput(input, {
+      initialCountry: 'co',
+      preferredCountries: ['co', 'us', 'gb', 'ca', 'mx', 'fr'],
+      separateDialCode: true,
+    } as any);
+    this.itiInstances.set(inputId, iti);
   }
 
-  // Obtener solo el código de país
-  obtenerCodigoPais(inputId: string): string | null {
-    const input = document.querySelector<HTMLInputElement>(`#${inputId}`);
-    if (!input) return null;
+  obtenerNumero(inputId: string): string | null {
+    const iti = this.itiInstances.get(inputId);
+    if (!iti) return null;
 
-    // @ts-ignore
-    const data = input?.intlTelInput('getSelectedCountryData');
-    return data?.dialCode || null;
+    const raw = (document.getElementById(inputId) as HTMLInputElement)?.value || '';
+    const codigo = iti.getSelectedCountryData().dialCode;
+    return raw ? `+${codigo}${raw}` : null;
+  }
+
+  obtenerCodigoPais(inputId: string): string | null {
+    const iti = this.itiInstances.get(inputId);
+    return iti ? iti.getSelectedCountryData().dialCode : null;
   }
 }

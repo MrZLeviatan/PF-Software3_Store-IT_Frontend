@@ -22,7 +22,11 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.css", "node_modules/intl-tel-input/build/css/intlTelInput.css"]
+            "styles": ["src/styles.css", "node_modules/intl-tel-input/build/css/intlTelInput.css"],
+            "scripts": [
+              "node_modules/intl-tel-input/build/js/intlTelInput.min.js",
+              "src/assets/js/utils.js"
+            ]
           },
           "configurations": {
             "production": {

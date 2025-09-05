@@ -45,10 +45,10 @@ export class TopBar {
     const currentUrl = this.router.url;
 
     if (currentUrl === '/' || currentUrl === '/inicio') {
-      // 🔝 Si ya estás en inicio, hace scroll suave hacia el top
+      // Si ya estás en inicio, hace scroll suave hacia el top
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      // 🚀 Si estás en otra ruta, navega hacia la raíz
+      // Si estás en otra ruta, navega hacia la raíz
       this.router.navigate(['/']);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
