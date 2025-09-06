@@ -25,9 +25,9 @@ export class UbicacionService {
 
               const ubicacion: UbicacionDto = {
                 pais: data.address?.country || 'Desconocido',
-                ciudad: data.address?.city || 'Desconocida',
-                latitud: pos.coords.latitude,
-                longitud: pos.coords.longitude,
+                ciudad: data.address?.city || data.address?.town || 'Desconocida',
+                latitud: lat,
+                longitud: lon,
               };
               resolve(ubicacion);
             } catch (error) {
@@ -35,7 +35,25 @@ export class UbicacionService {
             }
           },
           (err) => {
-            reject('No se pudo obtener la ubicación: ' + err.message);
+            // Manejo detallado de errores
+            switch (err.code) {
+              case err.PERMISSION_DENIED:
+                reject('Permiso denegado para acceder a la ubicación.');
+                break;
+              case err.POSITION_UNAVAILABLE:
+                reject('Ubicación no disponible.');
+                break;
+              case err.TIMEOUT:
+                reject('Tiempo de espera agotado al obtener la ubicación.');
+                break;
+              default:
+                reject('Error desconocido al obtener la ubicación: ' + err.message);
+            }
+          },
+          {
+            enableHighAccuracy: true, // Mejor precisión en móviles
+            timeout: 10000, // 10 segundos de espera
+            maximumAge: 0, // No usar caché
           }
         );
       } else {
