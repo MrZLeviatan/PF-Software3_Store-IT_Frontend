@@ -64,10 +64,6 @@
           Iniciar sesión
         </button>
       </div>
-
-      <!-- Mensaje general de error -->
-      <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-      <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
     </form>
 
     <!-- Separador social -->
@@ -87,5 +83,37 @@
 
     <!-- Link de contacto / registro -->
     <p class="register-link">¿No tienes una cuenta? <a href="/registroClientes"> Regístrate</a></p>
+  </div>
+
+  <!-- 🔹 Overlay de verificación -->
+  <div class="overlay" *ngIf="mostrarVerificacion">
+    <div class="verificacion-modal">
+      <h3>Autentificación de Inicio de Sesión</h3>
+      <p>
+        Hemos enviado un código de autentificación al correo
+        <strong>{{ emailVerificacion }}</strong
+        >.
+      </p>
+
+      <form [formGroup]="formCodigo" (ngSubmit)="confirmarVerificacion()">
+        <div class="form-group">
+          <input
+            type="text"
+            formControlName="codigo"
+            maxlength="6"
+            class="codigo-input"
+            placeholder="------"
+            (input)="forzarMayusculas($event)"
+          />
+        </div>
+
+        <div class="modal-buttons">
+          <button type="submit" class="submit-btn">Confirmar</button>
+          <button type="button" (click)="cancelarVerificacion()" class="cancel-btn">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>

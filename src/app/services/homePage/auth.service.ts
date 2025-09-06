@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { LoginDto } from '../../dto/homePage/login/login.dto';
+import { VerificacionCodigoDto } from '../../dto/homePage/login/verificacion-login.dto';
+import { TokenDto } from '../../dto/token.dto';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -13,5 +16,13 @@ export class AuthService {
 
   login(loginDto: LoginDto): Observable<any> {
     return this.http.post(`${this.baseUrl}/login`, loginDto);
+  }
+
+  verificarLogin(dto: VerificacionCodigoDto): Observable<TokenDto> {
+    return this.http
+      .post<{ error: boolean; mensaje: TokenDto }>(`${this.baseUrl}/login-verificación`, dto)
+      .pipe(
+        map((res) => res.mensaje) // extraemos el token dentro de mensaje
+      );
   }
 }
