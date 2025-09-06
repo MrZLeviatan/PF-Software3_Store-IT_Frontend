@@ -12,7 +12,7 @@ import { UbicacionDto } from '../../../dto/common/ubicacion.dto';
 import { UbicacionService } from './services/ubicacion.service';
 import { TelefonoService } from './services/telefono.service';
 import { Router } from '@angular/router';
-import { ClienteService } from '../../../services/homePage/registroCliente.service';
+import { RegistroClienteService } from '../../../services/homePage/registroCliente.service';
 import { ToastService } from '../../../components/toast/service/toast.service';
 
 @Component({
@@ -39,7 +39,7 @@ export class RegistroClientes implements AfterViewInit {
     private ubicacionService: UbicacionService,
     private telefonoService: TelefonoService,
     private router: Router,
-    private clienteService: ClienteService,
+    private clienteService: RegistroClienteService,
     private toastService: ToastService,
     private googleAuth: GoogleAuthService,
     private cd: ChangeDetectorRef

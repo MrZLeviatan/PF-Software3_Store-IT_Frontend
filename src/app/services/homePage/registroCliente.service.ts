@@ -9,7 +9,7 @@ import { CrearClienteGoogleDto } from '../../dto/homePage/registro/crear-cliente
 @Injectable({
   providedIn: 'root',
 })
-export class ClienteService {
+export class RegistroClienteService {
   private baseUrl = 'http://localhost:8080/api/store-it'; // Endpoint de Spring Boot
 
   constructor(private http: HttpClient) {}

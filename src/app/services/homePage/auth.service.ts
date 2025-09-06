@@ -5,6 +5,7 @@ import { LoginDto } from '../../dto/homePage/login/login.dto';
 import { VerificacionCodigoDto } from '../../dto/homePage/login/verificacion-login.dto';
 import { TokenDto } from '../../dto/token.dto';
 import { map } from 'rxjs/operators';
+import { GoogleValidateResponse } from '../../dto/common/google-validation.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,10 @@ export class AuthService {
 
   login(loginDto: LoginDto): Observable<any> {
     return this.http.post(`${this.baseUrl}/login`, loginDto);
+  }
+
+  loginConGoogle(idToken: string): Observable<GoogleValidateResponse> {
+    return this.http.post<GoogleValidateResponse>(`${this.baseUrl}/login-google`, { idToken });
   }
 
   verificarLogin(dto: VerificacionCodigoDto): Observable<TokenDto> {

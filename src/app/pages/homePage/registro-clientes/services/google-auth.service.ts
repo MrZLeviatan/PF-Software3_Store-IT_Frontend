@@ -1,4 +1,4 @@
-import { ClienteService } from './../../../../services/homePage/registroCliente.service';
+import { RegistroClienteService } from './../../../../services/homePage/registroCliente.service';
 import { Injectable } from '@angular/core';
 import { GoogleValidateResponse } from '../../../../dto/common/google-validation.dto';
 import { Observable, of } from 'rxjs';
@@ -10,7 +10,7 @@ declare const google: any;
 export class GoogleAuthService {
   private clientId = '79690855058-fojmhksrcau0tbvjlvfd10sifun3ght9.apps.googleusercontent.com'; // 🔹 cambia por el tuyo
 
-  constructor(private clienteService: ClienteService) {}
+  constructor(private clienteService: RegistroClienteService) {}
 
   /**
    * Inicializa el botón oficial de Google en el div dado por ID
@@ -40,7 +40,6 @@ export class GoogleAuthService {
 
     this.validarTokenGoogle(idToken).subscribe({
       next: (payload) => callback(payload),
-      error: (err) => console.error('Error validando token Google:', err),
     });
   }
 
@@ -52,6 +51,5 @@ export class GoogleAuthService {
       tap((res: any) => console.log('Google payload validado:', res)),
       map((res: any) => res.mensaje)
     );
-    // Extrae solo el mensaje para el componente
   }
 }
