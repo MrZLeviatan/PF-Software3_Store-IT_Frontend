@@ -197,6 +197,17 @@
   color: #007bff;
 }
 
+input[disabled] {
+  border: 1px solid #ccc;
+}
+
+input[disabled] {
+  background-color: #f0f0f0; /* 🔹 Fondo gris */
+  color: #555; /* 🔹 Texto un poco más opaco */
+  opacity: 0.7; /* 🔹 Le da efecto de desactivado */
+  cursor: not-allowed; /* 🔹 Cursor de no editable */
+}
+
 /* ============================= */
 /* 7. Contraseña con toggle      */
 /* ============================= */

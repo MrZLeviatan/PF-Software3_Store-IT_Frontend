@@ -180,7 +180,7 @@
           [disabled]="!formNatural.valid"
           *ngIf="esClienteNatural"
         >
-          Crear una cuenta personal
+          {{ esGoogle ? 'Crear cuenta con Google' : 'Crear una cuenta personal' }}
         </button>
       </form>
 
@@ -191,10 +191,7 @@
 
       <!-- Botones sociales -->
       <div class="social-buttons">
-        <button type="button" class="google-btn">
-          <i class="fa-brands fa-google"></i>
-          Google
-        </button>
+        <div id="googleButton"></div>
       </div>
 
       }

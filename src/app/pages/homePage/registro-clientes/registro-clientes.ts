@@ -1,5 +1,8 @@
+import { CrearClienteGoogleDto } from './../../../dto/homePage/registro/crear-cliente-google.dto';
+import { GoogleAuthService } from './services/google-auth.service';
+import { GoogleValidateResponse } from '../../../dto/common/google-validation.dto';
 import { CodigoVerificacionDto } from './../../../dto/common/codigo-verificacion.dto';
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -28,6 +31,8 @@ export class RegistroClientes implements AfterViewInit {
   mostrarPassword: boolean = false;
   mostrarVerificacion: boolean = false; // ✅ Toggle para mostrar cuadro de verificación
   emailVerificacion: string = ''; // ✅ correo mostrado en modal
+  private googlePayload: { name: string; email: string; picture?: string } | null = null;
+  public esGoogle: boolean = false; // ✅ nuevo flag para controlar el bloqueo
 
   constructor(
     private fb: FormBuilder,
@@ -35,7 +40,9 @@ export class RegistroClientes implements AfterViewInit {
     private telefonoService: TelefonoService,
     private router: Router,
     private clienteService: ClienteService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private googleAuth: GoogleAuthService,
+    private cd: ChangeDetectorRef
   ) {
     // Formulario Cliente Natural
     this.formNatural = this.fb.group({
@@ -65,8 +72,21 @@ export class RegistroClientes implements AfterViewInit {
 
   cambiarTipo(tipo: 'NATURAL' | 'JURIDICO') {
     this.esClienteNatural = tipo === 'NATURAL';
+
+    // 🔹 Reset de Google
+    this.esGoogle = false;
+    this.googlePayload = null;
+
     if (this.esClienteNatural) this.formNatural.reset();
     else this.formJuridico.reset();
+
+    // 🔹 Rehabilitar campos deshabilitados
+    this.formNatural.get('nombre')?.enable();
+    this.formNatural.get('apellido')?.enable();
+    this.formNatural.get('email')?.enable();
+
+    setTimeout(() => this.inicializarGoogleButton(), 0);
+
     setTimeout(() => this.inicializarTelefonos());
   }
 
@@ -92,8 +112,8 @@ export class RegistroClientes implements AfterViewInit {
   getErrorMessage(control: AbstractControl | null): string {
     if (!control?.errors) return '';
     if (control.errors['required']) return 'Este campo es obligatorio';
-    if (control.errors['pattern']) return 'Formato inválido';
-    if (control.errors['email']) return 'Correo inválido';
+    if (control.errors['pattern']) return 'Formato No Válido';
+    if (control.errors['email']) return 'Formato de Correo No Válido';
     if (control.errors['minlength'])
       return `Mínimo ${control.errors['minlength'].requiredLength} caracteres`;
     if (control.errors['maxlength'])
@@ -107,10 +127,92 @@ export class RegistroClientes implements AfterViewInit {
 
   ngAfterViewInit() {
     this.inicializarTelefonos();
+    this.inicializarGoogleButton();
+  }
+
+  private inicializarGoogleButton() {
+    this.googleAuth.initGoogleButton('googleButton', (payload: GoogleValidateResponse) => {
+      this.onGoogleData(payload);
+    });
+  }
+
+  private onGoogleData(payload: any) {
+    console.log('📌 Payload recibido:', payload);
+
+    const parts = (payload.name || '').trim().split(' ');
+    const nombre = parts.shift() || '';
+    const apellido = parts.join(' ') || '';
+
+    this.formNatural.patchValue({
+      nombre,
+      apellido,
+      email: payload.email,
+    });
+
+    // 🔹 Bloquea los campos
+    this.formNatural.get('nombre')?.disable();
+    this.formNatural.get('apellido')?.disable();
+    this.formNatural.get('email')?.disable();
+
+    this.esGoogle = true; // ✅ activa el flag de Google
+    this.googlePayload = payload;
+
+    this.cd.detectChanges();
+    this.emailVerificacion = payload.email;
+    this.toastService.show('Google: datos cargados, completa los campos faltantes', 'success');
   }
 
   onSubmit() {
-    // ✅ Paso 1: si está en verificación → validar código
+    // Si es Google, enviamos directo sin verificador
+    if (this.esGoogle && this.googlePayload) {
+      if (!this.ubicacionActual) {
+        this.toastService.show('Debes dar permiso de ubicación antes de registrar.', 'error');
+        this.limpiarTelefonos();
+        return;
+      }
+
+      const dtoGoogle: CrearClienteGoogleDto = {
+        nombre: this.googlePayload.name,
+        email: this.googlePayload.email,
+        ubicacion: this.ubicacionActual!,
+        password: this.formNatural.value.password,
+        telefono: this.telefonoService.obtenerNumero('telNatural') ?? '',
+        codigoPais: this.telefonoService.obtenerCodigoPais('telNatural') ?? '',
+        telefonoSecundario: this.telefonoService.obtenerNumero('telNaturalSec') ?? undefined,
+        codigoPaisSecundario: this.telefonoService.obtenerCodigoPais('telNaturalSec') ?? undefined,
+      };
+
+      this.clienteService.registrarClienteGoogle(dtoGoogle).subscribe({
+        next: (res) => {
+          this.toastService.show(res.mensaje, 'success');
+          this.irInicio(); // 🚀 Redirige directo a la pantalla de inicio
+        },
+        error: (err) => {
+          if (err.status === 400) {
+            this.toastService.show(err?.error?.mensaje || 'Error inesperado', 'error');
+            // 🔹 Formatear campos del formulario
+            if (this.esClienteNatural) {
+              this.formNatural.reset(); // limpia todos los campos
+              (document.getElementById('telNatural') as HTMLInputElement).value = '';
+              (document.getElementById('telNaturalSec') as HTMLInputElement).value = '';
+              // 🔹 Bloquea los campos
+              this.formNatural.get('nombre')?.enable();
+              this.formNatural.get('apellido')?.enable();
+              this.formNatural.get('email')?.enable();
+            }
+          } else if (err.status == 418) {
+            this.toastService.show(err?.error?.mensaje || 'Error inesperado', 'error');
+            this.limpiarTelefonos();
+          } else {
+            this.toastService.show(err?.error?.mensaje || 'Error inesperado', 'error');
+          }
+        },
+      });
+
+      return; // No ejecuta el flujo normal
+    }
+
+    // Si estamos en verificación → validar código
     if (this.mostrarVerificacion) {
       if (this.formCodigo.invalid) {
         this.toastService.show('Debes ingresar un código válido', 'error');
@@ -125,8 +227,7 @@ export class RegistroClientes implements AfterViewInit {
       this.clienteService.verificarRegistroCliente(codigoDto).subscribe({
         next: (res) => {
           this.toastService.show(res.mensaje, 'success');
-          this.router.navigate(['/']);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          this.irInicio();
         },
         error: (err) => {
           this.toastService.show(err?.error?.mensaje || 'Código inválido', 'error');
@@ -135,7 +236,7 @@ export class RegistroClientes implements AfterViewInit {
       return;
     }
 
-    // ✅ Paso 2: registrar cliente
+    // 🔹 Flujo normal de registro
     if (this.esClienteNatural) {
       this.formNatural.patchValue({
         telefono: this.telefonoService.obtenerNumero('telNatural'),
@@ -197,14 +298,31 @@ export class RegistroClientes implements AfterViewInit {
       return;
     }
 
+    // 🔹 Enviar registro normal → activa verificador
     this.clienteService.registrarCliente(dto).subscribe({
       next: (res) => {
         this.toastService.show(res.mensaje, 'success');
-        this.mostrarVerificacion = true; // 🔹 Muestra el cuadro de verificación
+        this.mostrarVerificacion = true; // ✅ muestra el modal de código
       },
       error: (err) => {
-        this.toastService.show(err?.error?.mensaje || 'Error inesperado', 'error');
-        this.limpiarTelefonos();
+        if (err.status === 400) {
+          this.toastService.show(err?.error?.mensaje || 'Error inesperado', 'error');
+          // 🔹 Formatear campos del formulario
+          if (this.esClienteNatural) {
+            this.formNatural.reset(); // limpia todos los campos
+            (document.getElementById('telNatural') as HTMLInputElement).value = '';
+            (document.getElementById('telNaturalSec') as HTMLInputElement).value = '';
+          } else {
+            this.formJuridico.reset();
+            (document.getElementById('telJuridico') as HTMLInputElement).value = '';
+            (document.getElementById('telJuridicoSec') as HTMLInputElement).value = '';
+          }
+        } else if (err.status == 418) {
+          this.toastService.show(err?.error?.mensaje || 'Error inesperado', 'error');
+          this.limpiarTelefonos();
+        } else {
+          this.toastService.show(err?.error?.mensaje || 'Error inesperado', 'error');
+        }
       },
     });
   }
