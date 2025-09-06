@@ -347,4 +347,36 @@
   <footer class="footer">
     <small>© 2025 Store-IT!. Todos los derechos reservados.</small>
   </footer>
+
+  <!-- 🔹 Overlay de verificación -->
+  <div class="overlay" *ngIf="mostrarVerificacion">
+    <div class="verificacion-modal">
+      <h3>Verifica tu correo</h3>
+      <p>
+        Hemos enviado un código de verificación al correo
+        <strong>{{ emailVerificacion }}</strong
+        >.
+      </p>
+
+      <form [formGroup]="formCodigo" (ngSubmit)="confirmarVerificacion()">
+        <div class="form-group">
+          <input
+            type="text"
+            formControlName="codigo"
+            maxlength="6"
+            class="codigo-input"
+            placeholder="------"
+            (input)="forzarMayusculas($event)"
+          />
+        </div>
+
+        <div class="modal-buttons">
+          <button type="submit" class="submit-btn">Confirmar</button>
+          <button type="button" (click)="cancelarVerificacion()" class="cancel-btn">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>

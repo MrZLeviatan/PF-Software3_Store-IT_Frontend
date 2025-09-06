@@ -1,7 +1,8 @@
+import { CodigoVerificacionDto } from './../../../dto/common/codigo-verificacion.dto';
 import { Component, AfterViewInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CrearClienteDto } from '../../../dto/homePage/registro/crear-cliente.dto';
 import { TipoCliente } from '../../../dto/homePage/registro/tipo-cliente.enum';
 import { UbicacionDto } from '../../../dto/common/ubicacion.dto';
@@ -10,12 +11,11 @@ import { TelefonoService } from './services/telefono.service';
 import { Router } from '@angular/router';
 import { ClienteService } from '../../../services/homePage/registroCliente.service';
 import { ToastService } from '../../../components/toast/service/toast.service';
-import intlTelInput from 'intl-tel-input';
 
 @Component({
   selector: 'app-registro-clientes',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './registro-clientes.html',
   styleUrl: './registro-clientes.css',
 })
@@ -23,8 +23,11 @@ export class RegistroClientes implements AfterViewInit {
   esClienteNatural: boolean = true;
   formNatural: FormGroup;
   formJuridico: FormGroup;
+  formCodigo: FormGroup; // ✅ Formulario para el código de verificación
   ubicacionActual: UbicacionDto | null = null;
   mostrarPassword: boolean = false;
+  mostrarVerificacion: boolean = false; // ✅ Toggle para mostrar cuadro de verificación
+  emailVerificacion: string = ''; // ✅ correo mostrado en modal
 
   constructor(
     private fb: FormBuilder,
@@ -32,7 +35,7 @@ export class RegistroClientes implements AfterViewInit {
     private telefonoService: TelefonoService,
     private router: Router,
     private clienteService: ClienteService,
-    private toastService: ToastService // <-- Inyección del servicio toast
+    private toastService: ToastService
   ) {
     // Formulario Cliente Natural
     this.formNatural = this.fb.group({
@@ -53,13 +56,17 @@ export class RegistroClientes implements AfterViewInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
     });
+
+    // ✅ Formulario para verificar el código
+    this.formCodigo = this.fb.group({
+      codigo: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]],
+    });
   }
 
   cambiarTipo(tipo: 'NATURAL' | 'JURIDICO') {
     this.esClienteNatural = tipo === 'NATURAL';
     if (this.esClienteNatural) this.formNatural.reset();
     else this.formJuridico.reset();
-
     setTimeout(() => this.inicializarTelefonos());
   }
 
@@ -72,13 +79,6 @@ export class RegistroClientes implements AfterViewInit {
   async obtenerUbicacion() {
     try {
       this.ubicacionActual = await this.ubicacionService.obtenerUbicacionActual();
-
-      navigator.geolocation.getCurrentPosition(
-        (position) => console.log('Posición obtenida:', position),
-        (error) =>
-          this.toastService.show('Error al obtener la posición. Permite ubicación.', 'error')
-      );
-      console.log('Ubicación obtenida:', this.ubicacionActual);
     } catch (error: any) {
       this.toastService.show(error.message || 'Error al obtener ubicación', 'error');
     }
@@ -86,6 +86,7 @@ export class RegistroClientes implements AfterViewInit {
 
   irInicio() {
     this.router.navigate(['/']);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   getErrorMessage(control: AbstractControl | null): string {
@@ -105,30 +106,51 @@ export class RegistroClientes implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    ['telNatural', 'telNaturalSec', 'telJuridico', 'telJuridicoSec'].forEach((id) => {
-      this.telefonoService.inicializar(id);
-    });
+    this.inicializarTelefonos();
   }
 
   onSubmit() {
+    // ✅ Paso 1: si está en verificación → validar código
+    if (this.mostrarVerificacion) {
+      if (this.formCodigo.invalid) {
+        this.toastService.show('Debes ingresar un código válido', 'error');
+        return;
+      }
+
+      const codigoDto: CodigoVerificacionDto = {
+        email: this.emailVerificacion,
+        codigo: this.formCodigo.value.codigo,
+      };
+
+      this.clienteService.verificarRegistroCliente(codigoDto).subscribe({
+        next: (res) => {
+          this.toastService.show(res.mensaje, 'success');
+          this.router.navigate(['/']);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        },
+        error: (err) => {
+          this.toastService.show(err?.error?.mensaje || 'Código inválido', 'error');
+        },
+      });
+      return;
+    }
+
+    // ✅ Paso 2: registrar cliente
     if (this.esClienteNatural) {
-      // 🔹 Sincronizar teléfonos en el form natural
       this.formNatural.patchValue({
         telefono: this.telefonoService.obtenerNumero('telNatural'),
         telefonoSecundario: this.telefonoService.obtenerNumero('telNaturalSec'),
       });
     } else {
-      // 🔹 Sincronizar teléfonos en el form jurídico
       this.formJuridico.patchValue({
         telefono: this.telefonoService.obtenerNumero('telJuridico'),
         telefonoSecundario: this.telefonoService.obtenerNumero('telJuridicoSec'),
       });
     }
 
-    // ✅ Verificar que la ubicación no sea null
     if (!this.ubicacionActual) {
       this.toastService.show('Debes dar permiso de ubicación antes de registrar.', 'error');
-      this.limpiarTelefonos(); // 🔹 limpiar teléfonos si hay error
+      this.limpiarTelefonos();
       return;
     }
 
@@ -150,6 +172,7 @@ export class RegistroClientes implements AfterViewInit {
         ubicacion: this.ubicacionActual,
         tipoCliente: TipoCliente.NATURAL,
       };
+      this.emailVerificacion = this.formNatural.value.email;
     } else if (!this.esClienteNatural && this.formJuridico.valid) {
       dto = {
         nombre: this.formJuridico.value.nombre,
@@ -167,39 +190,66 @@ export class RegistroClientes implements AfterViewInit {
         tipoCliente: TipoCliente.JURIDICO,
         nit: this.formJuridico.value.nit,
       };
+      this.emailVerificacion = this.formJuridico.value.email;
     } else {
       this.toastService.show('Formulario inválido', 'error');
-      this.limpiarTelefonos(); // 🔹 limpiar teléfonos si hay error
-      console.log('❌ Errores formNatural:', this.formNatural.errors, this.formNatural);
-      console.log('❌ Errores formJuridico:', this.formJuridico.errors, this.formJuridico);
+      this.limpiarTelefonos();
       return;
     }
 
-    // ✅ Enviar DTO al backend
     this.clienteService.registrarCliente(dto).subscribe({
       next: (res) => {
         this.toastService.show(res.mensaje, 'success');
-        this.limpiarTelefonos(); // 🔹 siempre limpiar después de éxito
+        this.mostrarVerificacion = true; // 🔹 Muestra el cuadro de verificación
       },
       error: (err) => {
         this.toastService.show(err?.error?.mensaje || 'Error inesperado', 'error');
-        this.limpiarTelefonos(); // 🔹 siempre limpiar también después de error
+        this.limpiarTelefonos();
       },
     });
   }
 
-  /** 🔹 Método para limpiar los campos de teléfono */
   private limpiarTelefonos() {
     if (this.esClienteNatural) {
       this.formNatural.get('telefono')?.reset('');
       this.formNatural.get('telefonoSecundario')?.reset('');
+      this.formNatural.get('password')?.reset('');
       (document.getElementById('telNatural') as HTMLInputElement).value = '';
       (document.getElementById('telNaturalSec') as HTMLInputElement).value = '';
     } else {
       this.formJuridico.get('telefono')?.reset('');
       this.formJuridico.get('telefonoSecundario')?.reset('');
+      this.formJuridico.get('password')?.reset('');
       (document.getElementById('telJuridico') as HTMLInputElement).value = '';
       (document.getElementById('telJuridicoSec') as HTMLInputElement).value = '';
     }
+  }
+
+  confirmarVerificacion() {
+    this.onSubmit();
+  }
+
+  cancelarVerificacion() {
+    this.mostrarVerificacion = false;
+    this.formCodigo.reset();
+
+    // 🔹 Resetear el formulario completo
+    if (this.formNatural) {
+      this.formNatural.reset();
+    } else if (this.formJuridico) {
+      this.formJuridico.reset();
+    }
+
+    // 🔹 Borrar también la ubicación seleccionada
+    this.ubicacionActual = null;
+
+    // 🔹 Borrar el código de verificación
+    this.emailVerificacion = '';
+  }
+
+  forzarMayusculas(event: Event) {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.toUpperCase(); // 🔹 Convierte en mayúsculas
+    this.formCodigo.get('codigo')?.setValue(input.value, { emitEvent: false });
   }
 }

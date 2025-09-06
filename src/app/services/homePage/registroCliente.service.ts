@@ -1,4 +1,5 @@
 import { CrearClienteDto } from './../../dto/homePage/registro/crear-cliente.dto';
+import { CodigoVerificacionDto } from '../../dto/common/codigo-verificacion.dto';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -13,5 +14,9 @@ export class ClienteService {
 
   registrarCliente(cliente: CrearClienteDto): Observable<any> {
     return this.http.post(`${this.baseUrl}/registro-clientes`, cliente);
+  }
+
+  verificarRegistroCliente(codigo: CodigoVerificacionDto): Observable<any> {
+    return this.http.post(`${this.baseUrl}/verificar-registro-clientes`, codigo);
   }
 }
