@@ -1,0 +1,356 @@
+/* ============================= */
+/* 1. Layout general             */
+/* ============================= */
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  gap: 40px;
+  padding: 20px;
+  position: relative;
+}
+
+/* ============================= */
+/* 2. Logo arriba izquierda      */
+/* ============================= */
+.logo-container {
+  position: absolute;
+  top: 20px;
+  left: 50px;
+}
+
+.logo-container img {
+  width: 200px;
+  height: auto;
+}
+
+/* ============================= */
+/* 3. Columna izquierda (imagen) */
+/* ============================= */
+.login-image {
+  flex: 0.6;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 70px;
+}
+
+.login-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+  object-position: top;
+}
+
+/* ============================= */
+/* 4. Columna derecha (formulario) */
+/* ============================= */
+.login-form-container {
+  flex: 0.6;
+  background-color: #ede9e997;
+  padding: 70px 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 12px;
+  box-shadow: -4px 0 10px rgba(0, 0, 0, 0.05);
+  font-family: Verdana, Geneva, sans-serif;
+  max-width: 500px;
+  right: 60px;
+  position: relative;
+}
+
+.login-form-container h2 {
+  font-size: 32px;
+  color: #1976d2;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.login-subtitle {
+  font-size: 16px;
+  color: #000000;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* ============================= */
+/* 5. Floating labels            */
+/* ============================= */
+.form-group {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.floating-label input {
+  width: 96%;
+  padding: 12px 10px 12px 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s;
+}
+
+.floating-label label {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #aaa;
+  font-size: 14px;
+  pointer-events: none;
+  transition: 0.2s ease all;
+}
+
+.floating-label input:focus + label,
+.floating-label input:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 10px;
+  font-size: 12px;
+  color: #007bff;
+}
+
+/* ============================= */
+/* 6. Contraseña con toggle      */
+/* ============================= */
+.password-group {
+  position: relative;
+}
+
+.password-group .toggle-btn {
+  position: absolute;
+  right: 40px;
+  top: 55%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: #666;
+}
+
+.password-group .toggle-btn i {
+  font-size: 16px;
+}
+
+/* ============================= */
+/* 7. Botones principales        */
+/* ============================= */
+button[type='submit'],
+.google-login-button button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 6px;
+  background-color: #ff6600;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+
+button[type='submit']:hover,
+.google-login-button button:hover {
+  background-color: #ff8533;
+}
+
+/* ============================= */
+/* Validar Campos        */
+/* ============================= */
+
+input.invalid {
+  border: 2px solid red !important;
+  background-color: #ffe6e6;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.875rem;
+  margin-top: 5px;
+}
+
+.success-message {
+  color: green;
+  font-size: 0.875rem;
+  margin-top: 5px;
+}
+
+button[disabled] {
+  background-color: #ccc !important;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+button[type='submit']:hover:not([disabled]) {
+  background-color: #ff8533;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Icono de error */
+.error-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: red;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Tooltip simple con title */
+.error-icon:hover::after {
+  content: attr(title);
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #ffcccc;
+  color: red;
+  padding: 5px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  font-size: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+/* Ajustar input con icono */
+.form-group {
+  position: relative;
+}
+
+/* ============================= */
+/* 8. Google login button        */
+/* ============================= */
+
+/* Separador "o continúa con" */
+.social-separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+  color: #666;
+  font-size: 14px;
+  font-weight: 400;
+}
+.social-separator::before,
+.social-separator::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #ddd;
+  margin: 0 10px;
+}
+
+.google-login-button {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #ffffff;
+  color: #444;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.google-login-button img {
+  width: 20px;
+  height: 20px;
+}
+
+.google-login-button:hover {
+  background-color: #f5f5f5;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ============================= */
+/* 9. Enlace a registro         */
+/* ============================= */
+.register-link {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 14px;
+  color: #444;
+}
+
+.register-link a {
+  color: #1976d2;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}
+
+/* ============================= */
+/* 10. Errores y validaciones    */
+/* ============================= */
+input.invalid {
+  border: 2px solid red !important;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.success-message {
+  color: green;
+}
+
+/* ============================= */
+/* 11. Responsive Android / móvil */
+/* ============================= */
+@media screen and (max-width: 768px) {
+  .login-wrapper {
+    flex-direction: column;
+    width: 90%;
+  }
+
+  .login-image {
+    display: none;
+  }
+
+  .floating-label input {
+    width: 93%;
+  }
+
+  .login-form-container {
+    width: 100%;
+    max-width: 100%;
+    box-shadow: none;
+    padding: 20px 15px;
+    right: 0;
+  }
+
+  .logo-container {
+    position: relative;
+    top: 10px;
+    margin-top: -60px;
+    left: 0;
+    text-align: center;
+  }
+
+  .logo-container img {
+    width: 200px; /* ajusta tamaño para móvil */
+    height: auto;
+    display: block;
+    margin: 0 auto; /* asegura que quede centrado */
+  }
+}

@@ -185,11 +185,10 @@ export class RegistroClientes implements AfterViewInit {
       this.clienteService.registrarClienteGoogle(dtoGoogle).subscribe({
         next: (res) => {
           this.toastService.show(res.mensaje, 'success');
-          this.irInicio(); // 🚀 Redirige directo a la pantalla de inicio
+          this.irInicio(); // Redirige directo a la pantalla de inicio
         },
         error: (err) => {
           if (err.status === 400) {
-            this.toastService.show(err?.error?.mensaje || 'Error inesperado', 'error');
             // 🔹 Formatear campos del formulario
             if (this.esClienteNatural) {
               this.formNatural.reset(); // limpia todos los campos
@@ -201,10 +200,7 @@ export class RegistroClientes implements AfterViewInit {
               this.formNatural.get('email')?.enable();
             }
           } else if (err.status == 418) {
-            this.toastService.show(err?.error?.mensaje || 'Error inesperado', 'error');
             this.limpiarTelefonos();
-          } else {
-            this.toastService.show(err?.error?.mensaje || 'Error inesperado', 'error');
           }
         },
       });
@@ -229,9 +225,7 @@ export class RegistroClientes implements AfterViewInit {
           this.toastService.show(res.mensaje, 'success');
           this.irInicio();
         },
-        error: (err) => {
-          this.toastService.show(err?.error?.mensaje || 'Código inválido', 'error');
-        },
+        error: (err) => {},
       });
       return;
     }
@@ -306,7 +300,6 @@ export class RegistroClientes implements AfterViewInit {
       },
       error: (err) => {
         if (err.status === 400) {
-          this.toastService.show(err?.error?.mensaje || 'Error inesperado', 'error');
           // 🔹 Formatear campos del formulario
           if (this.esClienteNatural) {
             this.formNatural.reset(); // limpia todos los campos
@@ -318,10 +311,7 @@ export class RegistroClientes implements AfterViewInit {
             (document.getElementById('telJuridicoSec') as HTMLInputElement).value = '';
           }
         } else if (err.status == 418) {
-          this.toastService.show(err?.error?.mensaje || 'Error inesperado', 'error');
           this.limpiarTelefonos();
-        } else {
-          this.toastService.show(err?.error?.mensaje || 'Error inesperado', 'error');
         }
       },
     });

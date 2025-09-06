@@ -57,6 +57,7 @@ export class TopBar {
   irRegistro() {
     this.menuOpen = false;
     this.router.navigate(['/registroClientes']);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   irAbout() {
@@ -68,5 +69,6 @@ export class TopBar {
   irLogin() {
     this.menuOpen = false;
     this.router.navigate(['/login']);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
