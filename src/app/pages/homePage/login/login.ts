@@ -11,21 +11,35 @@ import { AuthService } from '../../../services/homePage/auth.service';
 import { TokenService } from '../../../services/token.service';
 import { GoogleAuthService } from './service/google-login.service';
 import { GoogleValidateResponse } from '../../../dto/common/google-validation.dto';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
 })
 export class Login implements AfterViewInit {
   mostrarPassword: boolean = false;
   loginForm: FormGroup;
+  solicitudForm: FormGroup;
 
   mostrarVerificacion: boolean = false;
   emailVerificacion: string = '';
   formCodigo: FormGroup;
+
+  // Variables para el modal solicitud
+  mostrarModalPassword = false;
+  emailRestablecer: string = '';
+
+  // Variable para el modal verificar codigo restablecer
+  mostrarCodigoRestablecer = false;
+  formCodigoRestablecer: FormGroup;
+
+  // Variable para modal de nueva contraseña
+  mostrarNuevaPassword = false;
+  formNuevaPassword: FormGroup;
 
   constructor(
     private fb: FormBuilder,
@@ -44,6 +58,18 @@ export class Login implements AfterViewInit {
 
     this.formCodigo = this.fb.group({
       codigo: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]],
+    });
+
+    this.solicitudForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+    });
+
+    this.formCodigoRestablecer = this.fb.group({
+      codigo: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]],
+    });
+
+    this.formNuevaPassword = this.fb.group({
+      nuevaPassword: ['', [Validators.required, Validators.minLength(8)]],
     });
   }
 
@@ -137,5 +163,90 @@ export class Login implements AfterViewInit {
     const input = event.target as HTMLInputElement;
     input.value = input.value.toUpperCase();
     this.formCodigo.get('codigo')?.setValue(input.value, { emitEvent: false });
+  }
+
+  solicitarRestablecerPassword(event: Event) {
+    event.preventDefault();
+    this.mostrarModalPassword = true; // abre modal
+  }
+
+  cerrarModal() {
+    this.mostrarModalPassword = false;
+    this.emailRestablecer = '';
+    this.solicitudForm.reset();
+  }
+
+  isInvalidSolicitud(controlName: string): boolean {
+    const control = this.solicitudForm.get(controlName);
+    return !!(control && control.invalid && (control.touched || control.dirty));
+  }
+
+  enviarSolicitudRestablecer() {
+    if (this.solicitudForm.invalid) {
+      this.toastService.show('Debes ingresar un correo válido', 'error');
+      return;
+    }
+
+    const dto = { email: this.solicitudForm.value.email };
+    const email = this.solicitudForm.value.email;
+
+    this.authService.solicitarRestablecimientoPassword(dto).subscribe({
+      next: (res) => {
+        // Reset campos usados
+        this.toastService.show(res.mensaje || 'Solicitud enviada al correo', 'success');
+        this.emailRestablecer = email;
+        this.solicitudForm.reset();
+        this.mostrarModalPassword = false;
+        // Abrimos modal de verificación codigo
+        this.mostrarCodigoRestablecer = true;
+      },
+      error: (err) => {},
+    });
+  }
+
+  // Confirmar código de verificación
+  confirmarCodigo() {
+    if (this.formCodigoRestablecer.invalid) return;
+
+    const dto = {
+      email: this.emailRestablecer,
+      codigo: this.formCodigoRestablecer.value.codigo,
+    };
+
+    this.authService.verificarCodigoPassword(dto).subscribe({
+      next: () => {
+        this.mostrarCodigoRestablecer = false;
+        this.formCodigoRestablecer.reset();
+
+        this.mostrarNuevaPassword = true; // 🔹 abrimos modal nueva contraseña
+      },
+      error: (err) => {},
+    });
+  }
+
+  actualizarPassword() {
+    if (this.formNuevaPassword.invalid) {
+      this.toastService.show('La contraseña debe tener al menos 8 caracteres', 'error');
+      return;
+    }
+
+    const dto = {
+      email: this.emailRestablecer,
+      nuevaPassword: this.formNuevaPassword.value.nuevaPassword,
+    };
+
+    this.authService.actualizarPassword(dto).subscribe({
+      next: (res) => {
+        this.toastService.show(res.mensaje || 'Contraseña actualizada correctamente', 'success');
+        this.formNuevaPassword.reset();
+        this.mostrarNuevaPassword = false;
+      },
+      error: (err) => {},
+    });
+  }
+
+  cancelarCodigo() {
+    this.formCodigo.reset();
+    this.mostrarCodigoRestablecer = false;
   }
 }

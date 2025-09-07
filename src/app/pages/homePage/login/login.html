@@ -58,6 +58,11 @@
         </div>
       </div>
 
+      <!-- 🔹 Link restablecer contraseña -->
+      <p class="forgot-password">
+        <a href="#" (click)="solicitarRestablecerPassword($event)">¿Olvidaste tu contraseña?</a>
+      </p>
+
       <!-- Botón login -->
       <div class="form-group">
         <button type="submit" [disabled]="loginForm.invalid" class="submit-btn">
@@ -110,6 +115,115 @@
           <button type="button" (click)="cancelarVerificacion()" class="cancel-btn">
             Cancelar
           </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal restablecer contraseña -->
+  <div class="modal-backdrop" *ngIf="mostrarModalPassword">
+    <div class="modal">
+      <h3>Restablecer contraseña</h3>
+      <p>Introduce tu correo electrónico para recibir un enlace de restablecimiento.</p>
+
+      <form [formGroup]="solicitudForm" (ngSubmit)="enviarSolicitudRestablecer()">
+        <!-- Email -->
+        <div class="form-group floating-label">
+          <input
+            type="email"
+            id="email"
+            placeholder=" "
+            formControlName="email"
+            [class.invalid]="isInvalidSolicitud('email')"
+          />
+          <label for="email">Correo Electrónico</label>
+          <!-- Ícono de error -->
+          <div
+            *ngIf="isInvalidSolicitud('email')"
+            class="error-icon"
+            [title]="'Ingresa un email válido'"
+          >
+            <i class="fa fa-exclamation-circle"></i>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="submit">Enviar</button>
+          <button type="button" (click)="cerrarModal()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 🔹 Modal para verificar código -->
+  <div class="overlay" *ngIf="mostrarCodigoRestablecer">
+    <div class="verificacion-modal">
+      <h3>Verificación de Código</h3>
+      <p>
+        Hemos enviado un código de verificación al correo
+        <strong>{{ emailVerificacion }}</strong
+        >.
+      </p>
+
+      <form [formGroup]="formCodigoRestablecer" (ngSubmit)="confirmarCodigo()">
+        <div class="form-group">
+          <input
+            type="text"
+            formControlName="codigo"
+            maxlength="6"
+            class="codigo-input"
+            placeholder="------"
+            (input)="
+              formCodigoRestablecer.patchValue({ codigo: $event.target.value.toUpperCase() })
+            "
+          />
+        </div>
+
+        <div class="modal-actions">
+          <button type="submit" class="submit-btn">Confirmar</button>
+          <button type="button" (click)="cancelarCodigo()" class="cancel-btn">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal nueva contraseña -->
+  <div class="modal-backdrop" *ngIf="mostrarNuevaPassword">
+    <div class="modal">
+      <h3>Establecer nueva contraseña</h3>
+      <p>Introduce tu nueva contraseña para actualizar el acceso a tu cuenta.</p>
+
+      <form [formGroup]="formNuevaPassword" (ngSubmit)="actualizarPassword()">
+        <!-- Contraseña -->
+        <div class="form-group floating-label password-group">
+          <input
+            type="password"
+            id="nuevaPassword"
+            placeholder=" "
+            formControlName="nuevaPassword"
+            [class.invalid]="
+              formNuevaPassword.get('nuevaPassword')?.invalid &&
+              formNuevaPassword.get('nuevaPassword')?.touched
+            "
+          />
+          <label for="nuevaPassword">Nueva Contraseña</label>
+
+          <!-- 🔹 Ícono de error -->
+          <div
+            *ngIf="
+              formNuevaPassword.get('nuevaPassword')?.invalid &&
+              formNuevaPassword.get('nuevaPassword')?.touched
+            "
+            class="error-icon"
+            [title]="'La contraseña debe tener mínimo 8 caracteres'"
+          >
+            <i class="fa fa-exclamation-circle"></i>
+          </div>
+        </div>
+
+        <!-- Botones -->
+        <div class="modal-actions">
+          <button type="submit" class="submit-btn">Confirmar</button>
         </div>
       </form>
     </div>

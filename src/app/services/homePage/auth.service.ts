@@ -30,4 +30,17 @@ export class AuthService {
         map((res) => res.mensaje) // extraemos el token dentro de mensaje
       );
   }
+
+  solicitarRestablecimientoPassword(dto: { email: string }): Observable<any> {
+    return this.http.post(`${this.baseUrl}/restablecer-password`, dto);
+  }
+
+  // Endpoint para verificar código
+  verificarCodigoPassword(dto: { email: string; codigo: string }): Observable<any> {
+    return this.http.post(`${this.baseUrl}/verificar-codigo-restablecimiento-password`, dto);
+  }
+
+  actualizarPassword(dto: { email: string; nuevaPassword: string }): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/actualizar-password`, dto);
+  }
 }
