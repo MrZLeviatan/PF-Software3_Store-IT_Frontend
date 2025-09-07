@@ -77,6 +77,45 @@ legend {
   color: #007bff;
 }
 
+/* Ícono de error */
+.error-icon {
+  color: #e74c3c; /* rojo */
+  font-size: 18px;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: help; /* cambia cursor a ayuda */
+}
+
+/* ============================= */
+/* Mensajes de Error en Cuadro   */
+/* ============================= */
+.error-message {
+  background: #e74c3c; /* rojo fuerte */
+  color: #fff; /* texto blanco */
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+/* ============================= */
+/* Vista Previa Imagen           */
+/* ============================= */
+.image-preview {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.image-preview img {
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
 /* ============================= */
 /* Boton de Envio    */
 /* ============================= */
@@ -88,7 +127,7 @@ button[type='submit'] {
   font-size: 16px;
   font-weight: 500;
   color: #fff;
-  background: linear-gradient(90deg, #ff4b2b, #ff416c);
+  background: linear-gradient(90deg, #ff6600, #ff8533);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -111,8 +150,8 @@ button:disabled {
 
 .upload-wrapper {
   display: grid;
-  width: 100%;
-  max-width: 500px;
+  width: 70%;
+  max-width: 100%;
   padding: 20px;
   border-radius: 15px;
   background-color: #fff;

@@ -32,6 +32,13 @@ export class TokenService {
     }
   }
 
+  getEmail(): string | null {
+    const token = this.getToken();
+    if (!token) return null;
+    const decode: any = this.decodeToken(token);
+    return decode ? decode.email : null;
+  }
+
   // Obtiene el ID del usuario desde el token JWT
   getUserIdFromToken(): number | null {
     const token = this.getToken();

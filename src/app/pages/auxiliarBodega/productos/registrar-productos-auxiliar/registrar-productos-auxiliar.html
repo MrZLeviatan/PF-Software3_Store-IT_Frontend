@@ -9,23 +9,56 @@
       <legend>Registro de Producto</legend>
 
       <div class="form-group">
-        <input formControlName="codigoProducto" type="text" required />
+        <input formControlName="codigoProducto" type="text" required placeholder=" " />
         <label>Código del Producto</label>
+
+        <!-- Icono de error -->
+        <span
+          *ngIf="
+            productoForm.get('codigoProducto')?.invalid &&
+            productoForm.get('codigoProducto')?.touched
+          "
+          class="error-icon bi bi-exclamation-circle-fill"
+          [title]="
+            productoForm.get('codigoProducto')?.hasError('required')
+              ? 'El código es obligatorio'
+              : productoForm.get('codigoProducto')?.hasError('minlength')
+              ? 'Debe tener mínimo 4 caracteres'
+              : ''
+          "
+        ></span>
       </div>
 
       <div class="form-group">
-        <input formControlName="nombre" type="text" required />
+        <input formControlName="nombre" type="text" required placeholder=" " />
         <label>Nombre del Producto</label>
+        <span
+          *ngIf="productoForm.get('nombre')?.invalid && productoForm.get('nombre')?.touched"
+          class="error-icon bi bi-exclamation-circle-fill"
+          title="El nombre es obligatorio"
+        ></span>
       </div>
 
       <div class="form-group">
-        <input formControlName="cantidad" type="number" required />
+        <input formControlName="cantidad" type="number" required placeholder=" " />
         <label>Cantidad</label>
+        <span
+          *ngIf="productoForm.get('cantidad')?.invalid && productoForm.get('cantidad')?.touched"
+          class="error-icon bi bi-exclamation-circle-fill"
+          title="La cantidad es obligatoria"
+        ></span>
       </div>
 
       <div class="form-group">
-        <textarea formControlName="descripcion" rows="3" required></textarea>
+        <textarea formControlName="descripcion" rows="3" required placeholder=" "></textarea>
         <label>Descripción</label>
+        <span
+          *ngIf="
+            productoForm.get('descripcion')?.invalid && productoForm.get('descripcion')?.touched
+          "
+          class="error-icon bi bi-exclamation-circle-fill"
+          title="La descripción es obligatoria"
+        ></span>
       </div>
 
       <div class="form-group">
@@ -34,19 +67,29 @@
           <option *ngFor="let tipo of tiposProducto" [value]="tipo">{{ tipo }}</option>
         </select>
         <label>Tipo de Producto</label>
+        <span
+          *ngIf="
+            productoForm.get('tipoProducto')?.invalid && productoForm.get('tipoProducto')?.touched
+          "
+          class="error-icon bi bi-exclamation-circle-fill"
+          title="Debe seleccionar un tipo de producto"
+        ></span>
       </div>
 
-      <!-- Selector de bodega -->
-      <!-- ================= Selector de bodega ================= -->
       <div class="form-group">
         <select formControlName="idBodega" required>
           <option value="" disabled selected>Seleccionar Bodega</option>
-          <option *ngFor="let bodega of bodegas" [value]="bodega.direccion">
-            Ciudad: {{ bodega.ubicacion.ciudad }} - Dirección: {{ bodega.direccion }} Telefono:
+          <option *ngFor="let bodega of bodegas" [value]="bodega.id">
+            Ciudad: {{ bodega.ubicacion.ciudad }} - Dirección: {{ bodega.direccion }} - Tel:
             {{ bodega.telefono }}
           </option>
         </select>
         <label>Bodega</label>
+        <span
+          *ngIf="productoForm.get('idBodega')?.invalid && productoForm.get('idBodega')?.touched"
+          class="error-icon bi bi-exclamation-circle-fill"
+          title="Debe seleccionar una bodega"
+        ></span>
       </div>
 
       <!-- ================= Sección Imagen ================= -->
@@ -68,6 +111,22 @@
           <input type="file" accept="image/*" (change)="onFileSelected($event)" />
         </div>
 
+        <!-- Mensaje de error si no hay imagen -->
+        <div
+          *ngIf="
+            productoForm.get('imagenProducto')?.invalid &&
+            productoForm.get('imagenProducto')?.touched
+          "
+          class="error-message"
+        >
+          Debe subir una imagen del producto
+        </div>
+
+        <!-- Vista previa de la imagen -->
+        <div *ngIf="imagenPreview" class="image-preview">
+          <img [src]="imagenPreview" alt="Vista previa del producto" />
+        </div>
+
         <div class="action-btns">
           <button type="button" (click)="resetFile()">Cancelar</button>
         </div>
@@ -80,7 +139,7 @@
 
       <div class="form-group">
         <textarea formControlName="descripcionMovimiento" rows="3"></textarea>
-        <label>Descripción del Movimiento</label>
+        <label>Descripción del Movimiento (Opcional)</label>
       </div>
     </fieldset>
 

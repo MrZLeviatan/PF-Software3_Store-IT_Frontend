@@ -1,9 +1,12 @@
+import { Toast } from './../../../../components/toast/toast';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FondoAnimadoComponent } from '../../../../shared/fondo-animado/fondo-animado.component';
 import { AuxiliarBodegaService } from '../../../../services/auxiliarBodega/auxiliarProductos.service';
 import { BodegaDto } from '../../../../dto/bodega/bodega.dto';
+import { TokenService } from '../../../../services/token.service';
+import { ToastService } from '../../../../components/toast/service/toast.service';
 
 @Component({
   selector: 'app-registrar-productos-auxiliar',
@@ -13,38 +16,55 @@ import { BodegaDto } from '../../../../dto/bodega/bodega.dto';
 })
 export class RegistrarProductosAuxiliar implements OnInit {
   productoForm: FormGroup;
-  tiposProducto = ['Electrónica', 'Muebles', 'Ropa', 'Otros']; // ejemplo
+  tiposProducto = ['FRAGIL', 'ESTANDAR']; // ejemplo
   dragging = false;
   imagenProducto: File | null = null;
   imagenNombre = '';
   imagenSize = '';
+  imagenPreview: string | null = null; //  Vista previa
   bodegas: BodegaDto[] = []; // lista Bodegas
 
-  constructor(private fb: FormBuilder, private auxiliarService: AuxiliarBodegaService) {
+  constructor(
+    private fb: FormBuilder,
+    private auxiliarService: AuxiliarBodegaService,
+    private TokenService: TokenService,
+    private toastService: ToastService
+  ) {
     this.productoForm = this.fb.group({
-      codigoProducto: ['', Validators.required],
+      codigoProducto: ['', [Validators.required, Validators.minLength(4)]], // mínimo 4 caracteres
       nombre: ['', Validators.required],
       cantidad: [null, Validators.required],
       descripcion: ['', Validators.required],
       tipoProducto: ['', Validators.required],
-      idBodega: [''],
-      descripcionMovimiento: [''],
+      idBodega: ['', Validators.required],
+      descripcionMovimiento: [''], // puede quedar vacío
+      imagenProducto: [null, Validators.required], // Nueva validación para imagen
     });
   }
 
   onSubmit() {
-    if (this.productoForm.valid) {
-      const formData = new FormData();
-      Object.keys(this.productoForm.value).forEach((key) => {
-        formData.append(key, this.productoForm.value[key]);
-      });
-      if (this.imagenProducto) {
-        formData.append('imagenProducto', this.imagenProducto);
-      }
-
-      console.log('Datos a enviar:', formData);
-      // Aquí llamas al servicio para enviar el DTO al backend
+    if (this.productoForm.invalid) {
+      this.productoForm.markAllAsTouched();
+      return;
     }
+
+    const dto = {
+      ...this.productoForm.value,
+      imagenProducto: this.imagenProducto, // file real
+      emailPersonalBodega: this.TokenService.getEmail() ?? '',
+    };
+
+    this.auxiliarService.registrarProducto(dto).subscribe({
+      next: (res) => {
+        this.productoForm.reset();
+        this.resetFile();
+        this.toastService.show(
+          'Producto registrado correctamente. Pendiente de autorización.',
+          'success'
+        );
+      },
+      error: (err) => {},
+    });
   }
 
   ngOnInit(): void {
@@ -84,11 +104,22 @@ export class RegistrarProductosAuxiliar implements OnInit {
     this.imagenProducto = file;
     this.imagenNombre = file.name;
     this.imagenSize = (file.size / 1024).toFixed(2) + ' KB';
+    this.productoForm.get('imagenProducto')?.setValue(file); // ✅ vincular al form
+    this.productoForm.get('imagenProducto')?.markAsTouched();
+
+    // Generar vista previa con FileReader
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagenPreview = reader.result as string;
+    };
+    reader.readAsDataURL(file);
   }
 
   resetFile() {
     this.imagenProducto = null;
     this.imagenNombre = '';
     this.imagenSize = '';
+    this.productoForm.get('imagenProducto')?.reset(); // impiar en form
+    this.imagenPreview = null;
   }
 }
