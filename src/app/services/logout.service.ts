@@ -17,6 +17,7 @@ export class LogoutService {
 
     // Redirigir al login
     this.router.navigate(['/'], { replaceUrl: true }); // o '/' según prefieras
-    this.toastr.show('Cierre de sesión exitoso.', 'error');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    this.toastr.show('Cierre de sesión exitoso.', 'success');
   }
 }

@@ -18,7 +18,6 @@ export class ValidarLoginService {
     const token = this.tokenService.getToken();
 
     if (!token) {
-      console.warn('❌ Token ausente. Redirigiendo a inicio.');
       this.router.navigate(['/']);
       return;
     }
@@ -26,7 +25,6 @@ export class ValidarLoginService {
     const decoded: any = this.tokenService.decodeToken(token); // usamos método de TokenService
 
     if (!decoded || !decoded.rol || !decoded.exp) {
-      console.warn('❌ Token inválido. Redirigiendo a inicio.');
       this.router.navigate(['/']);
       return;
     }
@@ -34,7 +32,6 @@ export class ValidarLoginService {
     // Validar expiración
     const ahora = Math.floor(Date.now() / 1000);
     if (decoded.exp <= ahora) {
-      console.warn('❌ Token expirado. Redirigiendo a inicio.');
       this.router.navigate(['/']);
       return;
     }
@@ -43,6 +40,9 @@ export class ValidarLoginService {
     switch (decoded.rol) {
       case 'ROLE_CLIENTE':
         this.router.navigate(['/cliente/dashboard']);
+        break;
+      case 'ROLE_AUXILIAR_BODEGA':
+        this.router.navigate(['/auxiliar-bodega']);
         break;
       case 'ROLE_RECURSOS_HUMANOS':
         this.router.navigate(['/recursos-humanos/dashboard']);
