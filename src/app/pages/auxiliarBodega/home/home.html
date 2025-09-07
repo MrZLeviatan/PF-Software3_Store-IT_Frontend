@@ -1,3 +1,10 @@
+<!-- Botón para abrir sidebar en móvil -->
+<!-- Botón para abrir sidebar en móvil -->
+<button class="sidebar-toggle" (click)="toggleSidebar()" aria-label="Abrir menú">
+  <i class="fas fa-bars"></i>
+  <!-- Icono blanco -->
+</button>
+
 <div class="sidebar" [class.visible]="isVisible">
   <!-- Logo y subtítulo -->
   <div class="sidebar-logo">
@@ -34,6 +41,7 @@
           *ngFor="let sub of item.subOpciones"
           [routerLink]="sub.ruta"
           routerLinkActive="active"
+          (click)="closeSidebarOnMobile()"
         >
           {{ sub.nombre }}
         </button>
@@ -49,11 +57,6 @@
     </button>
   </div>
 
-  <!-- Flecha decorativa -->
-  <div class="sidebar-arrow">
-    <i class="fas fa-chevron-right"></i>
-  </div>
-
   <!-- Footer -->
   <div class="sidebar-footer">
     <p>© 2025 Store-It</p>
@@ -61,6 +64,6 @@
 </div>
 
 <!-- Main Content -->
-<main class="main-content">
+<main class="main-content" (click)="closeSidebarOnMobile()">
   <router-outlet></router-outlet>
 </main>

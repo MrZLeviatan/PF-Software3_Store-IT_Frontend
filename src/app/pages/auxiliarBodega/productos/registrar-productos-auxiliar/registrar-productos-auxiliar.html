@@ -1,1 +1,89 @@
 <app-fondo-animado></app-fondo-animado>
+
+<div class="form-container">
+  <h2>Registrar Nuevo Producto</h2>
+
+  <form [formGroup]="productoForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+    <!-- ================= Sección 1: Registro Producto ================= -->
+    <fieldset>
+      <legend>Registro de Producto</legend>
+
+      <div class="form-group">
+        <input formControlName="codigoProducto" type="text" required />
+        <label>Código del Producto</label>
+      </div>
+
+      <div class="form-group">
+        <input formControlName="nombre" type="text" required />
+        <label>Nombre del Producto</label>
+      </div>
+
+      <div class="form-group">
+        <input formControlName="cantidad" type="number" required />
+        <label>Cantidad</label>
+      </div>
+
+      <div class="form-group">
+        <textarea formControlName="descripcion" rows="3" required></textarea>
+        <label>Descripción</label>
+      </div>
+
+      <div class="form-group">
+        <select formControlName="tipoProducto" required>
+          <option value="" disabled selected>Seleccionar tipo de producto</option>
+          <option *ngFor="let tipo of tiposProducto" [value]="tipo">{{ tipo }}</option>
+        </select>
+        <label>Tipo de Producto</label>
+      </div>
+
+      <!-- Selector de bodega -->
+      <!-- ================= Selector de bodega ================= -->
+      <div class="form-group">
+        <select formControlName="idBodega" required>
+          <option value="" disabled selected>Seleccionar Bodega</option>
+          <option *ngFor="let bodega of bodegas" [value]="bodega.direccion">
+            Ciudad: {{ bodega.ubicacion.ciudad }} - Dirección: {{ bodega.direccion }} Telefono:
+            {{ bodega.telefono }}
+          </option>
+        </select>
+        <label>Bodega</label>
+      </div>
+
+      <!-- ================= Sección Imagen ================= -->
+      <div class="upload-wrapper">
+        <h3>Imagen del Producto</h3>
+        <p>Click o arrastra y suelta la imagen aquí</p>
+
+        <div
+          class="upload-zone"
+          (dragenter)="dragging = true"
+          (dragover)="$event.preventDefault()"
+          (dragleave)="dragging = false"
+          (drop)="onFileDropped($event)"
+        >
+          <div class="icon bi bi-cloud-upload"></div>
+          <p class="file-name">{{ imagenNombre || 'No File Uploaded' }}</p>
+          <p class="file-size">{{ imagenSize || '0.00 KB' }}</p>
+
+          <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+        </div>
+
+        <div class="action-btns">
+          <button type="button" (click)="resetFile()">Cancelar</button>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- ================= Sección 2: Justificación Movimiento ================= -->
+    <fieldset>
+      <legend>Justificación del Movimiento</legend>
+
+      <div class="form-group">
+        <textarea formControlName="descripcionMovimiento" rows="3"></textarea>
+        <label>Descripción del Movimiento</label>
+      </div>
+    </fieldset>
+
+    <button type="submit" [disabled]="productoForm.invalid">Registrar Producto</button>
+  </form>
+</div>

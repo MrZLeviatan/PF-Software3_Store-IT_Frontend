@@ -12,15 +12,12 @@ import { LogoutService } from '../../../services/logout.service';
 })
 export class HomeAuxiliar {
   isVisible = false; // controla si la barra se muestra
+  subMenuOpen: { [key: string]: boolean } = {};
 
   constructor(private logoutService: LogoutService) {}
 
   menuItems = [
-    {
-      nombre: 'Dashboard',
-      ruta: '/dashboard',
-      icono: 'fas fa-tachometer-alt',
-    },
+    { nombre: 'Dashboard', ruta: '/dashboard', icono: 'fas fa-tachometer-alt' },
     {
       nombre: 'Clientes',
       ruta: '/clientes',
@@ -41,15 +38,29 @@ export class HomeAuxiliar {
     },
   ];
 
-  subMenuOpen: { [key: string]: boolean } = {}; // para controlar submenú
-
+  // Desktop hover
   @HostListener('document:mousemove', ['$event'])
   onMouseMove(event: MouseEvent) {
-    this.isVisible = event.clientX < 50;
+    if (window.innerWidth > 768) {
+      this.isVisible = event.clientX < 50;
+    }
   }
 
+  // Toggle submenú
   toggleSubMenu(nombre: string) {
     this.subMenuOpen[nombre] = !this.subMenuOpen[nombre];
+  }
+
+  // Toggle sidebar móvil
+  toggleSidebar() {
+    this.isVisible = !this.isVisible;
+  }
+
+  // Cerrar sidebar al tocar contenido móvil
+  closeSidebarOnMobile() {
+    if (window.innerWidth <= 768) {
+      this.isVisible = false;
+    }
   }
 
   salir() {
