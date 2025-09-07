@@ -44,3 +44,60 @@
     </div>
   </div>
 </div>
+
+<!-- Título del banner -->
+<div class="banner-titulo">
+  <h2>Conoce nuestros servicios</h2>
+</div>
+
+<!-- Carrusel solo para escritorio (con botones) -->
+<div class="services-banner desktop-only">
+  <!-- Botón para navegar hacia la izquierda -->
+  <button class="circle-button" (click)="cambiarContenido(-1)">
+    <i class="fa-solid fa-chevron-left"></i>
+  </button>
+
+  <!-- Contenido del carrusel: solo se muestra el servicio actual -->
+  <div class="carousel-content-horizontal" *ngIf="servicios[contenidoActual] as servicio">
+    <!-- Imagen del servicio -->
+    <img [src]="servicio.imagen" [alt]="servicio.titulo" class="carousel-image" />
+    <div class="carousel-info">
+      <!-- Título del servicio -->
+      <h3>{{ servicio.titulo }}</h3>
+      <!-- Descripción del servicio -->
+      <p>{{ servicio.descripcion }}</p>
+    </div>
+  </div>
+
+  <!-- Botón para navegar hacia la derecha -->
+  <button class="circle-button" (click)="cambiarContenido(1)">
+    <i class="fa-solid fa-chevron-right"></i>
+  </button>
+</div>
+
+<!-- Carrusel solo para móvil (deslizable) -->
+<div class="services-banner mobile-only">
+  <!-- Contenedor del carrusel que permite el desplazamiento horizontal -->
+  <div class="carousel-scroll-container" (scroll)="actualizarIndice($event)">
+    <!-- Elementos del carrusel: cada uno con una imagen y descripción -->
+    <div class="carousel-item" *ngFor="let servicio of servicios">
+      <!-- Imagen del servicio -->
+      <img [src]="servicio.imagen" [alt]="servicio.titulo" class="carousel-image" />
+      <div class="carousel-info">
+        <!-- Título del servicio -->
+        <h3>{{ servicio.titulo }}</h3>
+        <!-- Descripción del servicio -->
+        <p>{{ servicio.descripcion }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Indicadores de posición en el carrusel (solo visible en móvil) -->
+  <div class="carousel-indicators">
+    <!-- Un indicador por cada servicio, con una clase 'active' si es el servicio actual -->
+    <span
+      *ngFor="let servicio of servicios; let i = index"
+      [class.active]="i === contenidoActual"
+    ></span>
+  </div>
+</div>

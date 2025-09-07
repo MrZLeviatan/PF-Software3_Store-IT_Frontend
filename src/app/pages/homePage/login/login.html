@@ -1,0 +1,231 @@
+<div class="login-wrapper">
+  <!-- Logo arriba izquierda -->
+  <div class="logo-container" (click)="irInicio()" style="cursor: pointer">
+    <img
+      src="https://res.cloudinary.com/dehltwwbu/image/upload/f_auto,q_auto/v1756972307/StoreIt-logo-azul_cq41qg.png"
+      alt="Logo"
+    />
+  </div>
+
+  <!-- Lado izquierdo con imagen -->
+  <div class="login-image">
+    <img
+      src="https://res.cloudinary.com/dehltwwbu/image/upload/f_auto,q_auto/v1757145314/logoLogin_m9qazj.png"
+      alt="Imagen de inicio de sesión"
+    />
+  </div>
+
+  <!-- Lado derecho con formulario -->
+  <div class="login-form-container">
+    <h2>Bienvenido a Store-IT!</h2>
+    <p class="login-subtitle">Inicia sesión en tu cuenta</p>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <!-- Email -->
+      <div class="form-group floating-label">
+        <input
+          type="email"
+          id="email"
+          placeholder=" "
+          formControlName="email"
+          [class.invalid]="isInvalid('email')"
+        />
+        <label for="email">Correo Electrónico</label>
+        <div *ngIf="isInvalid('email')" class="error-icon" [title]="'Ingresa un email válido'">
+          <i class="fa fa-exclamation-circle"></i>
+        </div>
+      </div>
+
+      <!-- Contraseña -->
+      <div class="form-group floating-label password-group">
+        <input
+          [type]="mostrarPassword ? 'text' : 'password'"
+          id="password"
+          placeholder=" "
+          formControlName="password"
+          [class.invalid]="isInvalid('password')"
+        />
+        <label for="password">Contraseña</label>
+        <button type="button" class="toggle-btn" (click)="togglePassword()">
+          <i [ngClass]="mostrarPassword ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>
+        </button>
+        <div
+          *ngIf="isInvalid('password')"
+          class="error-icon"
+          [title]="'La contraseña es obligatoria'"
+        >
+          <i class="fa fa-exclamation-circle"></i>
+        </div>
+      </div>
+
+      <!-- 🔹 Link restablecer contraseña -->
+      <p class="forgot-password">
+        <a href="#" (click)="solicitarRestablecerPassword($event)">¿Olvidaste tu contraseña?</a>
+      </p>
+
+      <!-- Botón login -->
+      <div class="form-group">
+        <button type="submit" [disabled]="loginForm.invalid" class="submit-btn">
+          Iniciar sesión
+        </button>
+      </div>
+    </form>
+
+    <!-- Separador social -->
+
+    <!-- Separador "o continúa con" -->
+    <div class="social-separator">
+      <span>o continúa con</span>
+    </div>
+
+    <!-- Botón Google -->
+    <div class="social-buttons">
+      <!-- Aquí Google renderiza el botón -->
+      <div id="googleBtn"></div>
+    </div>
+
+    <!-- Link de contacto / registro -->
+    <p class="register-link">¿No tienes una cuenta? <a href="/registroClientes"> Regístrate</a></p>
+  </div>
+
+  <!-- 🔹 Overlay de verificación -->
+  <div class="overlay" *ngIf="mostrarVerificacion">
+    <div class="verificacion-modal">
+      <h3>Autentificación de Inicio de Sesión</h3>
+      <p>
+        Hemos enviado un código de autentificación al correo
+        <strong>{{ emailVerificacion }}</strong
+        >.
+      </p>
+
+      <form [formGroup]="formCodigo" (ngSubmit)="confirmarVerificacion()">
+        <div class="form-group">
+          <input
+            type="text"
+            formControlName="codigo"
+            maxlength="6"
+            class="codigo-input"
+            placeholder="------"
+            (input)="forzarMayusculas($event)"
+          />
+        </div>
+
+        <div class="modal-buttons">
+          <button type="submit" class="submit-btn">Confirmar</button>
+          <button type="button" (click)="cancelarVerificacion()" class="cancel-btn">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal restablecer contraseña -->
+  <div class="modal-backdrop" *ngIf="mostrarModalPassword">
+    <div class="modal">
+      <h3>Restablecer contraseña</h3>
+      <p>Introduce tu correo electrónico para recibir un enlace de restablecimiento.</p>
+
+      <form [formGroup]="solicitudForm" (ngSubmit)="enviarSolicitudRestablecer()">
+        <!-- Email -->
+        <div class="form-group floating-label">
+          <input
+            type="email"
+            id="email"
+            placeholder=" "
+            formControlName="email"
+            [class.invalid]="isInvalidSolicitud('email')"
+          />
+          <label for="email">Correo Electrónico</label>
+          <!-- Ícono de error -->
+          <div
+            *ngIf="isInvalidSolicitud('email')"
+            class="error-icon"
+            [title]="'Ingresa un email válido'"
+          >
+            <i class="fa fa-exclamation-circle"></i>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="submit">Enviar</button>
+          <button type="button" (click)="cerrarModal()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 🔹 Modal para verificar código -->
+  <div class="overlay" *ngIf="mostrarCodigoRestablecer">
+    <div class="verificacion-modal">
+      <h3>Verificación de Código</h3>
+      <p>
+        Hemos enviado un código de verificación al correo
+        <strong>{{ emailVerificacion }}</strong
+        >.
+      </p>
+
+      <form [formGroup]="formCodigoRestablecer" (ngSubmit)="confirmarCodigo()">
+        <div class="form-group">
+          <input
+            type="text"
+            formControlName="codigo"
+            maxlength="6"
+            class="codigo-input"
+            placeholder="------"
+            (input)="
+              formCodigoRestablecer.patchValue({ codigo: $event.target.value.toUpperCase() })
+            "
+          />
+        </div>
+
+        <div class="modal-actions">
+          <button type="submit" class="submit-btn">Confirmar</button>
+          <button type="button" (click)="cancelarCodigo()" class="cancel-btn">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal nueva contraseña -->
+  <div class="modal-backdrop" *ngIf="mostrarNuevaPassword">
+    <div class="modal">
+      <h3>Establecer nueva contraseña</h3>
+      <p>Introduce tu nueva contraseña para actualizar el acceso a tu cuenta.</p>
+
+      <form [formGroup]="formNuevaPassword" (ngSubmit)="actualizarPassword()">
+        <!-- Contraseña -->
+        <div class="form-group floating-label password-group">
+          <input
+            type="password"
+            id="nuevaPassword"
+            placeholder=" "
+            formControlName="nuevaPassword"
+            [class.invalid]="
+              formNuevaPassword.get('nuevaPassword')?.invalid &&
+              formNuevaPassword.get('nuevaPassword')?.touched
+            "
+          />
+          <label for="nuevaPassword">Nueva Contraseña</label>
+
+          <!-- 🔹 Ícono de error -->
+          <div
+            *ngIf="
+              formNuevaPassword.get('nuevaPassword')?.invalid &&
+              formNuevaPassword.get('nuevaPassword')?.touched
+            "
+            class="error-icon"
+            [title]="'La contraseña debe tener mínimo 8 caracteres'"
+          >
+            <i class="fa fa-exclamation-circle"></i>
+          </div>
+        </div>
+
+        <!-- Botones -->
+        <div class="modal-actions">
+          <button type="submit" class="submit-btn">Confirmar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

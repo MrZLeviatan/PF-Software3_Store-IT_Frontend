@@ -1,0 +1,868 @@
+/* ============================= */
+/* 1. Layout general             */
+/* ============================= */
+.registro-layout {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  gap: 40px;
+  padding: 20px;
+  background: #f9f9f9;
+  position: relative;
+}
+
+.registro-layout h2 {
+  position: absolute;
+  font-size: 32px; /* más grande */
+  font-weight: 700;
+  color: #333;
+  text-align: center;
+  margin-bottom: 30px;
+  font-family: 'Verdana', Geneva, sans-serif;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* efecto sutil */
+  top: 150px;
+  margin-top: 10px;
+  right: 230px;
+}
+
+/* ============================= */
+/* 2. Logo arriba izquierda      */
+/* ============================= */
+.logo-container {
+  position: absolute;
+  top: 20px;
+  left: 50px;
+}
+
+.logo-container img {
+  width: 200px;
+  height: auto;
+}
+
+/* ============================= */
+/* 3. Columna izquierda (imagen) */
+/* ============================= */
+.imagen-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex;
+  margin-left: 140px;
+  margin-top: 10px;
+}
+
+.imagen-container img {
+  width: 150%;
+  max-width: 700px;
+  border-radius: 16px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  object-fit: cover;
+}
+
+/* ============================= */
+/* 4. Columna derecha (formulario) */
+/* ============================= */
+.registro-container {
+  max-width: 350px;
+  width: 100%;
+  margin: 120px;
+  padding: 80px 80px;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* ============================= */
+/* 5. Selector tipo cliente      */
+/* ============================= */
+
+/* Contenedor estilo toggle */
+.selector-toggle {
+  display: flex;
+  position: relative;
+  border: 1px solid #ccc;
+  border-radius: 999px; /* pill shape */
+  overflow: hidden;
+  width: 109%;
+  max-width: 400px;
+  margin: 0 auto 20px auto;
+  background: #fff;
+}
+
+/* Fondo animado (slider) */
+.selector-toggle::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: #007bff;
+  border-radius: 999px;
+  transition: transform 0.3s ease;
+  z-index: 0;
+}
+
+/* Si está seleccionado Cliente Jurídico, se mueve */
+.selector-toggle.juridico::before {
+  transform: translateX(100%);
+}
+
+/* Botones internos */
+.selector-toggle button {
+  flex: 1;
+  padding: 10px 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 500;
+  color: #333;
+  position: relative;
+  z-index: 1; /* por encima del slider */
+  transition: color 0.3s ease;
+}
+
+/* Botón activo (color blanco sobre el fondo oscuro) */
+.selector-toggle button.active {
+  color: #fff;
+}
+
+/* ============================= */
+/* 6. Campos con label flotante  */
+/* ============================= */
+
+.form-row,
+.form-group,
+.selector-toggle {
+  right: 13px;
+}
+
+.form-row,
+.form-group,
+.selector-toggle,
+.ubicacion-container {
+  right: 13px;
+}
+
+.form-row {
+  display: flex;
+  gap: 35px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-group {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  background: none;
+  font-size: 14px;
+}
+
+.form-group label {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: white;
+  padding: 0 5px;
+  color: #aaa;
+  font-size: 14px;
+  pointer-events: none;
+  transition: 0.2s ease all;
+}
+
+.form-group input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 1px rgba(0, 123, 255, 0.25);
+}
+
+.form-group input:focus + label,
+.form-group input:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 10px;
+  font-size: 12px;
+  color: #007bff;
+}
+
+input[disabled] {
+  border: 1px solid #ccc;
+}
+
+input[disabled] {
+  background-color: #f0f0f0; /* 🔹 Fondo gris */
+  color: #555; /* 🔹 Texto un poco más opaco */
+  opacity: 0.7; /* 🔹 Le da efecto de desactivado */
+  cursor: not-allowed; /* 🔹 Cursor de no editable */
+}
+
+/* ============================= */
+/* 7. Contraseña con toggle      */
+/* ============================= */
+.password-group {
+  position: relative;
+}
+
+.toggle-btn {
+  position: absolute;
+  right: 20px;
+  top: 55%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  font-size: 16px;
+}
+
+/* ============================= */
+/* 10. Teléfonos (intl-tel-input)*/
+/* ============================= */
+
+/* Contenedor relativo para floating label */
+:host ::ng-deep .floating-input {
+  position: relative;
+  margin: 20px 0; /* espacio superior e inferior entre teléfonos */
+  right: 13px;
+}
+
+/* Input base */
+:host ::ng-deep .floating-input .iti input {
+  width: 144%;
+  padding: 13px 12px 12px 80px; /* espacio para la bandera y label */
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  font-size: 14px;
+  background: none;
+  transition: border-color 0.3s ease;
+}
+
+/* Hover / focus en el input */
+:host ::ng-deep .floating-input .iti input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 1px rgba(0, 123, 255, 0.25);
+}
+
+/* Label flotante */
+:host ::ng-deep .floating-input label {
+  position: absolute;
+  left: 89px; /* mismo que padding-left del input */
+  top: 50%;
+  color: #aaa;
+  font-size: 14px;
+  pointer-events: none;
+  transition: all 0.2s ease-out;
+  padding: 0 4px;
+  transform: translateY(-50%);
+  white-space: nowrap;
+}
+
+/* Cuando el input tiene foco o valor */
+:host ::ng-deep .floating-input:focus-within label,
+:host ::ng-deep .floating-input.filled label {
+  top: -8px;
+  left: 12px;
+  font-size: 12px;
+  color: #007bff;
+}
+
+/* Label flotante cuando hay foco o texto */
+.floating-input.filled label,
+.floating-input input:focus + label {
+  top: -8px;
+  left: 12px;
+  font-size: 12px;
+  color: #007bff;
+}
+
+/* Contenedor de la bandera */
+:host ::ng-deep .iti .iti__flag-container {
+  left: 5px; /* ajustado para que no tape el label */
+}
+
+/* Dropdown del país */
+:host ::ng-deep .iti__country-list {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  font-size: 14px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* Estilo cuando seleccionas un país */
+:host ::ng-deep .iti__country.iti__highlight {
+  background-color: #b3d3f9;
+}
+
+/* Wrapper de intl-tel-input para separación entre inputs */
+:host ::ng-deep .iti {
+  margin: 0; /* ya el contenedor .floating-input maneja el espacio */
+}
+
+/* ============================= */
+/* 8. Botones                    */
+/* ============================= */
+
+,
+.ubicacion-container {
+  width: 120%;
+  margin-right: 15px;
+}
+
+/* Botón de ubicación */
+.ubicacion-btn {
+  display: flex;
+  position: relative;
+  align-items: center;
+  gap: 8px;
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 13px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 14px;
+  width: 108%;
+  right: 13px;
+}
+
+.ubicacion-btn i {
+  font-size: 16px;
+}
+
+.ubicacion-btn:hover {
+  background: #0056b3;
+}
+
+/* Info que reemplaza el botón */
+.ubicacion-info {
+  display: flex;
+  position: relative;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #007bff;
+  background: #e6f0ff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid #b3d3f9;
+  width: 98%;
+  right: 13px;
+}
+
+/* ============================= */
+/* Botón de Registro             */
+/* ============================= */
+
+/* Botón deshabilitado */
+.submit-btn:disabled {
+  background-color: #ccc; /* gris neutro */
+  color: #666;
+  cursor: not-allowed;
+  opacity: 0.7;
+  border-radius: 12px; /* más redondeado */
+  padding: 14px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  width: 100%;
+  text-align: center;
+  border: none;
+  box-shadow: none;
+}
+
+/* Botón habilitado */
+.submit-btn:not(:disabled) {
+  background-color: #ff6600; /* naranja */
+  color: #fff;
+  cursor: pointer;
+  border-radius: 12px; /* más redondeado */
+  padding: 14px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  width: 100%;
+  text-align: center;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover cuando está habilitado */
+.submit-btn:not(:disabled):hover {
+  background-color: #ff8533; /* naranja más claro */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+/* ============================= */
+/* 9. Aviso Legal              */
+/* ============================= */
+
+.aviso-legal {
+  font-size: 12px;
+  color: #555;
+  text-align: center;
+  margin-bottom: 15px;
+  line-height: 1.4;
+  right: 13px;
+}
+
+.aviso-legal a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.aviso-legal a:hover {
+  text-decoration: underline;
+}
+
+/* ============================= */
+/* 9. Alertas (errores)         */
+/* ============================= */
+
+/* Recuadro rojo en inputs con error */
+.form-group.error input,
+.floating-input.error input {
+  border-color: #ff4d4f; /* borde rojo */
+  box-shadow: 0 0 0 1px rgba(255, 77, 79, 0.5);
+}
+
+.form-group {
+  position: relative; /* necesario para que tooltip se posicione respecto al grupo */
+}
+
+.error-icon {
+  color: #ff4d4f;
+  cursor: pointer;
+  font-size: 14px;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.tooltip {
+  visibility: hidden;
+  opacity: 0;
+  width: max-content;
+  max-width: 180px;
+  background-color: #ff4d4f;
+  color: #fff;
+  text-align: center;
+  border-radius: 4px;
+  padding: 5px 8px;
+  position: absolute;
+  z-index: 10;
+  bottom: 125%; /* Aparece arriba del icono */
+  left: 100%; /* al lado derecho del icono */
+  transform: translateX(-50%);
+  transition: opacity 0.3s;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: #ff4d4f transparent transparent transparent;
+}
+
+/* Mostrar tooltip al pasar el mouse sobre el icono */
+.error-icon:hover + .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* ============================= */
+/* 12. Google         */
+/* ============================= */
+
+/* Separador "o continúa con" */
+.social-separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+  color: #666;
+  font-size: 14px;
+  font-weight: 400;
+}
+.social-separator::before,
+.social-separator::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #ddd;
+  margin: 0 10px;
+}
+
+/* Contenedor de botones sociales */
+.social-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+/* Estilo general para botones sociales */
+.social-buttons button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Icono dentro del botón */
+.social-buttons button i {
+  font-size: 20px;
+  color: #db4437; /* Color característico de Google */
+}
+
+/* Hover efecto */
+.social-buttons button:hover {
+  background-color: #f8f8f8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Botón específico de Google */
+.google-btn {
+  border-color: #db4437;
+  color: #db4437;
+  font-weight: 600;
+}
+.google-btn:hover {
+  background-color: #db4437;
+  color: #c43434;
+  border-color: #db4437;
+}
+
+/* ============================= */
+/* Login y Footer              */
+/* ============================= */
+
+/* Parte superior derecha: login */
+.top-right-login {
+  position: absolute;
+  top: 30px;
+  right: 50px;
+  font-size: 17px;
+  color: #666;
+  z-index: 10;
+  font-family: 'Verdana', Geneva, sans-serif;
+}
+.top-right-login a {
+  color: #007bff; /* Color resaltado para el enlace */
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+.top-right-login a:hover {
+  text-decoration: underline;
+  color: #007bff; /* Color hover más oscuro */
+}
+
+/* Footer con derechos reservados */
+.footer {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+  z-index: 5;
+}
+
+/* ============================= */
+/* 13. Overlay de Verificación   */
+/* ============================= */
+
+/* 🔹 Fondo overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(20, 20, 20, 0.65);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(6px);
+}
+
+/* 🔹 Ventana flotante */
+.verificacion-modal {
+  background: #fff;
+  border-radius: 16px;
+  padding: 30px 25px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.3s ease;
+}
+
+/* 🔹 Títulos y texto */
+.verificacion-modal h3 {
+  font-size: 22px;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.verificacion-modal p {
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+/* 🔹 Input estilo cuadros */
+.codigo-input {
+  font-size: 28px;
+  letter-spacing: 18px; /* Espacio entre caracteres simula cuadros */
+  font-weight: bold;
+  padding: 12px 15px;
+  width: 100%;
+  text-align: center;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  background: #fafafa;
+  outline: none;
+  transition: all 0.3s ease;
+  caret-color: #007bff; /* Cursor visible */
+  text-transform: uppercase;
+}
+
+/* Placeholder simula los cuadros vacíos */
+.codigo-input::placeholder {
+  color: #ccc;
+  letter-spacing: 18px;
+  font-weight: normal;
+}
+
+/* Efecto de focus */
+.codigo-input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+  background: #fff;
+}
+
+/* 🔹 Botones */
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.submit-btn,
+.cancel-btn {
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.submit-btn {
+  background: #007bff;
+  color: #fff;
+}
+
+.submit-btn:hover {
+  background: #0056b3;
+}
+
+.cancel-btn {
+  background: #f1f1f1;
+  color: #444;
+}
+
+.cancel-btn:hover {
+  background: #ddd;
+}
+
+/* 🔹 Animación suave */
+@keyframes fadeIn {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ============================= */
+/* 1. Layout general - responsive Android */
+/* ============================= */
+@media (max-width: 768px) {
+  /* Layout principal: columna y centrado */
+  .registro-layout {
+    flex-direction: column; /* Coloca los elementos verticalmente */
+    padding-top: 20px;
+    align-items: flex-start; /* Centra horizontalmente */
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+    left: -10px;
+  }
+
+  /* Logo */
+  .logo-container {
+    position: relative;
+    top: 0;
+    left: 0;
+    margin: 0 auto 10px auto;
+
+    text-align: center;
+  }
+
+  .logo-container img {
+    width: 140px; /* tamaño más pequeño para móvil */
+    height: auto;
+  }
+
+  /* Login */
+  .top-right-login {
+    position: relative;
+    top: 0;
+    left: 0;
+    text-align: center;
+    font-size: 16px;
+    color: #666;
+    margin-top: 20px;
+  }
+
+  .top-right-login a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .top-right-login a:hover {
+    text-decoration: underline;
+  }
+
+  /* Formulario */
+  .registro-container {
+    margin: 0 auto; /* centrar horizontal */
+    padding: 30px 20px;
+    width: 100%;
+    max-width: 90%;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Contenedor superior: logo y login */
+  .top-row {
+    display: flex;
+    flex-direction: column; /* Logo arriba, login debajo */
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+    padding: 0;
+  }
+
+  /* Evitar ancho mayor al de pantalla */
+  .selector-toggle,
+  .form-group input,
+  .ubicacion-btn,
+  .ubicacion-info,
+  .social-buttons button,
+  .submit-btn {
+    width: 120% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+    left: 1px !important;
+  }
+
+  .form-group {
+    left: 1px;
+  }
+
+  :host ::ng-deep .floating-input .iti {
+    max-width: 100% !important;
+    box-sizing: border-box;
+    left: 13px;
+  }
+
+  :host ::ng-deep .floating-input .iti input {
+    width: 137%;
+    box-sizing: border-box;
+    max-width: 200%;
+  }
+
+  /* Título dentro del formulario */
+  .registro-container h2 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    position: static;
+  }
+
+  /* Form-row vertical */
+  .form-row {
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  /* Ocultar imagen lateral */
+  .imagen-container {
+    display: none;
+  }
+
+  /* H2 centrado dentro del formulario */
+  .registro-container h2 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    position: static;
+  }
+
+  /* Ajustes de botones sociales */
+  .social-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Aviso legal */
+  .aviso-legal {
+    text-align: center;
+    font-size: 12px;
+  }
+}

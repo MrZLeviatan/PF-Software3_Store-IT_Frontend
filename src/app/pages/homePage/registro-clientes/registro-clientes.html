@@ -1,0 +1,382 @@
+<div class="registro-layout">
+  <!-- Logo en la esquina superior izquierda -->
+
+  <div class="top-row">
+    <div class="logo-container" (click)="irInicio()" style="cursor: pointer">
+      <img
+        src="https://res.cloudinary.com/dehltwwbu/image/upload/f_auto,q_auto/v1756972307/StoreIt-logo-azul_cq41qg.png"
+        alt="Logo Store-It"
+      />
+    </div>
+
+    <!-- Parte superior derecha: enlace de login -->
+    <div class="top-right-login">
+      <span>¿Ya tienes una cuenta? <a href="/login">Inicia sesión</a></span>
+    </div>
+  </div>
+
+  <!-- Columna izquierda con imagen dinámica -->
+  <div class="imagen-container">
+    <img
+      [src]="
+        esClienteNatural
+          ? 'https://res.cloudinary.com/dehltwwbu/image/upload/f_auto,q_auto/v1757054589/logoRegistroCliente_kq0xnd.jpg'
+          : 'https://res.cloudinary.com/dehltwwbu/image/upload/f_auto,q_auto/v1757055247/logoRegistroJuridico_lyeefp.jpg'
+      "
+      alt="Imagen registro"
+    />
+  </div>
+
+  <!-- Columna derecha con formulario -->
+  <div class="registro-container">
+    <div class="form-container">
+      <h2>Crear una cuenta</h2>
+
+      <!-- Selector tipo de cliente -->
+      <div class="selector-toggle" [class.juridico]="!esClienteNatural">
+        <button [class.active]="esClienteNatural" (click)="cambiarTipo('NATURAL')">Personal</button>
+        <button [class.active]="!esClienteNatural" (click)="cambiarTipo('JURIDICO')">
+          Comercial
+        </button>
+      </div>
+
+      <!-- Cliente Natural -->
+      @if (esClienteNatural) {
+      <form [formGroup]="formNatural" (ngSubmit)="onSubmit()" class="form-box">
+        <!-- Nombre y Apellido -->
+        <div class="form-row">
+          <div
+            class="form-group"
+            [class.error]="formNatural.get('nombre')?.touched && formNatural.get('nombre')?.invalid"
+          >
+            <input type="text" formControlName="nombre" id="nombre" placeholder=" " required />
+            <label for="nombre">Nombre</label>
+            <i
+              *ngIf="formNatural.get('nombre')?.touched && formNatural.get('nombre')?.invalid"
+              class="fa fa-exclamation-circle error-icon"
+            ></i>
+            <span class="tooltip">
+              {{ getErrorMessage(formNatural.get('nombre')) }}
+            </span>
+          </div>
+
+          <div
+            class="form-group"
+            [class.error]="
+              formNatural.get('apellido')?.touched && formNatural.get('apellido')?.invalid
+            "
+          >
+            <input type="text" formControlName="apellido" id="apellido" placeholder=" " required />
+            <label for="apellido">Apellido</label>
+            <i
+              *ngIf="formNatural.get('apellido')?.touched && formNatural.get('apellido')?.invalid"
+              class="fa fa-exclamation-circle error-icon"
+            ></i>
+            <span class="tooltip">{{ getErrorMessage(formNatural.get('apellido')) }}</span>
+          </div>
+        </div>
+
+        <!-- Correo -->
+        <div
+          class="form-group"
+          [class.error]="formNatural.get('email')?.touched && formNatural.get('email')?.invalid"
+        >
+          <input type="text" formControlName="email" id="email" placeholder=" " required />
+          <label for="email">Correo Electrónico</label>
+          <i
+            *ngIf="formNatural.get('email')?.touched && formNatural.get('email')?.invalid"
+            class="fa fa-exclamation-circle error-icon"
+          ></i>
+          <span class="tooltip">{{ getErrorMessage(formNatural.get('email')) }}</span>
+        </div>
+
+        <!-- Teléfonos -->
+        <div
+          class="floating-input"
+          [class.filled]="formNatural.get('telefono')?.value"
+          [class.error]="
+            formNatural.get('telefono')?.touched && formNatural.get('telefono')?.invalid
+          "
+        >
+          <input id="telNatural" type="tel" formControlName="telefono" placeholder=" " required />
+          <label for="telNatural">Teléfono Principal</label>
+          <i
+            *ngIf="formNatural.get('telefono')?.touched && formNatural.get('telefono')?.invalid"
+            class="fa fa-exclamation-circle error-icon"
+          ></i>
+          <span class="tooltip">{{ getErrorMessage(formNatural.get('telefono')) }}</span>
+        </div>
+
+        <div
+          class="floating-input"
+          [class.filled]="formNatural.get('telefonoSecundario')?.value"
+          [class.error]="
+            formNatural.get('telefonoSecundario')?.touched &&
+            formNatural.get('telefonoSecundario')?.invalid
+          "
+        >
+          <input id="telNaturalSec" type="tel" formControlName="telefonoSecundario" />
+          <label for="telNaturalSec">Teléfono Secundario (Opcional) </label>
+          <i
+            *ngIf="
+              formNatural.get('telefonoSecundario')?.touched &&
+              formNatural.get('telefonoSecundario')?.invalid
+            "
+            class="fa fa-exclamation-circle error-icon"
+          ></i>
+          <span class="tooltip">{{ getErrorMessage(formNatural.get('telefonoSecundario')) }}</span>
+        </div>
+
+        <!-- Contraseña -->
+        <div
+          class="form-group password-group"
+          [class.error]="
+            formNatural.get('password')?.touched && formNatural.get('password')?.invalid
+          "
+        >
+          <input
+            [type]="mostrarPassword ? 'text' : 'password'"
+            id="password"
+            placeholder=" "
+            formControlName="password"
+          />
+          <label for="password">Contraseña</label>
+          <i
+            *ngIf="formNatural.get('password')?.touched && formNatural.get('password')?.invalid"
+            class="fa fa-exclamation-circle error-icon"
+          ></i>
+          <span class="tooltip">{{ getErrorMessage(formNatural.get('password')) }}</span>
+          <button type="button" class="toggle-btn" (click)="togglePassword()">
+            <i [ngClass]="mostrarPassword ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>
+          </button>
+        </div>
+
+        <!-- Ubicación -->
+        <div class="ubicacion-container">
+          <!-- Botón visible solo si no hay ubicación -->
+          <button
+            *ngIf="!ubicacionActual"
+            type="button"
+            class="ubicacion-btn"
+            (click)="obtenerUbicacion()"
+          >
+            <i class="fa fa-map-marker-alt"></i> Obtener ubicación actual
+          </button>
+
+          <!-- Información de ubicación reemplaza al botón -->
+          <div *ngIf="ubicacionActual" class="ubicacion-info">
+            <i class="fa fa-map-marker-alt"></i>
+            {{ ubicacionActual.pais }}, {{ ubicacionActual.ciudad }}
+          </div>
+        </div>
+
+        <!-- Aviso legal -->
+        <p class="aviso-legal">
+          Al seleccionar <strong>Crear una cuenta personal</strong>, aceptas nuestras
+          <a href="/condiciones" target="_blank">Condiciones de uso</a> y admites haber leído
+          nuestro <a href="/privacidad" target="_blank">Aviso de privacidad</a>.
+        </p>
+
+        <button
+          type="submit"
+          class="submit-btn"
+          [disabled]="!formNatural.valid"
+          *ngIf="esClienteNatural"
+        >
+          {{ esGoogle ? 'Crear cuenta con Google' : 'Crear una cuenta personal' }}
+        </button>
+      </form>
+
+      <!-- Separador "o continúa con" -->
+      <div class="social-separator">
+        <span>o continúa con</span>
+      </div>
+
+      <!-- Botones sociales -->
+      <div class="social-buttons">
+        <div id="googleButton"></div>
+      </div>
+
+      }
+
+      <!-- Cliente Jurídico -->
+      <form
+        *ngIf="!esClienteNatural"
+        [formGroup]="formJuridico"
+        (ngSubmit)="onSubmit()"
+        class="form-box"
+      >
+        <!-- Representante Legal -->
+        <div
+          class="form-group"
+          [class.error]="formJuridico.get('nombre')?.touched && formJuridico.get('nombre')?.invalid"
+        >
+          <input type="text" formControlName="nombre" id="nombre" placeholder=" " required />
+          <label for="nombre">Representante Legal</label>
+          <i
+            *ngIf="formJuridico.get('nombre')?.touched && formJuridico.get('nombre')?.invalid"
+            class="fa fa-exclamation-circle error-icon"
+          ></i>
+          <span class="tooltip">{{ getErrorMessage(formJuridico.get('nombre')) }}</span>
+        </div>
+
+        <!-- NIT -->
+        <div
+          class="form-group"
+          [class.error]="formJuridico.get('nit')?.touched && formJuridico.get('nit')?.invalid"
+        >
+          <input type="text" formControlName="nit" id="nit" placeholder=" " required />
+          <label for="nit">NIT</label>
+          <i
+            *ngIf="formJuridico.get('nit')?.touched && formJuridico.get('nit')?.invalid"
+            class="fa fa-exclamation-circle error-icon"
+          ></i>
+          <span class="tooltip">{{ getErrorMessage(formJuridico.get('nit')) }}</span>
+        </div>
+
+        <!-- Correo -->
+        <div
+          class="form-group"
+          [class.error]="formJuridico.get('email')?.touched && formJuridico.get('email')?.invalid"
+        >
+          <input type="text" formControlName="email" id="email" placeholder=" " required />
+          <label for="email">Correo Electrónico</label>
+          <i
+            *ngIf="formJuridico.get('email')?.touched && formJuridico.get('email')?.invalid"
+            class="fa fa-exclamation-circle error-icon"
+          ></i>
+          <span class="tooltip">{{ getErrorMessage(formJuridico.get('email')) }}</span>
+        </div>
+
+        <!-- Teléfonos -->
+        <div
+          class="floating-input"
+          [class.filled]="formJuridico.get('telefono')?.value"
+          [class.error]="
+            formJuridico.get('telefono')?.touched && formJuridico.get('telefono')?.invalid
+          "
+        >
+          <input id="telJuridico" type="tel" formControlName="telefono" />
+          <label for="telJuridico">Teléfono Principal</label>
+          <i
+            *ngIf="formJuridico.get('telefono')?.touched && formJuridico.get('telefono')?.invalid"
+            class="fa fa-exclamation-circle error-icon"
+          ></i>
+          <span class="tooltip">{{ getErrorMessage(formJuridico.get('telefono')) }}</span>
+        </div>
+
+        <div
+          class="floating-input"
+          [class.filled]="formJuridico.get('telefonoSecundario')?.value"
+          [class.error]="
+            formJuridico.get('telefonoSecundario')?.touched &&
+            formJuridico.get('telefonoSecundario')?.invalid
+          "
+        >
+          <input id="telJuridicoSec" type="tel" formControlName="telefonoSecundario" />
+          <label for="telJuridicoSec">Teléfono Secundario (Opcional)</label>
+          <i
+            *ngIf="
+              formJuridico.get('telefonoSecundario')?.touched &&
+              formJuridico.get('telefonoSecundario')?.invalid
+            "
+            class="fa fa-exclamation-circle error-icon"
+          ></i>
+          <span class="tooltip">{{ getErrorMessage(formJuridico.get('telefonoSecundario')) }}</span>
+        </div>
+
+        <!-- Contraseña -->
+        <div
+          class="form-group password-group"
+          [class.error]="
+            formJuridico.get('password')?.touched && formJuridico.get('password')?.invalid
+          "
+        >
+          <input
+            [type]="mostrarPassword ? 'text' : 'password'"
+            id="password"
+            placeholder=" "
+            formControlName="password"
+          />
+          <label for="password">Contraseña</label>
+          <i
+            *ngIf="formJuridico.get('password')?.touched && formJuridico.get('password')?.invalid"
+            class="fa fa-exclamation-circle error-icon"
+          ></i>
+          <span class="tooltip">{{ getErrorMessage(formJuridico.get('password')) }}</span>
+          <button type="button" class="toggle-btn" (click)="togglePassword()">
+            <i [ngClass]="mostrarPassword ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>
+          </button>
+        </div>
+
+        <!-- Ubicación -->
+        <div class="ubicacion-container">
+          <button
+            *ngIf="!ubicacionActual"
+            type="button"
+            class="ubicacion-btn"
+            (click)="obtenerUbicacion()"
+          >
+            <i class="fa fa-map-marker-alt"></i> Obtener ubicación actual
+          </button>
+          <div *ngIf="ubicacionActual" class="ubicacion-info">
+            <i class="fa fa-map-marker-alt"></i>
+            {{ ubicacionActual.pais }}, {{ ubicacionActual.ciudad }}
+          </div>
+        </div>
+
+        <p class="aviso-legal">
+          Al seleccionar <strong>Crear una cuenta comercial</strong>, aceptas nuestras
+          <a href="/condiciones" target="_blank">Condiciones de uso</a> y admites haber leído
+          nuestro <a href="/privacidad" target="_blank">Aviso de privacidad</a>.
+        </p>
+
+        <button
+          type="submit"
+          class="submit-btn"
+          [disabled]="!formJuridico.valid"
+          *ngIf="!esClienteNatural"
+        >
+          Crear una cuenta comercial
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer con derechos reservados -->
+  <footer class="footer">
+    <small>© 2025 Store-IT!. Todos los derechos reservados.</small>
+  </footer>
+
+  <!-- 🔹 Overlay de verificación -->
+  <div class="overlay" *ngIf="mostrarVerificacion">
+    <div class="verificacion-modal">
+      <h3>Verifica tu correo</h3>
+      <p>
+        Hemos enviado un código de verificación al correo
+        <strong>{{ emailVerificacion }}</strong
+        >.
+      </p>
+
+      <form [formGroup]="formCodigo" (ngSubmit)="confirmarVerificacion()">
+        <div class="form-group">
+          <input
+            type="text"
+            formControlName="codigo"
+            maxlength="6"
+            class="codigo-input"
+            placeholder="------"
+            (input)="forzarMayusculas($event)"
+          />
+        </div>
+
+        <div class="modal-buttons">
+          <button type="submit" class="submit-btn">Confirmar</button>
+          <button type="button" (click)="cancelarVerificacion()" class="cancel-btn">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

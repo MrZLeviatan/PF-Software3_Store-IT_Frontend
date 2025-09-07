@@ -39,32 +39,36 @@ export class TopBar {
 
   // Función que se activa al hacer clic en el logo
   irAlInicio() {
-    // 🔒 Cierra el menú si está abierto (útil en móvil)
+    // Cierra el menú si está abierto (útil en móvil)
     this.menuOpen = false;
 
     const currentUrl = this.router.url;
 
     if (currentUrl === '/' || currentUrl === '/inicio') {
-      // 🔝 Si ya estás en inicio, hace scroll suave hacia el top
+      // Si ya estás en inicio, hace scroll suave hacia el top
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      // 🚀 Si estás en otra ruta, navega hacia la raíz
+      // Si estás en otra ruta, navega hacia la raíz
       this.router.navigate(['/']);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 
   irRegistro() {
     this.menuOpen = false;
-    this.router.navigate(['/register']);
+    this.router.navigate(['/registroClientes']);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   irAbout() {
     this.menuOpen = false;
     this.router.navigate(['/about']);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   irLogin() {
     this.menuOpen = false;
     this.router.navigate(['/login']);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
