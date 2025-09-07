@@ -26,11 +26,23 @@ export const routes: Routes = [
     component: HomeAuxiliar,
     children: [
       {
+        path: '',
+        redirectTo: 'producto/verProductos', // Redirección automática
+        pathMatch: 'full',
+      },
+      {
         path: 'producto/registrar',
         loadComponent: () =>
           import(
             './pages/auxiliarBodega/productos/registrar-productos-auxiliar/registrar-productos-auxiliar'
           ).then((m) => m.RegistrarProductosAuxiliar),
+      },
+      {
+        path: 'producto/verProductos',
+        loadComponent: () =>
+          import('./pages/auxiliarBodega/productos/ver-productos/ver-productos').then(
+            (m) => m.VerProductos
+          ),
       },
     ],
   },

@@ -17,24 +17,15 @@ export class HomeAuxiliar {
   constructor(private logoutService: LogoutService) {}
 
   menuItems = [
-    { nombre: 'Dashboard', ruta: '/dashboard', icono: 'fas fa-tachometer-alt' },
-    {
-      nombre: 'Clientes',
-      ruta: '/clientes',
-      icono: 'fas fa-users',
-    },
+    { nombre: 'Perfil Usuario', ruta: '/perfil-usuario', icono: 'fas fa-user' },
+
     {
       nombre: 'Productos',
       icono: 'fas fa-boxes',
       subOpciones: [
-        { nombre: 'Ver Productos', ruta: '/productos/ver' },
+        { nombre: 'Ver Productos', ruta: '/auxiliar-bodega/producto/verProductos' },
         { nombre: 'Registrar Producto', ruta: '/auxiliar-bodega/producto/registrar' },
       ],
-    },
-    {
-      nombre: 'Reportes',
-      ruta: '/reportes',
-      icono: 'fas fa-chart-line',
     },
   ];
 
