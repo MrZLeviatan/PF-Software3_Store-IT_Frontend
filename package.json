@@ -29,6 +29,7 @@
     "@angular/forms": "^20.2.0",
     "@angular/platform-browser": "^20.2.0",
     "@angular/router": "^20.2.0",
+    "@mapbox/mapbox-sdk": "^0.16.1",
     "google-libphonenumber": "^3.2.42",
     "intl-tel-input": "^25.10.5",
     "jwt-decode": "^4.0.0",
