@@ -317,9 +317,8 @@ input[disabled] {
 /* 8. Botones                    */
 /* ============================= */
 
-,
 .ubicacion-container {
-  width: 120%;
+  width: 100%;
   margin-right: 15px;
 }
 

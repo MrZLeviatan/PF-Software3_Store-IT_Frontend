@@ -216,7 +216,7 @@
     left: -80vw;
   }
 
-  / .sidebar.visible {
+  .sidebar.visible {
     left: 0;
   }
 
