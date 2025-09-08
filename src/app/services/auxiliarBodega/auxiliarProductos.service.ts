@@ -8,12 +8,13 @@ import { map } from 'rxjs/operators';
 import { ProductoDto } from '../../dto/producto/producto.dto';
 import { RegistrarProductoExistenteDto } from '../../dto/producto/registrar-producto-existente.dto';
 import { RetiroProductoDto } from '../../dto/producto/retiro-producto.dto';
+import { API_CONFIG } from '../../app.config';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuxiliarBodegaService {
-  private baseUrl = 'http://localhost:8080/api/auxiliar-bodega';
+  private baseUrl = `${API_CONFIG.baseUrl}/api/auxiliar-bodega`;
 
   constructor(private http: HttpClient) {}
 

@@ -5,12 +5,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CrearClienteGoogleDto } from '../../dto/homePage/registro/crear-cliente-google.dto';
+import { API_CONFIG } from '../../app.config';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RegistroClienteService {
-  private baseUrl = 'http://localhost:8080/api/store-it'; // Endpoint de Spring Boot
+  private baseUrl = `${API_CONFIG.baseUrl}/api/store-it`; // Endpoint de Spring Boot
 
   constructor(private http: HttpClient) {}
 

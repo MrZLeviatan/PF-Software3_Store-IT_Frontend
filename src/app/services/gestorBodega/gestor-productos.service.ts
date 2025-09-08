@@ -10,12 +10,13 @@ import { RegistrarProductoExistenteDto } from '../../dto/producto/registrar-prod
 import { RetiroProductoDto } from '../../dto/producto/retiro-producto.dto';
 import { MovimientosProductoDto } from '../../dto/movimiento/movimiento.dto';
 import { AutorizacionProductoDto } from '../../dto/movimiento/autorizar-movimiento.dto';
+import { API_CONFIG } from '../../app.config';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GestorBodegasService {
-  private baseUrl = 'http://localhost:8080/api/gestor-bodega';
+  private baseUrl = `${API_CONFIG.baseUrl}/api/gestor-bodega`;
 
   constructor(private http: HttpClient) {}
 

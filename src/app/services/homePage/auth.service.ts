@@ -6,12 +6,13 @@ import { VerificacionCodigoDto } from '../../dto/homePage/login/verificacion-log
 import { TokenDto } from '../../dto/token.dto';
 import { map } from 'rxjs/operators';
 import { GoogleValidateResponse } from '../../dto/common/google-validation.dto';
+import { API_CONFIG } from '../../app.config';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private baseUrl = 'http://localhost:8080/api/auth'; // URL del backend
+  private baseUrl = `${API_CONFIG.baseUrl}/api/auth`; // URL del backend
 
   constructor(private http: HttpClient) {}
 
