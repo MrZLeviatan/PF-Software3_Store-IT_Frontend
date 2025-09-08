@@ -1,0 +1,249 @@
+/* ============================= */
+/* 1. Container general / Contenedor general */
+/* ============================= */
+.verproductos-container {
+  max-width: 1200px;
+  margin: 24px auto;
+  padding: 0 16px;
+  font-family: 'Verdana', Geneva, sans-serif;
+}
+
+.verproductos-container h2 {
+  color: #ffffff;
+  font-size: 35px;
+}
+
+/* ============================= */
+/* 2. Filters / Filtros */
+/* ============================= */
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.filters input,
+.filters select {
+  padding: 10px 14px; /* un poco más grandes */
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+
+/* ============================= */
+/* 3. Grid & Cards / Rejilla y tarjetas */
+/* ============================= */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* ============================= */
+/* 4. Product thumbnails / Miniaturas productos */
+/* ============================= */
+.thumb {
+  height: 190px; /* un poco más grande */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ============================= */
+/* 5. Product info / Información producto */
+/* ============================= */
+.info h3 {
+  margin: 0 0 6px;
+  font-size: 17px; /* más grande */
+  font-weight: 600;
+}
+.info .code {
+  color: #666;
+  font-size: 13px;
+}
+.info .qty {
+  margin-top: 6px;
+  font-size: 15px;
+}
+
+/* ============================= */
+/* 6. Modal & Backdrop / Ventana modal y fondo */
+/* ============================= */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1200;
+}
+.modal {
+  width: 95%;
+  max-width: 900px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  position: relative;
+}
+.modal .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  background: transparent;
+  font-size: 26px;
+  cursor: pointer;
+}
+.modal-top {
+  display: flex;
+  gap: 16px;
+}
+.modal-top img {
+  width: 220px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.modal-info {
+  flex: 1;
+}
+.modal-info .desc {
+  margin-top: 10px;
+  color: #333;
+}
+
+/* ============================= */
+/* 7. Action blocks / Bloques de acciones */
+/* ============================= */
+.actions {
+  display: flex;
+  gap: 20px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+.action-block {
+  flex: 1;
+  min-width: 260px;
+  border-radius: 8px;
+  padding: 14px;
+  background: #fafafa;
+  border: 1px solid #eee;
+}
+.action-block h4 {
+  margin-bottom: 10px;
+  font-size: 17px;
+  font-weight: 600;
+}
+.action-block form input {
+  width: 90%;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+.action-block button {
+  background: #ff6600;
+  color: #fff;
+  border: none;
+  padding: 12px 18px; /* botones más grandes */
+  border-radius: 8px;
+  font-size: 16px; /* texto más grande */
+  cursor: pointer;
+  width: 100%; /* ocupar todo el ancho */
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+.action-block button:hover:not(:disabled) {
+  background: #ff8533;
+}
+.action-block button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* ============================= */
+/* Responsive para móviles pequeños */
+/* ============================= */
+@media (max-width: 700px) {
+  .modal {
+    padding: 14px;
+    border-radius: 8px;
+    max-width: 100%;
+    width: 100%; /* ocupa todo el ancho */
+  }
+
+  .modal-top {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .modal-top img {
+    width: 100%;
+    height: auto;
+    max-height: 150px;
+  }/* ============================= */
+/* Responsive para móviles pequeños */
+/* ============================= */
+@media (max-width: 700px) {
+  .modal {
+    padding: 14px;
+    border-radius: 8px;
+    max-width: 100%;
+    width: 100%; /* ocupa todo el ancho */
+  }
+
+  .modal-top {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  /* 🔥 Ocultar la imagen en Android/móviles */
+  .modal-top img {
+    display: none;
+  }
+
+  .action-block button{
+    width: 95%;
+  }
+
+  .modal-info {
+    width: 100%;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .action-block {
+    width: 100%;
+    min-width: unset;
+  }
+}
+

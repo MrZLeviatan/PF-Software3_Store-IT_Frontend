@@ -1,0 +1,80 @@
+<app-fondo-animado></app-fondo-animado>
+
+<div class="verproductos-container">
+  <h2>Productos...</h2>
+
+  <div class="filters">
+    <input
+      placeholder="Buscar código..."
+      [(ngModel)]="filtroCodigo"
+      (ngModelChange)="loadProductos()"
+    />
+    <select [(ngModel)]="filtroTipo" (ngModelChange)="loadProductos()">
+      <option value="">Todos los tipos</option>
+      <option *ngFor="let t of ['FRAGIL', 'ESTANDAR']" [value]="t">
+        {{ t }}
+      </option>
+    </select>
+  </div>
+
+  <div *ngIf="loading" class="loading">Cargando...</div>
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+  <div class="grid">
+    <div class="card" *ngFor="let p of productos" (click)="openDetail(p)">
+      <div class="thumb">
+        <img [src]="p.imagen" alt="{{ p.nombre }}" />
+      </div>
+      <div class="info">
+        <h3>{{ p.nombre }}</h3>
+        <p class="code">Código Producto: {{ p.codigoProducto }}</p>
+        <p class="qty">
+          Cantidad: <strong>{{ p.cantidad }}</strong>
+        </p>
+        <p class="type">{{ p.tipoProducto }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal detalle -->
+  <div class="modal-backdrop" *ngIf="showModal">
+    <div class="modal">
+      <button class="close" (click)="closeModal()">×</button>
+
+      <div *ngIf="selected">
+        <div class="modal-top">
+          <img [src]="selected.imagen" alt="{{ selected.nombre }}" />
+          <div class="modal-info">
+            <h3>{{ selected.nombre }}</h3>
+            <p><strong>Código Producto:</strong> {{ selected.codigoProducto }}</p>
+            <p><strong>Cantidad:</strong> {{ selected.cantidad }}</p>
+            <p><strong>Tipo:</strong> {{ selected.tipoProducto }}</p>
+            <p class="desc"><strong>Descripción:</strong>{{ selected.descripcion }}</p>
+          </div>
+        </div>
+
+        <hr />
+
+        <div class="actions">
+          <div class="action-block">
+            <h4>Agregar cantidad</h4>
+            <form [formGroup]="addForm" (ngSubmit)="onAddSubmit()">
+              <input formControlName="cantidad" type="number" placeholder="Cantidad" />
+              <input formControlName="descripcion" placeholder="Descripción (opcional)" />
+              <button type="submit" [disabled]="addForm.invalid">Solicitar agregar</button>
+            </form>
+          </div>
+
+          <div class="action-block">
+            <h4>Retirar</h4>
+            <form [formGroup]="retiroForm" (ngSubmit)="onRetiroSubmit()">
+              <input formControlName="cantidad" type="number" placeholder="Cantidad a retirar" />
+              <input formControlName="descripcion" placeholder="Motivo (opcional)" />
+              <button type="submit" [disabled]="retiroForm.invalid">Solicitar retiro</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

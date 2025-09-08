@@ -49,9 +49,6 @@ export class GoogleAuthService {
   }
 
   loginWithGoogle(idToken: string): Observable<any> {
-    return this.authService.loginConGoogle(idToken).pipe(
-      tap((res: any) => console.log('✅ Google login validado:', res)),
-      map((res: any) => res.mensaje)
-    );
+    return this.authService.loginConGoogle(idToken).pipe(map((res: any) => res.mensaje));
   }
 }

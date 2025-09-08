@@ -197,6 +197,7 @@
         <!-- Contraseña -->
         <div class="form-group floating-label password-group">
           <input
+            [type]="mostrarPassword ? 'text' : 'password'"
             type="password"
             id="nuevaPassword"
             placeholder=" "
@@ -207,6 +208,9 @@
             "
           />
           <label for="nuevaPassword">Nueva Contraseña</label>
+          <button type="button" class="toggle-btn" (click)="togglePassword()">
+            <i [ngClass]="mostrarPassword ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>
+          </button>
 
           <!-- 🔹 Ícono de error -->
           <div

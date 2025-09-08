@@ -140,8 +140,6 @@ export class Login implements AfterViewInit {
     this.authService.verificarLogin(dto).subscribe({
       next: (res: TokenDto) => {
         this.tokenService.saveToken(res.token);
-        console.log('Token recibido:', res.token);
-        console.log('Decode Token: ', this.tokenService.decodeToken(res.token));
 
         this.validarLoginService.redirigirSegunRol();
         this.mostrarVerificacion = false;
@@ -239,6 +237,8 @@ export class Login implements AfterViewInit {
       next: (res) => {
         this.toastService.show(res.mensaje || 'Contraseña actualizada correctamente', 'success');
         this.formNuevaPassword.reset();
+        this.formCodigo.reset();
+        this.mostrarPassword = false;
         this.mostrarNuevaPassword = false;
       },
       error: (err) => {},

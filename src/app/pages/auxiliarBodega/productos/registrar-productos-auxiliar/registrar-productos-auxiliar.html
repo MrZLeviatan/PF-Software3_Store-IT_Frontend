@@ -1,0 +1,148 @@
+<app-fondo-animado></app-fondo-animado>
+
+<div class="form-container">
+  <h2>Registrar Nuevo Producto</h2>
+
+  <form [formGroup]="productoForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+    <!-- ================= Sección 1: Registro Producto ================= -->
+    <fieldset>
+      <legend>Registro de Producto</legend>
+
+      <div class="form-group">
+        <input formControlName="codigoProducto" type="text" required placeholder=" " />
+        <label>Código del Producto</label>
+
+        <!-- Icono de error -->
+        <span
+          *ngIf="
+            productoForm.get('codigoProducto')?.invalid &&
+            productoForm.get('codigoProducto')?.touched
+          "
+          class="error-icon bi bi-exclamation-circle-fill"
+          [title]="
+            productoForm.get('codigoProducto')?.hasError('required')
+              ? 'El código es obligatorio'
+              : productoForm.get('codigoProducto')?.hasError('minlength')
+              ? 'Debe tener mínimo 4 caracteres'
+              : ''
+          "
+        ></span>
+      </div>
+
+      <div class="form-group">
+        <input formControlName="nombre" type="text" required placeholder=" " />
+        <label>Nombre del Producto</label>
+        <span
+          *ngIf="productoForm.get('nombre')?.invalid && productoForm.get('nombre')?.touched"
+          class="error-icon bi bi-exclamation-circle-fill"
+          title="El nombre es obligatorio"
+        ></span>
+      </div>
+
+      <div class="form-group">
+        <input formControlName="cantidad" type="number" required placeholder=" " />
+        <label>Cantidad</label>
+        <span
+          *ngIf="productoForm.get('cantidad')?.invalid && productoForm.get('cantidad')?.touched"
+          class="error-icon bi bi-exclamation-circle-fill"
+          title="La cantidad es obligatoria"
+        ></span>
+      </div>
+
+      <div class="form-group">
+        <textarea formControlName="descripcion" rows="3" required placeholder=" "></textarea>
+        <label>Descripción</label>
+        <span
+          *ngIf="
+            productoForm.get('descripcion')?.invalid && productoForm.get('descripcion')?.touched
+          "
+          class="error-icon bi bi-exclamation-circle-fill"
+          title="La descripción es obligatoria"
+        ></span>
+      </div>
+
+      <div class="form-group">
+        <select formControlName="tipoProducto" required>
+          <option value="" disabled selected>Seleccionar tipo de producto</option>
+          <option *ngFor="let tipo of tiposProducto" [value]="tipo">{{ tipo }}</option>
+        </select>
+        <label>Tipo de Producto</label>
+        <span
+          *ngIf="
+            productoForm.get('tipoProducto')?.invalid && productoForm.get('tipoProducto')?.touched
+          "
+          class="error-icon bi bi-exclamation-circle-fill"
+          title="Debe seleccionar un tipo de producto"
+        ></span>
+      </div>
+
+      <div class="form-group">
+        <select formControlName="idBodega" required>
+          <option value="" disabled selected>Seleccionar Bodega</option>
+          <option *ngFor="let bodega of bodegas" [value]="bodega.id">
+            Ciudad: {{ bodega.ubicacion.ciudad }} - Dirección: {{ bodega.direccion }} - Tel:
+            {{ bodega.telefono }}
+          </option>
+        </select>
+        <label>Bodega</label>
+        <span
+          *ngIf="productoForm.get('idBodega')?.invalid && productoForm.get('idBodega')?.touched"
+          class="error-icon bi bi-exclamation-circle-fill"
+          title="Debe seleccionar una bodega"
+        ></span>
+      </div>
+
+      <!-- ================= Sección Imagen ================= -->
+      <div class="upload-wrapper">
+        <h3>Imagen del Producto</h3>
+        <p>Click o arrastra y suelta la imagen aquí</p>
+
+        <div
+          class="upload-zone"
+          (dragenter)="dragging = true"
+          (dragover)="$event.preventDefault()"
+          (dragleave)="dragging = false"
+          (drop)="onFileDropped($event)"
+        >
+          <div class="icon bi bi-cloud-upload"></div>
+          <p class="file-name">{{ imagenNombre || 'No File Uploaded' }}</p>
+          <p class="file-size">{{ imagenSize || '0.00 KB' }}</p>
+
+          <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+        </div>
+
+        <!-- Mensaje de error si no hay imagen -->
+        <div
+          *ngIf="
+            productoForm.get('imagenProducto')?.invalid &&
+            productoForm.get('imagenProducto')?.touched
+          "
+          class="error-message"
+        >
+          Debe subir una imagen del producto
+        </div>
+
+        <!-- Vista previa de la imagen -->
+        <div *ngIf="imagenPreview" class="image-preview">
+          <img [src]="imagenPreview" alt="Vista previa del producto" />
+        </div>
+
+        <div class="action-btns">
+          <button type="button" (click)="resetFile()">Cancelar</button>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- ================= Sección 2: Justificación Movimiento ================= -->
+    <fieldset>
+      <legend>Justificación del Movimiento</legend>
+
+      <div class="form-group">
+        <textarea formControlName="descripcionMovimiento" rows="3"></textarea>
+        <label>Descripción del Movimiento (Opcional)</label>
+      </div>
+    </fieldset>
+
+    <button type="submit" [disabled]="productoForm.invalid">Registrar Producto</button>
+  </form>
+</div>
