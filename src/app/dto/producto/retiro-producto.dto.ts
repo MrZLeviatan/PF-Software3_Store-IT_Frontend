@@ -1,6 +1,6 @@
 export interface RetiroProductoDto {
   codigoProducto: string;
   cantidad: number;
-  emailPersonalBodega: string;
-  descripcionMovimiento?: string;
+  emailPersonalResponsable: string;
+  descripcion?: string;
 }

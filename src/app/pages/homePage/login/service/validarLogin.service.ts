@@ -44,6 +44,9 @@ export class ValidarLoginService {
       case 'ROLE_AUXILIAR_BODEGA':
         this.router.navigate(['/auxiliar-bodega']);
         break;
+      case 'ROLE_GESTOR_BODEGA':
+        this.router.navigate(['/gestor-bodega']);
+        break;
       case 'ROLE_RECURSOS_HUMANOS':
         this.router.navigate(['/recursos-humanos/dashboard']);
         break;

@@ -60,7 +60,7 @@
             <h4>Agregar cantidad</h4>
             <form [formGroup]="addForm" (ngSubmit)="onAddSubmit()">
               <input formControlName="cantidad" type="number" placeholder="Cantidad" />
-              <input formControlName="descripcionMovimiento" placeholder="Descripción (opcional)" />
+              <input formControlName="descripcion" placeholder="Descripción (opcional)" />
               <button type="submit" [disabled]="addForm.invalid">Solicitar agregar</button>
             </form>
           </div>
@@ -69,7 +69,7 @@
             <h4>Retirar</h4>
             <form [formGroup]="retiroForm" (ngSubmit)="onRetiroSubmit()">
               <input formControlName="cantidad" type="number" placeholder="Cantidad a retirar" />
-              <input formControlName="descripcionMovimiento" placeholder="Motivo (opcional)" />
+              <input formControlName="descripcion" placeholder="Motivo (opcional)" />
               <button type="submit" [disabled]="retiroForm.invalid">Solicitar retiro</button>
             </form>
           </div>

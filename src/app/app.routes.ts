@@ -6,6 +6,7 @@ import { About } from './pages/homePage/about/about';
 import { Home } from './pages/homePage/home/home';
 import { AuthGuard } from './interceptors/auth.guard';
 import { HomeAuxiliar } from './pages/auxiliarBodega/home/home';
+import { HomeGestorBodega } from './pages/gestoBodega/home/home';
 
 export const routes: Routes = [
   {
@@ -42,6 +43,25 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/auxiliarBodega/productos/ver-productos/ver-productos').then(
             (m) => m.VerProductos
+          ),
+      },
+    ],
+  },
+  {
+    path: 'gestor-bodega',
+    canActivate: [AuthGuard],
+    component: HomeGestorBodega,
+    children: [
+      {
+        path: '',
+        redirectTo: 'producto/verProductos', // Redirección automática
+        pathMatch: 'full',
+      },
+      {
+        path: 'producto/verProductos',
+        loadComponent: () =>
+          import('./pages/gestoBodega/productos-gestor/productos-gestor').then(
+            (m) => m.ProductosGestor
           ),
       },
     ],

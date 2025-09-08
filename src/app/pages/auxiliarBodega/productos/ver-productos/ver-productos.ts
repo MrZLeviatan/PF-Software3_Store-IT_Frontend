@@ -67,12 +67,12 @@ export class VerProductos implements OnInit {
   private buildForms() {
     this.addForm = this.fb.group({
       cantidad: [null, [Validators.required, Validators.min(1)]],
-      descripcionMovimiento: [''],
+      descripcion: [''],
     });
 
     this.retiroForm = this.fb.group({
       cantidad: [null, [Validators.required, Validators.min(1)]],
-      descripcionMovimiento: [''],
+      descripcion: [''],
     });
   }
 
@@ -134,7 +134,7 @@ export class VerProductos implements OnInit {
       codigoProducto: this.selected.codigoProducto,
       cantidad: this.addForm.value.cantidad,
       emailPersonalBodega: this.tokenService.getEmail() ?? '',
-      descripcionMovimiento: this.addForm.value.descripcionMovimiento || undefined,
+      descripcion: this.addForm.value.descripcion || undefined,
     };
 
     this.srv.agregarCantidadProducto(dto).subscribe({
@@ -162,8 +162,8 @@ export class VerProductos implements OnInit {
     const dto = {
       codigoProducto: this.selected.codigoProducto,
       cantidad: this.retiroForm.value.cantidad,
-      emailPersonalBodega: this.tokenService.getEmail() ?? '',
-      descripcionMovimiento: this.retiroForm.value.descripcionMovimiento || undefined,
+      emailPersonalResponsable: this.tokenService.getEmail() ?? '',
+      descripcion: this.retiroForm.value.descripcion || undefined,
     };
 
     this.srv.retiroProducto(dto).subscribe({
