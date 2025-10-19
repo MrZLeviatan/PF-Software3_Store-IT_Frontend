@@ -1,0 +1,167 @@
+.about-container {
+  padding: 50px 20px;
+  font-family: Verdana, Geneva, sans-serif;
+  color: #ffffff;
+  margin-top: 8rem;
+}
+
+/* Sección introductoria */
+.intro-section {
+  display: flex;
+  flex-direction: column; /* Texto arriba, icono abajo */
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 60px;
+  text-align: center;
+}
+
+.intro-text {
+  max-width: 700px;
+}
+
+.intro-text h1 {
+  font-size: 2.8rem;
+  margin-bottom: 20px;
+  color: #ffffff;
+}
+
+.intro-text p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 16px;
+  text-align: justify;
+}
+
+.intro-text ul {
+  padding-left: 20px;
+  list-style-type: disc;
+  margin-top: -8px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+/* Icono del banner */
+.intro-icon {
+  width: 120px; /* Más pequeño */
+  height: 120px;
+  margin: 0 auto; /* Centrado */
+  display: block;
+}
+
+/* Sección compromisos con iconos */
+.objectives-section {
+  padding: 50px 20px;
+  background: #eef2f7;
+  border-radius: 20px;
+  margin-bottom: 80px;
+  text-align: center;
+}
+
+.objectives-title {
+  font-size: 2.6rem;
+  margin-bottom: 40px;
+  color: #2c3e50;
+}
+
+.objectives-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+.objective-card {
+  background: white;
+  border-radius: 20px;
+  padding: 30px 20px;
+  width: 280px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+}
+
+.objective-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+}
+
+.objective-card .icon {
+  width: 50px; /* Iconos un poco más pequeños */
+  height: 50px;
+  margin-bottom: 15px;
+}
+
+.objective-card h3 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: #34495e;
+}
+
+.objective-card p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #555;
+}
+
+/* Sección contacto */
+.mission-section {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centra el contenedor de contacto */
+  flex-wrap: wrap;
+  gap: 40px;
+  margin-bottom: 80px;
+  color: #2c3e50;
+}
+
+.mission-text-container {
+  flex: 1;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(255, 255, 255, 0.08);
+  max-width: 600px;
+}
+
+.mission-text-container h2 {
+  font-size: 2.2rem;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+.mission-text-container p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.mission-text-container a {
+  color: #2c6bc1;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.mission-text-container a:hover {
+  text-decoration: underline;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .intro-section,
+  .mission-section {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .intro-icon,
+  .mission-icon {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+  }
+
+  .objectives-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+}

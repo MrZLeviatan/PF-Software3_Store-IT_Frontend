@@ -7,6 +7,8 @@ import { Home } from './pages/homePage/home/home';
 import { AuthGuard } from './interceptors/auth.guard';
 import { HomeAuxiliar } from './pages/auxiliarBodega/home/home';
 import { HomeGestorBodega } from './pages/gestoBodega/home/home';
+import { HabeasData } from './pages/homePage/habeas-data/habeas-data';
+import { Condiciones } from './pages/homePage/condiciones/condiciones';
 
 export const routes: Routes = [
   {
@@ -15,6 +17,8 @@ export const routes: Routes = [
     children: [
       { path: '', component: Home },
       { path: 'about', component: About },
+      { path: 'habeas-data', component: HabeasData },
+      { path: 'condiciones', component: Condiciones },
     ],
   },
 
