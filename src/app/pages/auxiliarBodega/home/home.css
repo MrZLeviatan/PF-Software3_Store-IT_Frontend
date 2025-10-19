@@ -1,9 +1,5 @@
 /* Barra lateral más ancha */
 
-.sidebar.visible {
-  left: 0;
-}
-
 .sidebar:hover {
   left: 0;
 }
@@ -216,7 +212,7 @@
     left: -80vw;
   }
 
-  / .sidebar.visible {
+  .sidebar.visible {
     left: 0;
   }
 

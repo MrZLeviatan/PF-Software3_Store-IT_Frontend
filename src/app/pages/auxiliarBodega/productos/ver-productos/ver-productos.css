@@ -198,27 +198,6 @@
 
   .modal-top {
     flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .modal-top img {
-    width: 100%;
-    height: auto;
-    max-height: 150px;
-  }/* ============================= */
-/* Responsive para móviles pequeños */
-/* ============================= */
-@media (max-width: 700px) {
-  .modal {
-    padding: 14px;
-    border-radius: 8px;
-    max-width: 100%;
-    width: 100%; /* ocupa todo el ancho */
-  }
-
-  .modal-top {
-    flex-direction: column;
     align-items: flex-start;
     text-align: left;
   }
@@ -228,7 +207,7 @@
     display: none;
   }
 
-  .action-block button{
+  .action-block button {
     width: 95%;
   }
 
@@ -246,4 +225,3 @@
     min-width: unset;
   }
 }
-

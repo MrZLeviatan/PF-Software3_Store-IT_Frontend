@@ -68,8 +68,10 @@ export class Login implements AfterViewInit {
       codigo: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]],
     });
 
+    // Patrón: al menos 8 caracteres, 1 mayúscula, 1 número, 1 minuscula
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
     this.formNuevaPassword = this.fb.group({
-      nuevaPassword: ['', [Validators.required, Validators.minLength(8)]],
+      nuevaPassword: ['', [Validators.required, Validators.pattern(passwordPattern)]],
     });
   }
 

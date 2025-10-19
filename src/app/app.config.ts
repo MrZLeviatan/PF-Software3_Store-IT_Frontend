@@ -24,3 +24,5 @@ export const appConfig: ApplicationConfig = {
     ToastService,
   ],
 };
+
+export const API_CONFIG = { baseUrl: 'http://localhost:8080' };

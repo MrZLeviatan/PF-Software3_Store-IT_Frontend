@@ -1,0 +1,163 @@
+.about-container {
+  padding: 50px 20px;
+  font-family: Verdana, Geneva, sans-serif;
+  color: #ffffff;
+  margin-top: 8rem;
+}
+
+.intro-section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 60px;
+}
+
+.intro-image {
+  width: 550px;
+  max-width: 100%;
+  margin: 0 40px;
+  border-radius: 12px;
+  margin-top: 10px;
+}
+
+.intro-text {
+  max-width: 600px;
+}
+
+.intro-text h1 {
+  font-size: 2.8rem;
+  margin-bottom: 20px;
+  color: #ffffff;
+}
+
+.intro-text p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 16px;
+  text-align: justify;
+}
+
+.intro-text ul {
+  padding-left: 20px;
+  list-style-type: disc;
+  margin-top: -8px;
+  margin-bottom: 16px;
+}
+
+.mission-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin: 20px auto 60px auto;
+  max-width: 1200px;
+  padding: 30px 10px;
+}
+
+.mission-image {
+  width: 350px;
+  max-width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(254, 254, 254, 0.05);
+}
+
+.mission-text-container {
+  flex: 1;
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.08);
+  max-width: 650px;
+}
+
+.mission-text-container h2 {
+  font-size: 2.4rem;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+.mission-text-container p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  text-align: justify;
+}
+
+.objectives-section {
+  padding: 50px 20px;
+  background: #eef2f7;
+  border-radius: 20px;
+  margin-bottom: 80px;
+  text-align: center;
+}
+
+.objectives-title {
+  font-size: 2.6rem;
+  margin-bottom: 40px;
+  color: #2c3e50;
+}
+
+.objectives-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+.objective-card {
+  background: white;
+  border-radius: 20px;
+  padding: 30px 20px;
+  width: 280px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+}
+
+.objective-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+}
+
+.objective-card .icon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 15px;
+}
+
+.objective-card h3 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: #34495e;
+}
+
+.objective-card p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #555;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .intro-section,
+  .mission-section {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .intro-image,
+  .mission-image {
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  .intro-list li {
+    font-size: 1rem;
+  }
+
+  .objectives-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+}

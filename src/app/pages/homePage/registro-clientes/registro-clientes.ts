@@ -1,3 +1,5 @@
+import { ValidarLoginService } from './../login/service/validarLogin.service';
+import { routes } from './../../../app.routes';
 import { CrearClienteGoogleDto } from './../../../dto/homePage/registro/crear-cliente-google.dto';
 import { GoogleAuthService } from './services/google-auth.service';
 import { GoogleValidateResponse } from '../../../dto/common/google-validation.dto';
@@ -11,14 +13,15 @@ import { TipoCliente } from '../../../dto/homePage/registro/tipo-cliente.enum';
 import { UbicacionDto } from '../../../dto/common/ubicacion.dto';
 import { UbicacionService } from './services/ubicacion.service';
 import { TelefonoService } from './services/telefono.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { RegistroClienteService } from '../../../services/homePage/registroCliente.service';
 import { ToastService } from '../../../components/toast/service/toast.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-registro-clientes',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterLink],
   templateUrl: './registro-clientes.html',
   styleUrl: './registro-clientes.css',
 })
@@ -34,6 +37,10 @@ export class RegistroClientes implements AfterViewInit {
   private googlePayload: { name: string; email: string; picture?: string } | null = null;
   public esGoogle: boolean = false; // ✅ nuevo flag para controlar el bloqueo
 
+  email: string = '';
+  codigo: string = '';
+  verificado: boolean | null = null;
+
   constructor(
     private fb: FormBuilder,
     private ubicacionService: UbicacionService,
@@ -42,8 +49,13 @@ export class RegistroClientes implements AfterViewInit {
     private clienteService: RegistroClienteService,
     private toastService: ToastService,
     private googleAuth: GoogleAuthService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private route: ActivatedRoute,
+    private location: Location
   ) {
+    // Patrón: al menos 8 caracteres, 1 mayúscula, 1 número, 1 minuscula
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
     // Formulario Cliente Natural
     this.formNatural = this.fb.group({
       nombre: ['', [Validators.required, Validators.pattern(/^[a-zA-ZÀ-ÿ\s]+$/)]],
@@ -51,7 +63,7 @@ export class RegistroClientes implements AfterViewInit {
       telefono: ['', [Validators.required]],
       telefonoSecundario: [''],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
+      password: ['', [Validators.required, Validators.pattern(passwordPattern)]],
     });
 
     // Formulario Cliente Jurídico
@@ -61,7 +73,7 @@ export class RegistroClientes implements AfterViewInit {
       telefono: ['', [Validators.required]],
       telefonoSecundario: [''],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
+      password: ['', [Validators.required, Validators.pattern(passwordPattern)]],
     });
 
     // ✅ Formulario para verificar el código
@@ -111,13 +123,24 @@ export class RegistroClientes implements AfterViewInit {
 
   getErrorMessage(control: AbstractControl | null): string {
     if (!control?.errors) return '';
+
     if (control.errors['required']) return 'Este campo es obligatorio';
-    if (control.errors['pattern']) return 'Formato No Válido';
     if (control.errors['email']) return 'Formato de Correo No Válido';
     if (control.errors['minlength'])
       return `Mínimo ${control.errors['minlength'].requiredLength} caracteres`;
     if (control.errors['maxlength'])
       return `Máximo ${control.errors['maxlength'].requiredLength} caracteres`;
+    if (control.errors['pattern']) {
+      // Si el control es el password, mostrar mensaje específico
+      if (
+        control === this.formNatural?.get('password') ||
+        control === this.formJuridico?.get('password')
+      ) {
+        return 'La contraseña debe tener al menos 8 caracteres, una mayúscula, una minuscula y un número';
+      }
+      return 'Formato No Válido';
+    }
+
     return 'Error en el campo';
   }
 
@@ -359,5 +382,37 @@ export class RegistroClientes implements AfterViewInit {
     const input = event.target as HTMLInputElement;
     input.value = input.value.toUpperCase(); // 🔹 Convierte en mayúsculas
     this.formCodigo.get('codigo')?.setValue(input.value, { emitEvent: false });
+  }
+
+  ngOnInit(): void {
+    // Leer la parte del hash de la URL
+    const hash = this.location.path(true); // true = incluye query params
+    const queryIndex = hash.indexOf('?');
+    if (queryIndex !== -1) {
+      const queryString = hash.substring(queryIndex + 1);
+      const params = new URLSearchParams(queryString);
+      this.email = params.get('email') || '';
+      this.codigo = params.get('codigo') || '';
+
+      if (this.email && this.codigo) {
+        this.verificarLink(this.email, this.codigo); // 🔹 llamar al método modificado
+      }
+    }
+  }
+
+  // Función actualizada para usar GET
+  verificarLink(email: string, codigo: string) {
+    this.clienteService.verificarLink(email, codigo).subscribe({
+      next: (res) => {
+        console.log('Cuenta verificada', res);
+        this.verificado = true;
+        this.toastService.show('Cuenta verificada con éxito', 'success');
+      },
+      error: (err) => {
+        console.error('Error verificando cuenta', err);
+        this.verificado = false;
+        this.toastService.show('Error al verificar la cuenta', 'error');
+      },
+    });
   }
 }
