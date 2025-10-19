@@ -21,27 +21,27 @@ export class AuthService {
   }
 
   loginConGoogle(idToken: string): Observable<GoogleValidateResponse> {
-    return this.http.post<GoogleValidateResponse>(`${this.baseUrl}/login-google`, { idToken });
+    return this.http.post<GoogleValidateResponse>(`${this.baseUrl}/login/google`, { idToken });
   }
 
   verificarLogin(dto: VerificacionCodigoDto): Observable<TokenDto> {
     return this.http
-      .post<{ error: boolean; mensaje: TokenDto }>(`${this.baseUrl}/login-verificación`, dto)
+      .post<{ error: boolean; mensaje: TokenDto }>(`${this.baseUrl}/login/verificacion`, dto)
       .pipe(
         map((res) => res.mensaje) // extraemos el token dentro de mensaje
       );
   }
 
   solicitarRestablecimientoPassword(dto: { email: string }): Observable<any> {
-    return this.http.post(`${this.baseUrl}/restablecer-password`, dto);
+    return this.http.post(`${this.baseUrl}/password/restablecer`, dto);
   }
 
   // Endpoint para verificar código
   verificarCodigoPassword(dto: { email: string; codigo: string }): Observable<any> {
-    return this.http.post(`${this.baseUrl}/verificar-codigo-restablecimiento-password`, dto);
+    return this.http.post(`${this.baseUrl}/password/verificacion`, dto);
   }
 
   actualizarPassword(dto: { email: string; nuevaPassword: string }): Observable<any> {
-    return this.http.put<any>(`${this.baseUrl}/actualizar-password`, dto);
+    return this.http.put<any>(`${this.baseUrl}/password/actualizar`, dto);
   }
 }

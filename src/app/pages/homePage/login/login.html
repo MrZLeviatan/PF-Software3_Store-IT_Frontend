@@ -219,7 +219,9 @@
               formNuevaPassword.get('nuevaPassword')?.touched
             "
             class="error-icon"
-            [title]="'La contraseña debe tener mínimo 8 caracteres'"
+            [title]="
+              'La contraseña debe tener al menos 8 caracteres, una mayúscula, una minuscula y un número'
+            "
           >
             <i class="fa fa-exclamation-circle"></i>
           </div>
