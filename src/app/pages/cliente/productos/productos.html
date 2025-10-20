@@ -1,0 +1,78 @@
+<app-fondo-animado></app-fondo-animado>
+
+<div class="productos-container">
+  <h2 class="titulo">🛍️ Explora Nuestros Productos</h2>
+
+  <!-- 🔍 Barra de filtros -->
+  <div class="filters">
+    <input
+      type="text"
+      placeholder="Buscar por nombre o código..."
+      [(ngModel)]="filtroBusqueda"
+      (ngModelChange)="filtrarProductos()"
+    />
+
+    <select [(ngModel)]="filtroTipo" (ngModelChange)="filtrarProductos()">
+      <option value="">Todos los tipos</option>
+      <option *ngFor="let tipo of tipos" [value]="tipo">{{ tipo }}</option>
+    </select>
+  </div>
+
+  <!-- ⏳ Estado de carga o error -->
+  <div *ngIf="loading" class="loading">
+    <div class="spinner"></div>
+    <span>Cargando productos...</span>
+  </div>
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+  <!-- 🧩 Grid de productos -->
+  <div class="productos-grid" *ngIf="!loading && productosFiltrados?.length">
+    <div class="producto-card" *ngFor="let p of productosFiltrados" (click)="verDetalle(p)">
+      <div class="imagen-wrapper">
+        <img [src]="p.imagen" alt="{{ p.nombre }}" />
+      </div>
+
+      <div class="producto-info">
+        <h3>{{ p.nombre }}</h3>
+        <p class="tipo">{{ p.tipoProducto }}</p>
+        <p class="codigo">Código: {{ p.codigoBarras }}</p>
+
+        <div class="precio">
+          <span class="label">Precio:</span>
+          <span class="valor">\${{ p.valorVenta | number : '1.0-0' }}</span>
+        </div>
+
+        <button class="agregar-carrito">🛒 Agregar al carrito</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🚫 Estado vacío -->
+  <div *ngIf="!loading && productosFiltrados?.length === 0" class="empty-state">
+    No se encontraron productos para los filtros actuales.
+  </div>
+</div>
+
+<!-- 🪟 Modal Detalle -->
+<div class="modal-backdrop" *ngIf="showModal">
+  <div class="modal">
+    <button class="close" (click)="cerrarModal()">×</button>
+
+    <div class="modal-content" *ngIf="selected">
+      <div class="modal-img">
+        <img [src]="selected.imagen" alt="{{ selected.nombre }}" />
+      </div>
+
+      <div class="modal-info">
+        <h2>{{ selected.nombre }}</h2>
+        <p><strong>Código:</strong> {{ selected.codigoBarras }}</p>
+        <p><strong>Tipo:</strong> {{ selected.tipoProducto }}</p>
+        <p><strong>Proveedor:</strong> #{{ selected.idProveedor }}</p>
+        <p><strong>Precio Compra:</strong> \${{ selected.valorCompra | number : '1.0-0' }}</p>
+        <p><strong>Precio Venta:</strong> \${{ selected.valorVenta | number : '1.0-0' }}</p>
+
+        <button class="cerrar-btn" (click)="cerrarModal()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

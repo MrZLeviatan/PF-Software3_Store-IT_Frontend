@@ -39,7 +39,7 @@ export class ValidarLoginService {
     // Redirigir según rol
     switch (decoded.rol) {
       case 'ROLE_CLIENTE':
-        this.router.navigate(['/cliente/dashboard']);
+        this.router.navigate(['/cliente']);
         break;
       case 'ROLE_AUXILIAR_BODEGA':
         this.router.navigate(['/auxiliar-bodega']);
