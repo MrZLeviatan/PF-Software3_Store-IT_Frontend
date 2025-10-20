@@ -5,8 +5,7 @@ import { Login } from './pages/homePage/login/login';
 import { About } from './pages/homePage/about/about';
 import { Home } from './pages/homePage/home/home';
 import { AuthGuard } from './interceptors/auth.guard';
-import { HomeAuxiliar } from './pages/auxiliarBodega/home/home';
-import { HomeGestorBodega } from './pages/gestoBodega/home/home';
+import { HomeCliente } from './pages/cliente/home/home';
 import { HabeasData } from './pages/homePage/habeas-data/habeas-data';
 import { Condiciones } from './pages/homePage/condiciones/condiciones';
 
@@ -26,47 +25,18 @@ export const routes: Routes = [
   { path: 'login', component: Login },
 
   {
-    path: 'auxiliar-bodega',
+    path: 'cliente',
     canActivate: [AuthGuard],
-    component: HomeAuxiliar,
+    component: HomeCliente,
     children: [
       {
         path: '',
-        redirectTo: 'producto/verProductos', // Redirección automática
+        redirectTo: 'productos', // Redirección automática
         pathMatch: 'full',
       },
       {
-        path: 'producto/registrar',
-        loadComponent: () =>
-          import(
-            './pages/auxiliarBodega/productos/registrar-productos-auxiliar/registrar-productos-auxiliar'
-          ).then((m) => m.RegistrarProductosAuxiliar),
-      },
-      {
-        path: 'producto/verProductos',
-        loadComponent: () =>
-          import('./pages/auxiliarBodega/productos/ver-productos/ver-productos').then(
-            (m) => m.VerProductos
-          ),
-      },
-    ],
-  },
-  {
-    path: 'gestor-bodega',
-    canActivate: [AuthGuard],
-    component: HomeGestorBodega,
-    children: [
-      {
-        path: '',
-        redirectTo: 'producto/verProductos', // Redirección automática
-        pathMatch: 'full',
-      },
-      {
-        path: 'producto/verProductos',
-        loadComponent: () =>
-          import('./pages/gestoBodega/productos-gestor/productos-gestor').then(
-            (m) => m.ProductosGestor
-          ),
+        path: 'productos',
+        loadComponent: () => import('./pages/cliente/productos/productos').then((m) => m.Productos),
       },
     ],
   },
