@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/PF-Software3_Store-IT_Frontend",
+    "public": "dist/PF-Software3_Store-IT_Frontend/browser/",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
