@@ -36,11 +36,19 @@ export class ValidarLoginService {
       return;
     }
 
+    // Guardar rol en el localStorage
+    localStorage.setItem('rolUsuario', decoded.rol);
+
     // Redirigir según rol
     switch (decoded.rol) {
       case 'ROLE_CLIENTE':
         this.router.navigate(['/cliente']);
         break;
+
+      case 'ROLE_GESTOR_COMERCIAL':
+        this.router.navigate(['/gestor-comercial']);
+        break;
+
       case 'ROLE_AUXILIAR_BODEGA':
         this.router.navigate(['/auxiliar-bodega']);
         break;

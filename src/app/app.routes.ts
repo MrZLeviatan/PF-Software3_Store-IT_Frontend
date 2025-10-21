@@ -5,12 +5,13 @@ import { Login } from './pages/homePage/login/login';
 import { About } from './pages/homePage/about/about';
 import { Home } from './pages/homePage/home/home';
 import { AuthGuard } from './interceptors/auth.guard';
-import { HomeCliente } from './pages/cliente/home/home';
 import { HabeasData } from './pages/homePage/habeas-data/habeas-data';
 import { Condiciones } from './pages/homePage/condiciones/condiciones';
+import { HomeComponent } from './components/home/home';
 
 export const routes: Routes = [
   {
+    // Rutas públicas
     path: '',
     component: LayoutPublicoComponent,
     children: [
@@ -21,22 +22,37 @@ export const routes: Routes = [
     ],
   },
 
+  // Registro y Lógin ( Primer proceso del proyectp )
   { path: 'registroClientes', component: RegistroClientes },
   { path: 'login', component: Login },
 
   {
+    // Rutas privadas - Cliente
     path: 'cliente',
     canActivate: [AuthGuard],
-    component: HomeCliente,
+    component: HomeComponent,
     children: [
-      {
-        path: '',
-        redirectTo: 'productos', // Redirección automática
-        pathMatch: 'full',
-      },
+      { path: '', redirectTo: 'productos', pathMatch: 'full' }, // Redirección automática al cargar la ruta 'cliente'
       {
         path: 'productos',
         loadComponent: () => import('./pages/cliente/productos/productos').then((m) => m.Productos),
+      },
+    ],
+  },
+
+  {
+    // Rutas privadas - Gestor Comercial
+    path: 'gestor-comercial',
+    canActivate: [AuthGuard],
+    component: HomeComponent,
+    children: [
+      { path: '', redirectTo: 'productos', pathMatch: 'full' }, // Redirección automática al cargar la ruta 'gestor-comercial'
+      {
+        path: 'productos',
+        loadComponent: () =>
+          import('./pages/gestor-comercial/productos/productos').then(
+            (m) => m.ProductosGestorComcercial
+          ),
       },
     ],
   },

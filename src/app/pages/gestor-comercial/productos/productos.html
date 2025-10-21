@@ -1,0 +1,108 @@
+<app-fondo-animado></app-fondo-animado>
+
+<div class="productos-panel">
+  <h2 class="titulo">🛒 Catálogo de Productos</h2>
+
+  <!-- Filtros de búsqueda -->
+  <div class="filtros">
+    <label for="tipo">Tipo:</label>
+    <select
+      id="tipo"
+      [(ngModel)]="tipoSeleccionado"
+      (change)="filtrarProductos()"
+      class="select-filtro"
+    >
+      <option value="">Todos</option>
+      <option *ngFor="let tipo of tipos" [value]="tipo">{{ tipo }}</option>
+    </select>
+
+    <label for="proveedor">Proveedor:</label>
+    <select
+      id="proveedor"
+      [(ngModel)]="proveedorSeleccionado"
+      (change)="filtrarProductos()"
+      class="select-filtro"
+    >
+      <option value="">Todos</option>
+      <option *ngFor="let proveedor of proveedores" [value]="proveedor.id">
+        {{ proveedor.nombre }} - {{ proveedor.marca }}
+      </option>
+    </select>
+  </div>
+
+  <!-- Mensaje de carga -->
+  <div *ngIf="cargando" class="estado cargando">
+    <p>Cargando productos...</p>
+  </div>
+
+  <!-- Cuadrícula de productos -->
+  <div class="productos-grid" *ngIf="!cargando && productos.length > 0">
+    <div
+      class="producto-card"
+      *ngFor="let producto of productos"
+      (click)="mostrarDetallesProducto(producto)"
+    >
+      <img [src]="producto.imagen" alt="{{ producto.nombre }}" class="imagen-producto" />
+      <div class="info-producto">
+        <h3>{{ producto.nombre }}</h3>
+        <p><strong>Tipo:</strong> {{ producto.tipoProducto }}</p>
+        <p><strong>Código:</strong> {{ producto.codigoBarras }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensaje sin resultados -->
+  <div *ngIf="!cargando && productos.length === 0" class="estado sin-resultados">
+    <p>No se encontraron productos.</p>
+  </div>
+</div>
+
+<!-- Panel centrado de detalles -->
+<div class="detalle-overlay" *ngIf="productoSeleccionado" (click)="cerrarDetalles()">
+  <div class="detalle-modal" (click)="$event.stopPropagation()">
+    <button class="cerrar-btn" (click)="cerrarDetalles()">✕</button>
+
+    <div class="detalle-contenido">
+      <!-- Imagen del producto -->
+      <div class="detalle-imagen-contenedor">
+        <img
+          [src]="productoSeleccionado.imagen"
+          class="detalle-imagen"
+          alt="{{ productoSeleccionado.nombre }}"
+        />
+      </div>
+
+      <!-- Información del producto -->
+      <div class="detalle-info">
+        <h2>{{ productoSeleccionado.nombre }}</h2>
+        <p class="detalle-precio">
+          <strong>Valor Compra:</strong>
+          {{ productoSeleccionado.valorCompra | currency : 'USD' : 'symbol' : '1.0-0' }}
+          <br />
+          <strong>Valor Venta:</strong>
+          {{ productoSeleccionado.valorVenta | currency : 'USD' : 'symbol' : '1.0-0' }}
+        </p>
+        <p><strong>Tipo:</strong> {{ productoSeleccionado.tipoProducto }}</p>
+        <p><strong>Código de barras:</strong> {{ productoSeleccionado.codigoBarras }}</p>
+        <p><strong>Descripción:</strong> {{ productoSeleccionado.codigoBarras }}</p>
+
+        <hr />
+
+        <!-- Información del proveedor -->
+        <div *ngIf="proveedorSeleccionadoDetalles; else noProveedor">
+          <h3>🏢 Proveedor</h3>
+          <p><strong>Nombre:</strong> {{ proveedorSeleccionadoDetalles.nombre }}</p>
+          <p><strong>Marca:</strong> {{ proveedorSeleccionadoDetalles.marca }}</p>
+          <p><strong>Email:</strong> {{ proveedorSeleccionadoDetalles.email }}</p>
+          <p><strong>Teléfono:</strong> {{ proveedorSeleccionadoDetalles.telefono }}</p>
+        </div>
+
+        <ng-template #noProveedor>
+          <div class="estado">
+            <p>No se encontró información del proveedor.</p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
