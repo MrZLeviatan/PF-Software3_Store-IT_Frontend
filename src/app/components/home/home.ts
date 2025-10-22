@@ -62,7 +62,7 @@ export class HomeComponent implements OnInit {
         icono: 'fas fa-boxes',
         subOpciones: [
           { nombre: 'Ver Productos', ruta: '/gestor-comercial/productos' },
-          { nombre: 'Ofertas y Descuentos', ruta: '/gestor/ofertas' },
+          { nombre: 'Registro Productos', ruta: '/gestor-comercial/registro-productos' },
         ],
       },
     ];

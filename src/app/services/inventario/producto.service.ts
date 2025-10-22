@@ -7,6 +7,7 @@ import { TipoProducto } from '../../dto/enum/tipo-producto';
 // Dtos
 import { MensajeDto } from '../../dto/common/mensajeDto.dto';
 import { ProductoDto } from '../../dto/objects/inventario/producto/producto.dto';
+import { RegistroProductoDto } from '../../dto/objects/inventario/producto/registro-producto';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,11 @@ export class ProductoService {
   private baseUrl = `${API_CONFIG.baseUrl}/api/producto`; // URL del backend
 
   constructor(private http: HttpClient) {}
+
+  // Registrar un nuevo producto.
+  registrarProducto(producto: FormData): Observable<MensajeDto<ProductoDto>> {
+    return this.http.post<MensajeDto<ProductoDto>>(`${this.baseUrl}/registrar`, producto);
+  }
 
   // Obtener todos los productos disponibles.
   listarProductos(): Observable<MensajeDto<ProductoDto[]>> {

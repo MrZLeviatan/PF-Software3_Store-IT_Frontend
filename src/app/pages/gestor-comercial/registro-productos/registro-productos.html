@@ -1,0 +1,248 @@
+<app-fondo-animado></app-fondo-animado>
+
+<div class="registro-productos-container">
+  <!-- PASO 1: Selección de proveedor -->
+  <div *ngIf="pasoActual === 1">
+    <h2 class="titulo">🧾 Registro de Producto - Paso 1: Seleccionar Proveedor</h2>
+
+    <!-- Lista de proveedores -->
+    <div class="proveedor-lista">
+      <h3 class="subtitulo">Selecciona un proveedor existente</h3>
+
+      <input
+        type="text"
+        placeholder="Buscar proveedor por nombre o marca..."
+        [(ngModel)]="busqueda"
+        (ngModelChange)="filtrarProveedores()"
+        class="input-busqueda"
+      />
+
+      <div class="tabla-proveedores">
+        <div
+          *ngFor="let proveedor of proveedoresFiltrados"
+          class="proveedor-card"
+          [class.seleccionado]="proveedor.id === proveedorSeleccionado?.id"
+          (click)="seleccionarProveedor(proveedor)"
+        >
+          <h4>{{ proveedor.nombre }}</h4>
+          <p><strong>Marca:</strong> {{ proveedor.marca }}</p>
+          <p><strong>Email:</strong> {{ proveedor.email }}</p>
+          <p><strong>Teléfono:</strong> {{ proveedor.telefono }}</p>
+        </div>
+      </div>
+
+      <p *ngIf="proveedores.length === 0" class="mensaje-vacio">No hay proveedores registrados.</p>
+    </div>
+
+    <!-- Botones -->
+    <div class="acciones">
+      <button class="btn-principal" (click)="mostrarFormularioProveedor = true">
+        ➕ Agregar nuevo proveedor
+      </button>
+
+      <button class="btn-secundario" [disabled]="!proveedorSeleccionado" (click)="continuarPaso2()">
+        Continuar con proveedor seleccionado
+      </button>
+    </div>
+
+    <!-- Formulario proveedor -->
+    <form
+      *ngIf="mostrarFormularioProveedor"
+      [formGroup]="formProveedor"
+      (ngSubmit)="registrarProveedor()"
+      class="formulario-natural"
+    >
+      <h2 class="titulo-form">Registro de Proveedor</h2>
+
+      <div
+        class="floating-input"
+        [class.filled]="formProveedor.get('nombre')?.value"
+        [class.error]="formProveedor.get('nombre')?.touched && formProveedor.get('nombre')?.invalid"
+      >
+        <input id="nombre" type="text" formControlName="nombre" placeholder=" " required />
+        <label for="nombre">Nombre Completo</label>
+        <i
+          *ngIf="formProveedor.get('nombre')?.touched && formProveedor.get('nombre')?.invalid"
+          class="fa fa-exclamation-circle error-icon"
+        ></i>
+        <span class="tooltip">{{ getErrorMessage(formProveedor.get('nombre')) }}</span>
+      </div>
+
+      <!-- Email -->
+      <div
+        class="floating-input"
+        [class.filled]="formProveedor.get('email')?.value"
+        [class.error]="formProveedor.get('email')?.touched && formProveedor.get('email')?.invalid"
+      >
+        <input id="email" type="email" formControlName="email" placeholder=" " required />
+        <label for="email">Correo Electrónico</label>
+        <i
+          *ngIf="formProveedor.get('email')?.touched && formProveedor.get('email')?.invalid"
+          class="fa fa-exclamation-circle error-icon"
+        ></i>
+        <span class="tooltip">{{ getErrorMessage(formProveedor.get('email')) }}</span>
+      </div>
+
+      <!-- Teléfono -->
+      <div
+        class="floating-input"
+        [class.filled]="formProveedor.get('telefono')?.value"
+        [class.error]="
+          formProveedor.get('telefono')?.touched && formProveedor.get('telefono')?.invalid
+        "
+      >
+        <input id="telefono" type="tel" formControlName="telefono" placeholder=" " required />
+        <label for="telefono">Teléfono Principal</label>
+      </div>
+
+      <!-- Marca -->
+      <div
+        class="floating-input"
+        [class.filled]="formProveedor.get('marca')?.value"
+        [class.error]="formProveedor.get('marca')?.touched && formProveedor.get('marca')?.invalid"
+      >
+        <input id="marca" type="text" formControlName="marca" placeholder=" " required />
+        <label for="marca">Marca</label>
+      </div>
+
+      <!-- Botones -->
+      <div class="botones-formulario">
+        <button type="submit" class="btn-registrar" [disabled]="formProveedor.invalid">
+          Registrar Proveedor
+        </button>
+        <button type="button" class="btn-cancelar" (click)="cerrarFormulario()">✖ Cerrar</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- ==============Paso 2:===============  -->
+
+  <!-- 🧩 PASO 2: Registro de Producto -->
+  <div *ngIf="pasoActual === 2" class="formulario-producto">
+    <h2 class="titulo-form-producto">🧩 Registro de Producto - Paso 2</h2>
+
+    <form [formGroup]="formProducto" (ngSubmit)="registrarProducto()" enctype="multipart/form-data">
+      <!-- Código de barras -->
+      <div
+        class="floating-input-producto"
+        [class.filled]="formProducto.get('codigoBarras')?.value"
+        [class.error]="
+          formProducto.get('codigoBarras')?.touched && formProducto.get('codigoBarras')?.invalid
+        "
+      >
+        <input
+          id="codigoBarras"
+          type="text"
+          formControlName="codigoBarras"
+          placeholder=" "
+          required
+          maxlength="8"
+          (input)="formatearCodigoBarras($event)"
+        />
+        <label for="codigoBarras">Código de Barras</label>
+        <i
+          *ngIf="formProducto.get('codigoBarras')?.invalid"
+          class="fa fa-exclamation-circle error-icon"
+        ></i>
+        <span class="tooltip">{{ getErrorMessage(formProducto.get('codigoBarras')) }}</span>
+      </div>
+
+      <!-- Nombre del producto -->
+      <div class="floating-input-producto" [class.filled]="formProducto.get('nombre')?.value">
+        <input id="nombreProducto" type="text" formControlName="nombre" placeholder=" " required />
+        <label for="nombreProducto">Nombre del Producto</label>
+      </div>
+
+      <!-- Valor de compra -->
+      <div class="floating-input-producto" [class.filled]="formProducto.get('valorCompra')?.value">
+        <input
+          id="valorCompra"
+          type="number"
+          formControlName="valorCompra"
+          placeholder=" "
+          required
+        />
+        <label for="valorCompra">Valor de Compra</label>
+      </div>
+
+      <!-- Tipo de producto -->
+      <div
+        class="floating-input-producto select-container"
+        [class.filled]="formProducto.get('tipoProducto')?.value"
+      >
+        <select id="tipoProducto" formControlName="tipoProducto" required>
+          <option value="" disabled selected></option>
+          <option *ngFor="let tipo of tiposProducto" [value]="tipo">{{ tipo }}</option>
+        </select>
+        <label for="tipoProducto">Tipo de Producto</label>
+      </div>
+
+      <!-- Imagen del producto -->
+      <div class="floating-input">
+        <input
+          id="imagenProducto"
+          type="file"
+          (change)="onImagenSeleccionada($event)"
+          accept="image/*"
+        />
+        <label for="imagenProducto"></label>
+      </div>
+
+      <!-- Vista previa -->
+      <div class="preview-container" *ngIf="imagenPreview">
+        <img [src]="imagenPreview" alt="Vista previa del producto" class="preview-img" />
+      </div>
+
+      <!-- Botones -->
+      <div class="botones-formulario">
+        <button type="submit" class="btn-registrar" [disabled]="formProducto.invalid">
+          Registrar Producto
+        </button>
+        <button type="button" class="btn-cancelar" (click)="volverPaso1()">← Volver</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- ==============Paso 3:===============  -->
+
+  <!-- 🧱 PASO 3: Registro del Espacio del Producto -->
+  <div *ngIf="pasoActual === 3" class="formulario-espacio">
+    <h2 class="titulo-form-espacio">📦 Registro del Espacio del Producto</h2>
+
+    <form [formGroup]="formEspacio" (ngSubmit)="registrarEspacioProducto()" class="espacio-form">
+      <!-- Medidas agrupadas -->
+      <div class="medidas-grid">
+        <div class="floating-input-producto">
+          <input type="number" formControlName="largo" placeholder=" " required />
+          <label>Largo (cm)</label>
+        </div>
+
+        <div class="floating-input-producto">
+          <input type="number" formControlName="ancho" placeholder=" " required />
+          <label>Ancho (cm)</label>
+        </div>
+
+        <div class="floating-input-producto">
+          <input type="number" formControlName="alto" placeholder=" " required />
+          <label>Alto (cm)</label>
+        </div>
+      </div>
+
+      <!-- Descripción -->
+      <div class="floating-input-producto descripcion-area">
+        <textarea formControlName="descripcion" placeholder=" " rows="3" required></textarea>
+        <label>Descripción del espacio</label>
+      </div>
+
+      <!-- Botones -->
+      <div class="botones-formulario">
+        <button type="submit" class="btn-registrar" [disabled]="formEspacio.invalid">
+          ✅ Registrar Espacio
+        </button>
+        <button type="button" class="btn-cancelar" (click)="volverPaso1()">
+          ← Volver al inicio
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

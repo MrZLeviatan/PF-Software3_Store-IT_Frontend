@@ -54,6 +54,13 @@ export const routes: Routes = [
             (m) => m.ProductosGestorComcercial
           ),
       },
+      {
+        path: 'registro-productos',
+        loadComponent: () =>
+          import('./pages/gestor-comercial/registro-productos/registro-productos').then(
+            (m) => m.RegistroProductos
+          ),
+      },
     ],
   },
 ];

@@ -6,6 +6,7 @@ import { API_CONFIG } from '../../app.config';
 // Dtos
 import { MensajeDto } from '../../dto/common/mensajeDto.dto';
 import { ProveedorDto } from '../../dto/users/proveedor.dto';
+import { RegistroProveedorDto } from '../../dto/users/registro-proveedor.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,11 @@ export class ProveedorService {
   private baseUrl = `${API_CONFIG.baseUrl}/api/proveedor`; // URL del backend
 
   constructor(private http: HttpClient) {}
+
+  // Registro de un nuevo proveedor
+  registrarProveedor(proveedor: RegistroProveedorDto): Observable<MensajeDto<ProveedorDto>> {
+    return this.http.post<MensajeDto<ProveedorDto>>(`${this.baseUrl}/registrar`, proveedor);
+  }
 
   // Obtener la lista completa de proveedores
   listarProveedores(): Observable<MensajeDto<ProveedorDto[]>> {
