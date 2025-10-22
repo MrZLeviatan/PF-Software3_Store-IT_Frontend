@@ -53,13 +53,10 @@
 
 <!-- Panel centrado de detalles -->
 <div class="detalle-overlay" *ngIf="productoSeleccionado" (click)="cerrarDetalles()">
-  x
   <div class="detalle-modal" (click)="$event.stopPropagation()">
     <button class="cerrar-btn" (click)="cerrarDetalles()">✕</button>
 
-    <!-- Contenedor principal: Imagen e info lado a lado -->
     <div class="detalle-principal">
-      <!-- Imagen del producto -->
       <div class="detalle-imagen-contenedor">
         <img
           [src]="productoSeleccionado.imagen"
@@ -68,40 +65,25 @@
         />
       </div>
 
-      <!-- Información del producto y proveedor -->
       <div class="detalle-info">
         <h2>{{ productoSeleccionado.nombre }}</h2>
         <p class="detalle-precio">
           <strong>Valor Compra:</strong>
-          {{ productoSeleccionado.valorCompra | currency : 'USD' : 'symbol' : '1.0-0' }}<br />
+          {{ productoSeleccionado.valorCompra | currency : 'USD' }}<br />
           <strong>Valor Venta:</strong>
-          {{ productoSeleccionado.valorVenta | currency : 'USD' : 'symbol' : '1.0-0' }}
+          {{ productoSeleccionado.valorVenta | currency : 'USD' }}
         </p>
         <p><strong>Tipo:</strong> {{ productoSeleccionado.tipoProducto }}</p>
         <p><strong>Código de barras:</strong> {{ productoSeleccionado.codigoBarras }}</p>
 
-        <hr />
-
-        <div *ngIf="proveedorSeleccionadoDetalles; else noProveedor">
-          <h3>🏢 Proveedor</h3>
-          <p><strong>Nombre:</strong> {{ proveedorSeleccionadoDetalles.nombre }}</p>
-          <p><strong>Marca:</strong> {{ proveedorSeleccionadoDetalles.marca }}</p>
-          <p><strong>Email:</strong> {{ proveedorSeleccionadoDetalles.email }}</p>
-          <p><strong>Teléfono:</strong> {{ proveedorSeleccionadoDetalles.telefono }}</p>
-        </div>
-        <ng-template #noProveedor>
-          <div class="estado">No se encontró información del proveedor.</div>
-        </ng-template>
+        <button class="btn-lote" (click)="abrirRegistroLote()">➕ Registrar Lote</button>
       </div>
     </div>
-    `
 
-    <!-- Sección de Espacio del Producto -->
+    <!-- Sección de Espacio -->
     <div *ngIf="espacioProducto" class="seccion-espacio">
       <h3 class="titulo-espacio">Espacio del Producto</h3>
-
       <div class="espacio-contenedor">
-        <!-- Esfera 3D a la izquierda -->
         <div class="esfera-lado">
           <div
             class="esfera-3d"
@@ -117,26 +99,65 @@
           </div>
         </div>
 
-        <!-- Información del espacio a la derecha -->
         <div class="info-espacio">
           <p>
             <strong>Volumen total:</strong>
-            {{ espacioProducto.unidadAlmacenamiento.volumenTotal | number : '1.0-2' }} m³
-          </p>
-          <p>
-            <strong>Volumen ocupado:</strong>
-            {{ espacioProducto.unidadAlmacenamiento.volumenOcupado | number : '1.0-2' }} m³
+            {{ espacioProducto.unidadAlmacenamiento.volumenTotal }} m³
           </p>
           <p>
             <strong>Volumen disponible:</strong>
-            {{ espacioProducto.unidadAlmacenamiento.volumenDisponible | number : '1.0-2' }} m³
+            {{ espacioProducto.unidadAlmacenamiento.volumenDisponible }} m³
           </p>
           <p>
-            <strong>Estado unidad:</strong>
-            {{ espacioProducto.unidadAlmacenamiento.estadoUnidad }}
+            <strong>Cantidad Total:</strong>
+            {{ espacioProducto.cantidadTotal }}
           </p>
         </div>
       </div>
+    </div>
+
+    <!-- FORMULARIO DE REGISTRO DE LOTE -->
+    <div *ngIf="mostrarFormularioLote" class="form-lote-container">
+      <h3>📦 Registro de Lote</h3>
+
+      <form (ngSubmit)="registrarLote()" #formLote="ngForm">
+        <div class="campo">
+          <label>Fecha de Vencimiento (opcional)</label>
+          <input type="date" [(ngModel)]="nuevoLote.fechaVencimiento" name="fechaVencimiento" />
+        </div>
+
+        <div class="campo">
+          <label>Cantidad Total</label>
+          <input
+            type="number"
+            [(ngModel)]="nuevoLote.cantidadTotal"
+            name="cantidadTotal"
+            required
+          />
+        </div>
+
+        <div class="campo">
+          <label>Área Total (m²)</label>
+          <input type="number" [(ngModel)]="nuevoLote.areaTotal" name="areaTotal" required />
+        </div>
+
+        <div class="campo">
+          <label>Fecha de Entrada</label>
+          <input type="date" [(ngModel)]="nuevoLote.fechaEntra" name="fechaEntra" required />
+        </div>
+
+        <div class="campo">
+          <label>Observaciones</label>
+          <textarea [(ngModel)]="nuevoLote.observaciones" name="observaciones"></textarea>
+        </div>
+
+        <div class="acciones">
+          <button type="submit" class="btn-registrar">Registrar</button>
+          <button type="button" class="btn-cancelar" (click)="cerrarFormularioLote()">
+            Cancelar
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

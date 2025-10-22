@@ -333,6 +333,101 @@
   transform: scale(1.05);
 }
 
+/* --- Botón Registrar Lote --- */
+.btn-lote {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 0.6rem 1.4rem;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.btn-lote:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+/* --- Formulario de Registro Lote --- */
+.form-lote-container {
+  margin-top: 2rem;
+  background: #f9f9f9;
+  padding: 1.8rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  animation: aparecer 0.4s ease;
+}
+
+.form-lote-container h3 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 1.2rem;
+  font-weight: bold;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.campo label {
+  font-weight: bold;
+  margin-bottom: 0.4rem;
+  color: #555;
+}
+
+.campo input,
+.campo textarea {
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border 0.3s ease;
+}
+
+.campo input:focus,
+.campo textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.acciones {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.btn-registrar {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.4rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.btn-registrar:hover {
+  background-color: #1e7e34;
+}
+
+.btn-cancelar {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.4rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.btn-cancelar:hover {
+  background-color: #b02a37;
+}
+
 @keyframes giro-esfera {
   from {
     transform: rotateY(0deg);
