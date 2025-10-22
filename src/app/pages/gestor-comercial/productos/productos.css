@@ -1,4 +1,4 @@
-/* anel principal del catálogo */
+/* Panel principal del catálogo */
 .productos-panel {
   margin-left: 3rem; /* Margen izquierdo extra */
   padding: 2.5rem;
@@ -9,20 +9,21 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Título principal / Main title */
+/* Título principal */
 .titulo {
   text-align: center;
   margin-bottom: 2rem;
   font-size: 2rem;
   font-weight: 600;
-  color: #ff8000;
+  color: #000000;
   letter-spacing: 0.5px;
+  font-weight: bold;
 }
 
 /* Contenedor de filtros */
 .filtros {
   display: flex;
-  justify-content: flex-start; /* Alinea a la izquierda para más naturalidad visual */
+  justify-content: flex-start;
   align-items: center;
   gap: 0.8rem;
   margin-bottom: 2rem;
@@ -86,7 +87,7 @@
 }
 
 .producto-card:hover .imagen-producto {
-  transform: scale(1.03); /* Pequeño efecto zoom */
+  transform: scale(1.03);
 }
 
 /* Información del producto */
@@ -133,6 +134,8 @@
   align-items: center;
   z-index: 999;
   animation: aparecer 0.4s ease;
+  overflow-y: auto; /* Permite scroll vertical */
+  padding: 2rem 0; /* Espaciado superior e inferior */
 }
 
 /* Panel centrado */
@@ -142,12 +145,14 @@
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
   width: 80%;
   max-width: 750px;
-  padding: 2rem;
+  max-height: 120vh; /* Limita altura máxima */
+  padding: 1rem 4rem 4rem; /* Un poco más de espacio inferior */
   animation: zoomIn 0.4s ease;
   position: relative;
+  overflow-y: auto; /* Scroll interno si el contenido es grande */
 }
 
-/* Botón de cierre / Close button */
+/* Botón de cierre */
 .cerrar-btn {
   position: absolute;
   top: 15px;
@@ -177,14 +182,13 @@
   justify-content: space-between;
 }
 
-/* Contenedor de imagen */
+/* Imagen del producto */
 .detalle-imagen-contenedor {
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
 .detalle-imagen {
   width: 100%;
   max-width: 400px;
@@ -222,7 +226,15 @@
   line-height: 1.5;
 }
 
-/* Animaciones  */
+/* Contenedor principal de imagen + info */
+.detalle-principal {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Animaciones */
 @keyframes aparecer {
   from {
     opacity: 0;
@@ -243,65 +255,142 @@
   }
 }
 
-/* Ajustes responsivos para pantallas pequeñas */
+/* =============================
+   ESPACIO DEL PRODUCTO INTEGRADO
+   ============================= */
+.seccion-espacio {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 2px solid #e0e0e0;
+  width: 100%;
+}
+
+.titulo-espacio {
+  text-align: center;
+  color: #ff8000;
+  font-size: 1.4rem;
+  margin-bottom: 1.2rem;
+}
+
+.espacio-contenedor {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 2rem;
+}
+
+.esfera-lado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.esfera-3d {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  background: #d9d9d9; /* Color base gris */
+  box-shadow: inset -10px -10px 25px rgba(255, 255, 255, 0.15),
+    inset 10px 10px 25px rgba(0, 0, 0, 0.3), 0 10px 25px rgba(0, 0, 0, 0.25);
+  transition: transform 0.4s ease;
+}
+
+/* Capa de llenado dinámico */
+.esfera-3d::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: var(--porcentaje, 0%);
+  background: var(--color, #4caf50);
+  transition: height 1s ease, background 0.5s ease;
+  border-radius: 50%;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Efecto de reflejo superior */
+.esfera-3d::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), transparent 60%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.esfera-3d:hover {
+  transform: scale(1.05);
+}
+
+.esfera-3d:hover {
+  transform: scale(1.05);
+}
+
+@keyframes giro-esfera {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+.porcentaje-texto {
+  margin-top: 0.5rem;
+  font-weight: bold;
+  font-size: 1rem;
+  color: #333;
+}
+
+.info-espacio {
+  background: #fff;
+  padding: 1rem 1.2rem;
+  border-radius: 15px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  max-width: 330px;
+}
+
+.info-espacio p {
+  margin: 0.3rem 0;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+/* Responsivo */
 @media (max-width: 768px) {
-  /* Título más pequeño en móviles */
-  .titulo {
-    font-size: 1.6rem;
-    margin-bottom: 1.5rem;
+  .espacio-contenedor {
+    flex-direction: column;
+    gap: 1rem;
   }
 
-  /* Filtros en columna */
+  .info-espacio {
+    text-align: center;
+    width: 100%;
+  }
+
   .filtros {
     flex-direction: column;
-    align-items: stretch; /* Ocupa todo el ancho disponible */
-    gap: 0.6rem;
-  }
-
-  .filtros label {
-    margin-bottom: 0.2rem;
-    text-align: left;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-left: 0;
   }
 
   .select-filtro {
-    width: 100%;
-    font-size: 1rem;
+    width: 100%; /* Ocupa todo el ancho disponible */
   }
 
-  /* Tarjeta del producto */
-  .producto-card {
-    display: flex; /* Usa flexbox para centrar elementos */
-    flex-direction: column; /* Coloca los elementos en columna */
-    align-items: center; /* Centra horizontalmente */
-    justify-content: center; /* Centra verticalmente si hay espacio */
-    text-align: center; /* Asegura que el texto quede centrado */
-    padding: 1rem; /* Añade algo de espacio interno */
-  }
-
-  /* Imagen del producto  */
   .imagen-producto {
-    width: 100%; /* Ajusta el tamaño al ancho disponible */
-    height: auto; /* Mantiene proporciones */
-    display: block; /* Permite aplicar el centrado con margin */
-    margin: 0 auto 1rem auto; /* Centra horizontalmente y agrega espacio inferior */
-    border-radius: 10px; /* Bordes redondeados sutiles */
+    height: 70%;
   }
 
-  /* -- Información del producto -- */
-
-  /* Contenido del detalle */
-  .detalle-contenido {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .detalle-imagen {
-    max-width: 80%;
-    margin-bottom: 1rem;
-  }
-
-  .detalle-info {
-    text-align: center;
+  .detalle-modal {
+    max-height: 90vh; /* Aumenta el espacio visible en pantallas grandes */
   }
 }

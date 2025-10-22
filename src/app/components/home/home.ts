@@ -19,8 +19,6 @@ export class HomeComponent implements OnInit {
   constructor(private logoutService: LogoutService) {}
 
   ngOnInit(): void {
-    console.log('ROL LOCALSTORAGE:', localStorage.getItem('rolUsuario'));
-
     // Se obtiene el rol del usuario
     const rolUsuario = localStorage.getItem('rolUsuario') || 'ROLE_CLIENTE';
 

@@ -30,10 +30,9 @@
     </select>
   </div>
 
-  <!-- Mensaje de carga -->
-  <div *ngIf="cargando" class="estado cargando">
-    <p>Cargando productos...</p>
-  </div>
+  <!-- Mensajes de carga o sin resultados -->
+  <div *ngIf="cargando" class="estado">Cargando productos...</div>
+  <div *ngIf="!cargando && productos.length === 0" class="estado">No se encontraron productos.</div>
 
   <!-- Cuadrícula de productos -->
   <div class="productos-grid" *ngIf="!cargando && productos.length > 0">
@@ -50,19 +49,16 @@
       </div>
     </div>
   </div>
-
-  <!-- Mensaje sin resultados -->
-  <div *ngIf="!cargando && productos.length === 0" class="estado sin-resultados">
-    <p>No se encontraron productos.</p>
-  </div>
 </div>
 
 <!-- Panel centrado de detalles -->
 <div class="detalle-overlay" *ngIf="productoSeleccionado" (click)="cerrarDetalles()">
+  x
   <div class="detalle-modal" (click)="$event.stopPropagation()">
     <button class="cerrar-btn" (click)="cerrarDetalles()">✕</button>
 
-    <div class="detalle-contenido">
+    <!-- Contenedor principal: Imagen e info lado a lado -->
+    <div class="detalle-principal">
       <!-- Imagen del producto -->
       <div class="detalle-imagen-contenedor">
         <img
@@ -72,23 +68,20 @@
         />
       </div>
 
-      <!-- Información del producto -->
+      <!-- Información del producto y proveedor -->
       <div class="detalle-info">
         <h2>{{ productoSeleccionado.nombre }}</h2>
         <p class="detalle-precio">
           <strong>Valor Compra:</strong>
-          {{ productoSeleccionado.valorCompra | currency : 'USD' : 'symbol' : '1.0-0' }}
-          <br />
+          {{ productoSeleccionado.valorCompra | currency : 'USD' : 'symbol' : '1.0-0' }}<br />
           <strong>Valor Venta:</strong>
           {{ productoSeleccionado.valorVenta | currency : 'USD' : 'symbol' : '1.0-0' }}
         </p>
         <p><strong>Tipo:</strong> {{ productoSeleccionado.tipoProducto }}</p>
         <p><strong>Código de barras:</strong> {{ productoSeleccionado.codigoBarras }}</p>
-        <p><strong>Descripción:</strong> {{ productoSeleccionado.codigoBarras }}</p>
 
         <hr />
 
-        <!-- Información del proveedor -->
         <div *ngIf="proveedorSeleccionadoDetalles; else noProveedor">
           <h3>🏢 Proveedor</h3>
           <p><strong>Nombre:</strong> {{ proveedorSeleccionadoDetalles.nombre }}</p>
@@ -96,12 +89,53 @@
           <p><strong>Email:</strong> {{ proveedorSeleccionadoDetalles.email }}</p>
           <p><strong>Teléfono:</strong> {{ proveedorSeleccionadoDetalles.telefono }}</p>
         </div>
-
         <ng-template #noProveedor>
-          <div class="estado">
-            <p>No se encontró información del proveedor.</p>
-          </div>
+          <div class="estado">No se encontró información del proveedor.</div>
         </ng-template>
+      </div>
+    </div>
+    `
+
+    <!-- Sección de Espacio del Producto -->
+    <div *ngIf="espacioProducto" class="seccion-espacio">
+      <h3 class="titulo-espacio">Espacio del Producto</h3>
+
+      <div class="espacio-contenedor">
+        <!-- Esfera 3D a la izquierda -->
+        <div class="esfera-lado">
+          <div
+            class="esfera-3d"
+            [ngStyle]="{
+              '--porcentaje': espacioProducto.unidadAlmacenamiento.porcentajeOcupacion + '%',
+              '--color': obtenerColorOcupacion(
+                espacioProducto.unidadAlmacenamiento.porcentajeOcupacion
+              )
+            }"
+          ></div>
+          <div class="porcentaje-texto">
+            {{ espacioProducto.unidadAlmacenamiento.porcentajeOcupacion | number : '1.0-0' }}%
+          </div>
+        </div>
+
+        <!-- Información del espacio a la derecha -->
+        <div class="info-espacio">
+          <p>
+            <strong>Volumen total:</strong>
+            {{ espacioProducto.unidadAlmacenamiento.volumenTotal | number : '1.0-2' }} m³
+          </p>
+          <p>
+            <strong>Volumen ocupado:</strong>
+            {{ espacioProducto.unidadAlmacenamiento.volumenOcupado | number : '1.0-2' }} m³
+          </p>
+          <p>
+            <strong>Volumen disponible:</strong>
+            {{ espacioProducto.unidadAlmacenamiento.volumenDisponible | number : '1.0-2' }} m³
+          </p>
+          <p>
+            <strong>Estado unidad:</strong>
+            {{ espacioProducto.unidadAlmacenamiento.estadoUnidad }}
+          </p>
+        </div>
       </div>
     </div>
   </div>
