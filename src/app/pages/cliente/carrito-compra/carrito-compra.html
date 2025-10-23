@@ -1,0 +1,43 @@
+<app-fondo-animado></app-fondo-animado>
+
+<div class="carrito-container" *ngIf="!cargando; else loading">
+  <h2>🛒 Tu Carrito de Compras</h2>
+
+  <div *ngIf="carrito && carrito.itemsCarrito.length > 0; else empty">
+    <div class="carrito-item" *ngFor="let item of carrito.itemsCarrito">
+      <div class="item-info">
+        <img
+          [src]="productosMap[item.idProducto]?.imagen || 'assets/img/default-product.png'"
+          alt="{{ productosMap[item.idProducto]?.nombre }}"
+        />
+        <div>
+          <h3>{{ productosMap[item.idProducto]?.nombre }}</h3>
+          <p>{{ productosMap[item.idProducto]?.tipoProducto }}</p>
+          <p class="precio">💲{{ productosMap[item.idProducto]?.valorVenta | number }}</p>
+        </div>
+      </div>
+
+      <div class="item-actions">
+        <button (click)="disminuirCantidad(item)">−</button>
+        <span>{{ item.cantidad }}</span>
+        <button (click)="aumentarCantidad(item)">+</button>
+        <button class="eliminar" (click)="eliminarItem(item)">🗑</button>
+      </div>
+    </div>
+
+    <div class="total">
+      <h3>Total: 💰 {{ carrito.totalValor | number }}</h3>
+    </div>
+  </div>
+
+  <ng-template #empty>
+    <p class="vacio">🛍 Tu carrito está vacío</p>
+  </ng-template>
+</div>
+
+<ng-template #loading>
+  <div class="loading">
+    <div class="spinner"></div>
+    <p>Cargando tu carrito...</p>
+  </div>
+</ng-template>

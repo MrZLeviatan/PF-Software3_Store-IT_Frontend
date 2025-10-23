@@ -46,6 +46,6 @@ export class ProductoService {
 
   // Obtener un producto por su ID.
   obtenerProductoPorId(idProducto: number): Observable<MensajeDto<ProductoDto>> {
-    return this.http.get<MensajeDto<ProductoDto>>(`${this.baseUrl}/obtener/${idProducto}`);
+    return this.http.get<MensajeDto<ProductoDto>>(`${this.baseUrl}/${idProducto}`);
   }
 }

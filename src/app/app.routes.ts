@@ -1,3 +1,4 @@
+import { CarritoCompra } from './pages/cliente/carrito-compra/carrito-compra';
 import { Routes } from '@angular/router';
 import { LayoutPublicoComponent } from './layouts/public/layout-publico.component';
 import { RegistroClientes } from './pages/homePage/registro-clientes/registro-clientes';
@@ -36,6 +37,11 @@ export const routes: Routes = [
       {
         path: 'productos',
         loadComponent: () => import('./pages/cliente/productos/productos').then((m) => m.Productos),
+      },
+      {
+        path: 'carrito-compra',
+        loadComponent: () =>
+          import('./pages/cliente/carrito-compra/carrito-compra').then((m) => m.CarritoCompra),
       },
     ],
   },

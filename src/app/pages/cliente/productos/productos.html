@@ -35,14 +35,17 @@
       <div class="producto-info">
         <h3>{{ p.nombre }}</h3>
         <p class="tipo">{{ p.tipoProducto }}</p>
-        <p class="codigo">Código: {{ p.codigoBarras }}</p>
+        <p class="codigo">Código Barras: {{ p.codigoBarras }}</p>
 
         <div class="precio">
           <span class="label">Precio:</span>
           <span class="valor">\${{ p.valorVenta | number : '1.0-0' }}</span>
         </div>
 
-        <button class="agregar-carrito">🛒 Agregar al carrito</button>
+        <!-- dentro de tu *ngFor de productos -->
+        <button class="agregar-carrito" (click)="agregarAlCarrito(p.id)">
+          🛒 Agregar al carrito
+        </button>
       </div>
     </div>
   </div>
@@ -65,11 +68,9 @@
 
       <div class="modal-info">
         <h2>{{ selected.nombre }}</h2>
-        <p><strong>Código:</strong> {{ selected.codigoBarras }}</p>
+        <p><strong>Código Barras:</strong> {{ selected.codigoBarras }}</p>
         <p><strong>Tipo:</strong> {{ selected.tipoProducto }}</p>
-        <p><strong>Proveedor:</strong> #{{ selected.idProveedor }}</p>
-        <p><strong>Precio Compra:</strong> \${{ selected.valorCompra | number : '1.0-0' }}</p>
-        <p><strong>Precio Venta:</strong> \${{ selected.valorVenta | number : '1.0-0' }}</p>
+        <p><strong>Precio:</strong> \${{ selected.valorVenta | number : '1.0-0' }}</p>
 
         <button class="cerrar-btn" (click)="cerrarModal()">Cerrar</button>
       </div>
