@@ -1,0 +1,491 @@
+/* Panel principal del catálogo */
+.productos-panel {
+  margin-left: 3rem; /* Margen izquierdo extra */
+  padding: 2.5rem;
+  background: linear-gradient(to bottom right, #f7f8fa, #e9edf2);
+  border-radius: 25px;
+  box-shadow: 0 6px 25px rgba(143, 139, 139, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Título principal */
+.titulo {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #000000;
+  letter-spacing: 0.5px;
+  font-weight: bold;
+}
+
+/* Contenedor de filtros */
+.filtros {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+  margin-left: 0.5rem;
+}
+
+.filtros label {
+  font-weight: 600;
+  color: #333;
+}
+
+/* Select de filtro */
+.select-filtro {
+  padding: 0.6rem 1.2rem;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  background-color: #c9c9c9;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.select-filtro:hover,
+.select-filtro:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
+  outline: none;
+}
+
+/* Cuadrícula de productos */
+.productos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 2rem;
+  padding-right: 1rem;
+}
+
+/* Tarjeta individual de producto */
+.producto-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.producto-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.15);
+}
+
+/* Imagen del producto */
+.imagen-producto {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  background-color: #ffffff;
+  border-bottom: 1px solid #eee;
+  transition: transform 0.4s ease;
+}
+
+.producto-card:hover .imagen-producto {
+  transform: scale(1.03);
+}
+
+/* Información del producto */
+.info-producto {
+  padding: 1.2rem;
+  text-align: center;
+}
+
+.info-producto h3 {
+  font-size: 1.15rem;
+  margin-bottom: 0.6rem;
+  color: #007bff;
+  font-weight: 600;
+}
+
+.info-producto p {
+  margin: 0.3rem 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Estados de carga o sin resultados */
+.estado {
+  text-align: center;
+  margin-top: 2rem;
+  font-style: italic;
+  color: #666;
+  animation: aparecer 0.6s ease;
+}
+
+/* --- Panel centrado de detalles --- */
+
+/* Fondo oscuro de superposición */
+.detalle-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(25, 25, 25, 0.75);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  animation: aparecer 0.4s ease;
+  overflow-y: auto; /* Permite scroll vertical */
+  padding: 2rem 0; /* Espaciado superior e inferior */
+}
+
+/* Panel centrado */
+.detalle-modal {
+  background: #ffffff;
+  border-radius: 25px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+  width: 80%;
+  max-width: 750px;
+  max-height: 120vh; /* Limita altura máxima */
+  padding: 1rem 4rem 4rem; /* Un poco más de espacio inferior */
+  animation: zoomIn 0.4s ease;
+  position: relative;
+  overflow-y: auto; /* Scroll interno si el contenido es grande */
+}
+
+/* Botón de cierre */
+.cerrar-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: #ff4d4d;
+  border: none;
+  color: #fff;
+  font-size: 1.3rem;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cerrar-btn:hover {
+  background: #e60000;
+  transform: scale(1.1);
+}
+
+/* Contenido del detalle */
+.detalle-contenido {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+/* Imagen del producto */
+.detalle-imagen-contenedor {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.detalle-imagen {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  border-radius: 15px;
+  object-fit: contain;
+  background: #f5f5f5;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Información del producto */
+.detalle-info {
+  flex: 1.2;
+  text-align: left;
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+}
+
+.detalle-info h2 {
+  font-size: 1.8rem;
+  color: #000000;
+  margin-bottom: 0.8rem;
+}
+
+.detalle-precio {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #28a745;
+  margin: 0.8rem 0;
+}
+
+.detalle-info p {
+  margin: 0.4rem 0;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Contenedor principal de imagen + info */
+.detalle-principal {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Animaciones */
+@keyframes aparecer {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* =============================
+   ESPACIO DEL PRODUCTO INTEGRADO
+   ============================= */
+.seccion-espacio {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 2px solid #e0e0e0;
+  width: 100%;
+}
+
+.titulo-espacio {
+  text-align: center;
+  color: #ff8000;
+  font-size: 1.4rem;
+  margin-bottom: 1.2rem;
+}
+
+.espacio-contenedor {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 2rem;
+}
+
+.esfera-lado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.esfera-3d {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  background: #d9d9d9; /* Color base gris */
+  box-shadow: inset -10px -10px 25px rgba(255, 255, 255, 0.15),
+    inset 10px 10px 25px rgba(0, 0, 0, 0.3), 0 10px 25px rgba(0, 0, 0, 0.25);
+  transition: transform 0.4s ease;
+}
+
+/* Capa de llenado dinámico */
+.esfera-3d::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: var(--porcentaje, 0%);
+  background: var(--color, #4caf50);
+  transition: height 1s ease, background 0.5s ease;
+  border-radius: 50%;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Efecto de reflejo superior */
+.esfera-3d::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), transparent 60%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.esfera-3d:hover {
+  transform: scale(1.05);
+}
+
+.esfera-3d:hover {
+  transform: scale(1.05);
+}
+
+/* --- Botón Registrar Lote --- */
+.btn-lote {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 0.6rem 1.4rem;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.btn-lote:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+/* --- Formulario de Registro Lote --- */
+.form-lote-container {
+  margin-top: 2rem;
+  background: #f9f9f9;
+  padding: 1.8rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  animation: aparecer 0.4s ease;
+}
+
+.form-lote-container h3 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 1.2rem;
+  font-weight: bold;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.campo label {
+  font-weight: bold;
+  margin-bottom: 0.4rem;
+  color: #555;
+}
+
+.campo input,
+.campo textarea {
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border 0.3s ease;
+}
+
+.campo input:focus,
+.campo textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.acciones {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.btn-registrar {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.4rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.btn-registrar:hover {
+  background-color: #1e7e34;
+}
+
+.btn-cancelar {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.4rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.btn-cancelar:hover {
+  background-color: #b02a37;
+}
+
+@keyframes giro-esfera {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+.porcentaje-texto {
+  margin-top: 0.5rem;
+  font-weight: bold;
+  font-size: 1rem;
+  color: #333;
+}
+
+.info-espacio {
+  background: #fff;
+  padding: 1rem 1.2rem;
+  border-radius: 15px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  max-width: 330px;
+}
+
+.info-espacio p {
+  margin: 0.3rem 0;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .espacio-contenedor {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .info-espacio {
+    text-align: center;
+    width: 100%;
+  }
+
+  .filtros {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-left: 0;
+  }
+
+  .select-filtro {
+    width: 100%; /* Ocupa todo el ancho disponible */
+  }
+
+  .imagen-producto {
+    height: 70%;
+  }
+
+  .detalle-modal {
+    max-height: 90vh; /* Aumenta el espacio visible en pantallas grandes */
+  }
+}

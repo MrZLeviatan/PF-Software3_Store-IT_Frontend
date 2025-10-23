@@ -7,6 +7,10 @@ import { ProductoService } from '../../../services/inventario/producto.service';
 import { ProductoDto } from '../../../dto/objects/inventario/producto/producto.dto';
 import { TipoProducto } from '../../../dto/enum/tipo-producto';
 import { timer, Subject, takeUntil, switchMap, catchError, of } from 'rxjs';
+import { CarritoCompraService } from '../../../services/compra/carrito-compra/carrito-compra.service';
+import { TokenService } from '../../../services/token.service';
+import { ToastService } from '../../../components/toast/service/toast.service';
+import { RegistroItemCompraDto } from '../../../dto/objects/compra/carrito-compra/registro-items-carrito.dto';
 
 //Componente standalone para pasarela de productos
 @Component({
@@ -35,7 +39,12 @@ export class Productos implements OnInit, OnDestroy {
   // EN/ES: RxJS cleanup
   private destroy$ = new Subject<void>();
 
-  constructor(private productoService: ProductoService) {}
+  constructor(
+    private productoService: ProductoService,
+    private carritoCompraService: CarritoCompraService,
+    private tokenService: TokenService,
+    private toastService: ToastService
+  ) {}
 
   ngOnInit(): void {
     // EN/ES: Start polling immediately and every 10 minutes (600000 ms)
@@ -103,5 +112,21 @@ export class Productos implements OnInit, OnDestroy {
     // EN/ES: Clean up subscriptions when component is destroyed
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  agregarAlCarrito(productoId: number): void {
+    // Construir el DTO completo en el componente
+    const dto: RegistroItemCompraDto = {
+      idProducto: productoId,
+      cantidad: 1, // siempre 1 producto
+      idCliente: this.tokenService.getUserIdFromToken(), // obtener idCliente desde el token
+    };
+
+    // Enviar al servicio
+    this.carritoCompraService.agregarProducto(dto).subscribe({
+      next: (res) => {
+        this.toastService.show('Productos agregado correctamente', 'success');
+      },
+    });
   }
 }

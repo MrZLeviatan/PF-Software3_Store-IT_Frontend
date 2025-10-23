@@ -1,0 +1,5 @@
+export enum EstadoUnidad {
+  DISPONIBLE = 'DISPONIBLE',
+  LLENO = 'LLENO',
+  EN_MANTENIMIENTO = 'EN_MANTENIMIENTO',
+}

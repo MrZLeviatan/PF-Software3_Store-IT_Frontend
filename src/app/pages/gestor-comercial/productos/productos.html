@@ -1,0 +1,163 @@
+<app-fondo-animado></app-fondo-animado>
+
+<div class="productos-panel">
+  <h2 class="titulo">🛒 Catálogo de Productos</h2>
+
+  <!-- Filtros de búsqueda -->
+  <div class="filtros">
+    <label for="tipo">Tipo:</label>
+    <select
+      id="tipo"
+      [(ngModel)]="tipoSeleccionado"
+      (change)="filtrarProductos()"
+      class="select-filtro"
+    >
+      <option value="">Todos</option>
+      <option *ngFor="let tipo of tipos" [value]="tipo">{{ tipo }}</option>
+    </select>
+
+    <label for="proveedor">Proveedor:</label>
+    <select
+      id="proveedor"
+      [(ngModel)]="proveedorSeleccionado"
+      (change)="filtrarProductos()"
+      class="select-filtro"
+    >
+      <option value="">Todos</option>
+      <option *ngFor="let proveedor of proveedores" [value]="proveedor.id">
+        {{ proveedor.nombre }} - {{ proveedor.marca }}
+      </option>
+    </select>
+  </div>
+
+  <!-- Mensajes de carga o sin resultados -->
+  <div *ngIf="cargando" class="estado">Cargando productos...</div>
+  <div *ngIf="!cargando && productos.length === 0" class="estado">No se encontraron productos.</div>
+
+  <!-- Cuadrícula de productos -->
+  <div class="productos-grid" *ngIf="!cargando && productos.length > 0">
+    <div
+      class="producto-card"
+      *ngFor="let producto of productos"
+      (click)="mostrarDetallesProducto(producto)"
+    >
+      <img [src]="producto.imagen" alt="{{ producto.nombre }}" class="imagen-producto" />
+      <div class="info-producto">
+        <h3>{{ producto.nombre }}</h3>
+        <p><strong>Tipo:</strong> {{ producto.tipoProducto }}</p>
+        <p><strong>Código:</strong> {{ producto.codigoBarras }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Panel centrado de detalles -->
+<div class="detalle-overlay" *ngIf="productoSeleccionado" (click)="cerrarDetalles()">
+  <div class="detalle-modal" (click)="$event.stopPropagation()">
+    <button class="cerrar-btn" (click)="cerrarDetalles()">✕</button>
+
+    <div class="detalle-principal">
+      <div class="detalle-imagen-contenedor">
+        <img
+          [src]="productoSeleccionado.imagen"
+          class="detalle-imagen"
+          alt="{{ productoSeleccionado.nombre }}"
+        />
+      </div>
+
+      <div class="detalle-info">
+        <h2>{{ productoSeleccionado.nombre }}</h2>
+        <p class="detalle-precio">
+          <strong>Valor Compra:</strong>
+          {{ productoSeleccionado.valorCompra | currency : 'USD' }}<br />
+          <strong>Valor Venta:</strong>
+          {{ productoSeleccionado.valorVenta | currency : 'USD' }}
+        </p>
+        <p><strong>Tipo:</strong> {{ productoSeleccionado.tipoProducto }}</p>
+        <p><strong>Código de barras:</strong> {{ productoSeleccionado.codigoBarras }}</p>
+
+        <button class="btn-lote" (click)="abrirRegistroLote()">➕ Registrar Lote</button>
+      </div>
+    </div>
+
+    <!-- Sección de Espacio -->
+    <div *ngIf="espacioProducto" class="seccion-espacio">
+      <h3 class="titulo-espacio">Espacio del Producto</h3>
+      <div class="espacio-contenedor">
+        <div class="esfera-lado">
+          <div
+            class="esfera-3d"
+            [ngStyle]="{
+              '--porcentaje': espacioProducto.unidadAlmacenamiento.porcentajeOcupacion + '%',
+              '--color': obtenerColorOcupacion(
+                espacioProducto.unidadAlmacenamiento.porcentajeOcupacion
+              )
+            }"
+          ></div>
+          <div class="porcentaje-texto">
+            {{ espacioProducto.unidadAlmacenamiento.porcentajeOcupacion | number : '1.0-0' }}%
+          </div>
+        </div>
+
+        <div class="info-espacio">
+          <p>
+            <strong>Volumen total:</strong>
+            {{ espacioProducto.unidadAlmacenamiento.volumenTotal }} m³
+          </p>
+          <p>
+            <strong>Volumen disponible:</strong>
+            {{ espacioProducto.unidadAlmacenamiento.volumenDisponible }} m³
+          </p>
+          <p>
+            <strong>Cantidad Total:</strong>
+            {{ espacioProducto.cantidadTotal }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORMULARIO DE REGISTRO DE LOTE -->
+    <div *ngIf="mostrarFormularioLote" class="form-lote-container">
+      <h3>📦 Registro de Lote</h3>
+
+      <form (ngSubmit)="registrarLote()" #formLote="ngForm">
+        <div class="campo">
+          <label>Fecha de Vencimiento (opcional)</label>
+          <input type="date" [(ngModel)]="nuevoLote.fechaVencimiento" name="fechaVencimiento" />
+        </div>
+
+        <div class="campo">
+          <label>Cantidad Total</label>
+          <input
+            type="number"
+            [(ngModel)]="nuevoLote.cantidadTotal"
+            name="cantidadTotal"
+            required
+          />
+        </div>
+
+        <div class="campo">
+          <label>Área Total (m²)</label>
+          <input type="number" [(ngModel)]="nuevoLote.areaTotal" name="areaTotal" required />
+        </div>
+
+        <div class="campo">
+          <label>Fecha de Entrada</label>
+          <input type="date" [(ngModel)]="nuevoLote.fechaEntra" name="fechaEntra" required />
+        </div>
+
+        <div class="campo">
+          <label>Observaciones</label>
+          <textarea [(ngModel)]="nuevoLote.observaciones" name="observaciones"></textarea>
+        </div>
+
+        <div class="acciones">
+          <button type="submit" class="btn-registrar">Registrar</button>
+          <button type="button" class="btn-cancelar" (click)="cerrarFormularioLote()">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
