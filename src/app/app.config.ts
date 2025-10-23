@@ -25,4 +25,4 @@ export const appConfig: ApplicationConfig = {
   ],
 };
 
-export const API_CONFIG = { baseUrl: 'http://localhost:9090' };
+export const API_CONFIG = { baseUrl: 'https://pf-software3-backend-store-it.onrender.com' };
