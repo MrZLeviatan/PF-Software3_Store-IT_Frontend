@@ -1,10 +1,7 @@
-// 🧠 CarritoCompra Component
-// 🇪🇸 Panel del carrito de compras del cliente
-// 🇺🇸 Customer shopping cart panel
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CarritoCompraService } from '../../../services/compra/carrito-compra/carrito-compra.service';
+import { FormsModule } from '@angular/forms';
+import { CarritoCompraService } from '../../../services/compra/carrito-compra.service';
 import { TokenService } from '../../../services/token.service';
 import { ProductoService } from '../../../services/inventario/producto.service';
 import { CarritoCompraDto } from '../../../dto/objects/compra/carrito-compra/carrito-compra.dto';
@@ -14,11 +11,12 @@ import { EliminarItemsCarritoDto } from '../../../dto/objects/compra/carrito-com
 import { ProductoDto } from '../../../dto/objects/inventario/producto/producto.dto';
 import { ToastService } from '../../../components/toast/service/toast.service';
 import { FondoAnimadoComponent } from '../../../shared/fondo-animado/fondo-animado.component';
+import { CompraService } from '../../../services/compra/compra.service';
 
 @Component({
   selector: 'app-carrito-compra',
   standalone: true,
-  imports: [CommonModule, FondoAnimadoComponent],
+  imports: [CommonModule, FondoAnimadoComponent, FormsModule],
   templateUrl: './carrito-compra.html',
   styleUrl: './carrito-compra.css',
 })
@@ -26,12 +24,14 @@ export class CarritoCompra implements OnInit {
   carrito: CarritoCompraDto | null = null;
   productosMap: { [id: number]: ProductoDto } = {};
   cargando = false;
+  cantidades: { [id: number]: number } = {};
 
   constructor(
     private carritoService: CarritoCompraService,
     private productoService: ProductoService,
     private tokenService: TokenService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private compraService: CompraService
   ) {}
 
   ngOnInit(): void {
@@ -75,39 +75,28 @@ export class CarritoCompra implements OnInit {
     });
   }
 
-  // ➕ Aumentar cantidad de un item
-  aumentarCantidad(item: ItemCarritoDto): void {
-    const dto: ModificarCantidadItemsDto = {
-      idProducto: item.idProducto,
-      idCliente: this.carrito!.idCliente,
-      cantidadAgregar: 1,
-    };
+  // ➕ Actualizar cantidad y verificar stock
+  actualizarCantidad(item: ItemCarritoDto): void {
+    const nuevaCantidad = this.cantidades[item.id];
 
-    this.carritoService.agregarCantidad(dto).subscribe({
-      next: () => {
-        this.toastService.show('Cantidad aumentada', 'success');
-        this.cargarCarrito();
-      },
-    });
-  }
-
-  // ➖ Disminuir cantidad de un item
-  disminuirCantidad(item: ItemCarritoDto): void {
-    if (item.cantidad <= 1) {
-      this.eliminarItem(item);
+    if (nuevaCantidad <= 0) {
+      this.toastService.show('La cantidad debe ser mayor a 0', 'info');
       return;
     }
 
     const dto: ModificarCantidadItemsDto = {
       idProducto: item.idProducto,
       idCliente: this.carrito!.idCliente,
-      cantidadAgregar: 1,
+      cantidad: nuevaCantidad,
     };
 
-    this.carritoService.quitarCantidad(dto).subscribe({
+    this.carritoService.modificarCantidad(dto).subscribe({
       next: () => {
-        this.toastService.show('Cantidad disminuida', 'info');
+        this.toastService.show('Cantidad actualizada correctamente', 'success');
         this.cargarCarrito();
+      },
+      error: (err) => {
+        this.toastService.show(err.error?.mensaje || 'Error al modificar cantidad', 'error');
       },
     });
   }
@@ -122,6 +111,32 @@ export class CarritoCompra implements OnInit {
     this.carritoService.eliminarProducto(dto).subscribe({
       next: () => {
         this.cargarCarrito();
+      },
+    });
+  }
+
+  // Inicia el proceso de pago con Stripe
+  iniciarPago(): void {
+    if (!this.carrito || this.carrito.itemsCarrito.length === 0) {
+      this.toastService.show('Tu carrito está vacío', 'info');
+      return;
+    }
+
+    this.toastService.show('Redirigiendo a pasarela de pago...', 'info');
+
+    this.compraService.crearSesionPago(this.carrito).subscribe({
+      next: (resp) => {
+        const url = resp.url;
+        if (url) {
+          // 🚀 Redirigir al Checkout de Stripe
+          window.location.href = url;
+        } else {
+          this.toastService.show('No se pudo obtener la URL de pago', 'error');
+        }
+      },
+      error: (err) => {
+        console.error('❌ Error creando sesión de pago:', err);
+        this.toastService.show(err.error?.mensaje || 'Error iniciando pago', 'error');
       },
     });
   }

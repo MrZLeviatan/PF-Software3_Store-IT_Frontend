@@ -7,26 +7,32 @@
     <div class="carrito-item" *ngFor="let item of carrito.itemsCarrito">
       <div class="item-info">
         <img
-          [src]="productosMap[item.idProducto]?.imagen || 'assets/img/default-product.png'"
-          alt="{{ productosMap[item.idProducto]?.nombre }}"
+          [src]="productosMap[item.idProducto].imagen || 'assets/img/default-product.png'"
+          alt="{{ productosMap[item.idProducto].nombre }}"
         />
         <div>
-          <h3>{{ productosMap[item.idProducto]?.nombre }}</h3>
-          <p>{{ productosMap[item.idProducto]?.tipoProducto }}</p>
-          <p class="precio">💲{{ productosMap[item.idProducto]?.valorVenta | number }}</p>
+          <h3>{{ productosMap[item.idProducto].nombre }}</h3>
+          <p>{{ productosMap[item.idProducto].tipoProducto }}</p>
+          <p class="precio">💲{{ productosMap[item.idProducto].valorVenta | number }}</p>
         </div>
       </div>
 
       <div class="item-actions">
-        <button (click)="disminuirCantidad(item)">−</button>
-        <span>{{ item.cantidad }}</span>
-        <button (click)="aumentarCantidad(item)">+</button>
+        <!-- 🇪🇸 Input para ingresar cantidad / 🇺🇸 Input to enter quantity -->
+        <input type="number" min="1" [(ngModel)]="cantidades[item.id]" class="input-cantidad" />
+
+        <!-- 🇪🇸 Botón para confirmar / 🇺🇸 Button to confirm -->
+        <button (click)="actualizarCantidad(item)">+</button>
+
         <button class="eliminar" (click)="eliminarItem(item)">🗑</button>
       </div>
     </div>
 
     <div class="total">
       <h3>Total: 💰 {{ carrito.totalValor | number }}</h3>
+
+      <!-- Botón para iniciar la pasarela -->
+      <button class="btn-comprar" (click)="iniciarPago()">Comprar 🪙</button>
     </div>
   </div>
 
