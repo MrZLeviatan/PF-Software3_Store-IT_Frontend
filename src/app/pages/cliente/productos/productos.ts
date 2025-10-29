@@ -7,7 +7,7 @@ import { ProductoService } from '../../../services/inventario/producto.service';
 import { ProductoDto } from '../../../dto/objects/inventario/producto/producto.dto';
 import { TipoProducto } from '../../../dto/enum/tipo-producto';
 import { timer, Subject, takeUntil, switchMap, catchError, of } from 'rxjs';
-import { CarritoCompraService } from '../../../services/compra/carrito-compra/carrito-compra.service';
+import { CarritoCompraService } from '../../../services/compra/carrito-compra.service';
 import { TokenService } from '../../../services/token.service';
 import { ToastService } from '../../../components/toast/service/toast.service';
 import { RegistroItemCompraDto } from '../../../dto/objects/compra/carrito-compra/registro-items-carrito.dto';
