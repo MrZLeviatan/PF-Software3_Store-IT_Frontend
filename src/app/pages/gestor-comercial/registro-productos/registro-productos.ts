@@ -126,28 +126,44 @@ export class RegistroProductos implements OnInit {
     );
   }
 
+  // === Registrar proveedor ===
   registrarProveedor(): void {
+    // 🇪🇸 Validar el formulario / 🇺🇸 Validate form
     if (this.formProveedor.invalid) {
       this.formProveedor.markAllAsTouched();
       return;
     }
 
-    if (!this.proveedorSeleccionado) {
-      this.toastService.show(
-        'Debe seleccionar un proveedor antes de registrar el producto.',
-        'error'
-      );
-      return;
-    }
+    // 🇪🇸 Crear DTO desde el formulario / 🇺🇸 Create DTO from form data
+    const dto: RegistroProveedorDto = {
+      nombre: this.formProveedor.get('nombre')?.value,
+      email: this.formProveedor.get('email')?.value,
+      telefono: this.formProveedor.get('telefono')?.value,
+      marca: this.formProveedor.get('marca')?.value,
+    };
 
-    this.proveedorService.registrarProveedor(this.formProveedor.value).subscribe({
+    // 🇪🇸 Llamar al servicio / 🇺🇸 Call the provider service
+    this.proveedorService.registrarProveedor(dto).subscribe({
       next: (res) => {
-        const idProducto = res.mensaje.id; // Obtenemos el ID del producto registrado
-        this.irPaso3(idProducto); // Pasamos al siguiente paso
+        // 🇪🇸 Mostrar éxito / 🇺🇸 Show success message
         this.toastService.show('Proveedor registrado con éxito.', 'success');
+
+        // 🇪🇸 Actualizar lista de proveedores / 🇺🇸 Refresh providers list
+        this.cargarProveedores();
+
+        // 🇪🇸 Cerrar formulario / 🇺🇸 Close form
         this.mostrarFormularioProveedor = false;
         this.formProveedor.reset();
-        this.cargarProveedores();
+
+        // 🇪🇸 Seleccionar automáticamente el proveedor recién creado / 🇺🇸 Auto-select new provider
+        this.proveedorSeleccionado = res.mensaje;
+
+        // 🇪🇸 Pasar al paso 2 directamente / 🇺🇸 Move to step 2 automatically
+        this.pasoActual = 2;
+      },
+      error: (err) => {
+        console.error('Error al registrar proveedor:', err);
+        this.toastService.show('Error al registrar el proveedor.', 'error');
       },
     });
   }
