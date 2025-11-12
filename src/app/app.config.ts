@@ -24,4 +24,4 @@ export const appConfig: ApplicationConfig = {
     ToastService,
   ],
 };
-export const API_CONFIG = { baseUrl: 'http://localhost:9090' };
+export const API_CONFIG = { baseUrl: 'https://storeit-backend-556931055649.us-central1.run.app' };
