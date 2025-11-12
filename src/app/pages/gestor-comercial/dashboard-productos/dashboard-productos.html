@@ -1,0 +1,65 @@
+<div class="dashboard-container" *ngIf="!cargando && resumenDashboard" @fadeIn>
+  <h2 class="dashboard-title">📊 Resumen de Productos</h2>
+
+  <div class="cards-grid">
+    <!-- Producto más vendido -->
+    <div class="card highlight">
+      <img
+        [src]="resumenDashboard.productoMasVendido.imagen"
+        alt="Producto más vendido"
+        class="product-image"
+      />
+      <div class="card-info">
+        <h3>{{ resumenDashboard.productoMasVendido.nombre }}</h3>
+        <p class="label">Más vendido</p>
+        <p>
+          Unidades vendidas:
+          <strong>{{ resumenDashboard.productoMasVendido.unidadesVendidas }}</strong>
+        </p>
+        <p>
+          Ingresos generados:
+          <strong
+            >${{ resumenDashboard.productoMasVendido.ingresosGenerados | number : '1.0-0' }}</strong
+          >
+        </p>
+      </div>
+    </div>
+
+    <!-- Producto con más unidades -->
+    <div class="card">
+      <img
+        [src]="resumenDashboard.productoConMasUnidades.imagen"
+        alt="Producto con más unidades"
+        class="product-image"
+      />
+      <div class="card-info">
+        <h3>{{ resumenDashboard.productoConMasUnidades.nombre }}</h3>
+        <p class="label">Mayor cantidad en stock</p>
+        <p>
+          Unidades disponibles:
+          <strong>{{ resumenDashboard.productoConMasUnidades.cantidadDisponible }}</strong>
+        </p>
+      </div>
+    </div>
+
+    <!-- Producto con menos unidades -->
+    <div class="card">
+      <img
+        [src]="resumenDashboard.productoConMenosUnidades.imagen"
+        alt="Producto con menos unidades"
+        class="product-image"
+      />
+      <div class="card-info">
+        <h3>{{ resumenDashboard.productoConMenosUnidades.nombre }}</h3>
+        <p class="label low">Menor cantidad en stock</p>
+        <p>
+          Unidades disponibles:
+          <strong>{{ resumenDashboard.productoConMenosUnidades.cantidadDisponible }}</strong>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="loading" *ngIf="cargando">Cargando información...</div>
+<div class="error" *ngIf="!cargando && errorMensaje">{{ errorMensaje }}</div>

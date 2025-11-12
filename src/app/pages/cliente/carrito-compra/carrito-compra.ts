@@ -128,7 +128,7 @@ export class CarritoCompra implements OnInit {
       next: (resp) => {
         const url = resp.url;
         if (url) {
-          // 🚀 Redirigir al Checkout de Stripe
+          // Redirigir al Checkout de Stripe
           window.location.href = url;
         } else {
           this.toastService.show('No se pudo obtener la URL de pago', 'error');

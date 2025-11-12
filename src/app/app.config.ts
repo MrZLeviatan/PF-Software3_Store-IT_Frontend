@@ -24,4 +24,4 @@ export const appConfig: ApplicationConfig = {
     ToastService,
   ],
 };
-export const API_CONFIG = { baseUrl: 'https://pf-software3-backend-store-it.onrender.com' };
+export const API_CONFIG = { baseUrl: 'http://localhost:9090' };

@@ -67,6 +67,13 @@ export const routes: Routes = [
             (m) => m.RegistroProductos
           ),
       },
+      {
+        path: 'dashboard-productos',
+        loadComponent: () =>
+          import('./pages/gestor-comercial/dashboard-productos/dashboard-productos').then(
+            (m) => m.DashboardProductosComponent
+          ),
+      },
     ],
   },
 ];

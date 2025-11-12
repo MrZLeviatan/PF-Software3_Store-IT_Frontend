@@ -63,6 +63,7 @@ export class HomeComponent implements OnInit {
         subOpciones: [
           { nombre: 'Ver Productos', ruta: '/gestor-comercial/productos' },
           { nombre: 'Registro Productos', ruta: '/gestor-comercial/registro-productos' },
+          { nombre: 'DashBoard Productos', ruta: '/gestor-comercial/dashboard-productos' },
         ],
       },
     ];
